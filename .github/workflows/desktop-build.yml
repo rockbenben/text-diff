@@ -59,6 +59,20 @@ jobs:
           yarn update-version
           yarn install --frozen-lockfile
 
+      # Bundle the WebView2 *fixed-version* runtime so Windows installers and the
+      # portable exe run fully offline (intranet / LTSC / Server) with no internet
+      # install. WEBVIEW2_VERSION must match tauri.conf.json's webviewInstallMode.path;
+      # WEBVIEW2_CAB_URL is the version-specific .cab link copied from the WebView2
+      # download page. Set both as repo variables (Settings -> Secrets and variables
+      # -> Actions -> Variables).
+      - name: Fetch WebView2 fixed runtime
+        if: matrix.platform == 'windows-latest'
+        shell: pwsh
+        env:
+          WEBVIEW2_VERSION: ${{ vars.WEBVIEW2_VERSION }}
+          WEBVIEW2_CAB_URL: ${{ vars.WEBVIEW2_CAB_URL }}
+        run: pwsh src-tauri/scripts/fetch-webview2-runtime.ps1
+
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -71,8 +85,8 @@ jobs:
             Text Diff desktop — compare two texts or files side by side and see every change highlighted. Runs fully offline; remembers your language and window layout.
 
             **Pick the right file for your system:**
-            - **Windows (installer)**: `-setup.exe` (NSIS, recommended) or `.msi`.
-            - **Windows (portable)**: `TextDiff_<version>_portable.exe` — no install, just run (needs the WebView2 runtime, preinstalled on Win 11 / current Win 10).
+            - **Windows (installer)**: `-setup.exe` (NSIS, recommended) or `.msi` — bundles the WebView2 runtime, installs offline with no internet.
+            - **Windows (portable)**: `TextDiff_<version>_portable.zip` — unzip and run; the WebView2 runtime is included, so it works fully offline (keep the exe next to the runtime folder).
             - **macOS (Apple Silicon · M1/M2/M3)**: the `aarch64.dmg`.
             - **macOS (Intel)**: the `x64.dmg`.
             - **Linux**: `.AppImage` (portable), `.deb` (Debian/Ubuntu), or `.rpm` (Fedora/RHEL).
@@ -84,8 +98,8 @@ jobs:
             Text Diff 桌面版 —— 并排对比两段文本或文件，逐处高亮差异。完全离线运行，自动记住语言与窗口布局。
 
             **按系统选择对应文件：**
-            - **Windows（安装版）**：`-setup.exe`（NSIS，推荐）或 `.msi`。
-            - **Windows（绿色便携版）**：`TextDiff_<版本>_portable.exe` —— 免安装，双击即用（需 WebView2 运行时，Win 11 / 较新 Win 10 已自带）。
+            - **Windows（安装版）**：`-setup.exe`（NSIS，推荐）或 `.msi` —— 已内置 WebView2 运行时，离线即可安装，无需联网。
+            - **Windows（绿色便携版）**：`TextDiff_<版本>_portable.zip` —— 解压即用，已内置 WebView2 运行时，完全离线运行（请保持 exe 与运行时文件夹在同一目录）。
             - **macOS（Apple 芯片 · M1/M2/M3）**：选 `aarch64.dmg`。
             - **macOS（Intel）**：选 `x64.dmg`。
             - **Linux**：`.AppImage`（免安装）、`.deb`（Debian/Ubuntu）或 `.rpm`（Fedora/RHEL）。
@@ -97,27 +111,34 @@ jobs:
 
       # Portable "green" build (Windows only): the raw self-contained exe that
       # tauri builds anyway — no installer, no admin rights, just run it. The web
-      # assets are compiled in; the only external dependency is the WebView2
-      # runtime (preinstalled on Windows 11 and current Windows 10).
-      - name: Stage portable Windows exe
+      # assets are compiled in. To run fully offline (intranet / LTSC / Server) it
+      # also needs the bundled WebView2 fixed runtime placed next to the exe, so we
+      # ship a zip containing the exe + that runtime folder.
+      - name: Stage portable Windows zip
         if: matrix.platform == 'windows-latest'
-        shell: bash
+        shell: pwsh
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          cp "src-tauri/target/release/TextDiff.exe" "TextDiff_${VERSION}_portable.exe"
-          echo "APP_VERSION=$VERSION" >> "$GITHUB_ENV"
+          $version = node -p "require('./package.json').version"
+          "APP_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+          $runtime = Get-ChildItem -Path src-tauri -Directory -Filter "Microsoft.WebView2.FixedVersionRuntime.*" | Select-Object -First 1
+          if (-not $runtime) { throw "WebView2 fixed runtime folder not found in src-tauri." }
+          $stage = "portable/TextDiff_${version}_portable"
+          New-Item -ItemType Directory -Force -Path $stage | Out-Null
+          Copy-Item "src-tauri/target/release/TextDiff.exe" "$stage/TextDiff.exe"
+          Copy-Item $runtime.FullName "$stage/$($runtime.Name)" -Recurse
+          Compress-Archive -Path "$stage/*" -DestinationPath "TextDiff_${version}_portable.zip" -Force
 
-      - name: Upload portable exe as workflow artifact
+      - name: Upload portable zip as workflow artifact
         if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v7
         with:
           name: text-diff-portable-windows
-          path: TextDiff_${{ env.APP_VERSION }}_portable.exe
+          path: TextDiff_${{ env.APP_VERSION }}_portable.zip
           if-no-files-found: error
 
-      - name: Attach portable exe to the release
+      - name: Attach portable zip to the release
         if: matrix.platform == 'windows-latest'
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload "v${APP_VERSION}" "TextDiff_${APP_VERSION}_portable.exe" --clobber
+        run: gh release upload "v${APP_VERSION}" "TextDiff_${APP_VERSION}_portable.zip" --clobber

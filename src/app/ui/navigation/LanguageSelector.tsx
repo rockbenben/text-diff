@@ -4,6 +4,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button, Dropdown, Input, Drawer, Row, Col, theme, Grid } from "antd";
 import { TranslationOutlined, CheckOutlined } from "@ant-design/icons";
 import { useLocale } from "next-intl";
+import { isTauriRuntime } from "@/app/utils/externalLink";
+import { setPreferredLanguage } from "@/app/hooks/useLanguagePreference";
 
 // ============ 语言配置 ============
 
@@ -59,10 +61,14 @@ export function LanguageSelector() {
   })();
 
   const handleLanguageChange = (key: string) => {
+    // Record the explicit choice so the desktop app reopens in it next launch.
+    // (Desktop-only; harmless to skip on web, which doesn't read the preference.)
+    if (isTauriRuntime()) setPreferredLanguage(key);
     const newPath = pathname.replace(/^\/[a-z]{2}(-[a-z]+)?/, `/${key}`);
-    // usePathname 不含 query/hash —— 不补会在切语言时丢掉 ?huginn 这类
-    // 功能门控参数(data-batch 的效应还会因参数消失把已选工具回写成
-    // excel,localStorage 永久丢失)。点击事件里读 window.location 安全。
+    // Plain client-side (soft) navigation — same as the working img-prompt build.
+    // Soft nav is RSC routing that never touches the webview asset-protocol path
+    // resolution, so it works in Tauri without trailingSlash/hard-nav tricks.
+    // usePathname omits query/hash; re-append them so gating params survive a switch.
     router.push(`${newPath}${window.location.search}${window.location.hash}`);
   };
 

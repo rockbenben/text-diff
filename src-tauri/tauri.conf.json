@@ -1,0 +1,61 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Text Diff",
+  "mainBinaryName": "TextDiff",
+  "version": "3.0.0",
+  "identifier": "com.rockbenben.text-diff",
+  "build": {
+    "frontendDist": "../out",
+    "devUrl": "http://localhost:3000",
+    "beforeDevCommand": "yarn dev",
+    "beforeBuildCommand": "yarn build:tauri"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Text Diff",
+        "url": "/en/",
+        "width": 1280,
+        "height": 832,
+        "minWidth": 720,
+        "minHeight": 480,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "createUpdaterArtifacts": true,
+    "category": "Productivity",
+    "shortDescription": "Compare two texts and highlight every difference.",
+    "longDescription": "Text Diff compares two texts or files side by side, highlighting every difference and pointing to the exact line and field where they first diverge. Handles plain text, CSV/TSV and INI with automatic UTF-8 / GBK encoding detection — and runs fully offline.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper",
+        "silent": true
+      }
+    },
+    "android": {
+      "debugApplicationIdSuffix": ".debug"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": ["https://github.com/rockbenben/text-diff/releases/latest/download/latest.json"],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDc4RkZBOUVEMkZGMDQwMTMKUldRVFFQQXY3YW4vZUg3aVViclBxcE1uQVovYXFrZzBuZnBxeXBkS0JjdVVSTU1FSSs4Y3BWdDIK"
+    }
+  }
+}

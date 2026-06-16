@@ -5,6 +5,7 @@ import { ConfigProvider, App, theme, Layout } from "antd";
 import { ReactNode, useSyncExternalStore } from "react";
 import { useLocale } from "next-intl";
 import { getLangDir } from "rtl-detect";
+import TauriIntegration from "@/app/components/TauriIntegration";
 
 export default function ThemesProvider({ children }: { children: ReactNode }) {
   return (
@@ -166,6 +167,7 @@ function AntdConfigProvider({ children }: { children: ReactNode }) {
         },
       }}>
       <App>
+        <TauriIntegration />
         <Layout style={{ minHeight: "100vh", background: "transparent" }}>{children}</Layout>
       </App>
     </ConfigProvider>

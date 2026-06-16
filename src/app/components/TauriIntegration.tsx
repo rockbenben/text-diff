@@ -38,31 +38,45 @@ export default function TauriIntegration() {
   }, []);
 
   // ───────────────────────── TEMP DIAGNOSTIC (remove after) ─────────────────────────
-  // Surfaces runtime truth so we stop guessing: is this a Tauri webview, are the
-  // globals present, does openUrl work, does a hard nav to /zh/ resolve?
   return <DiagnosticOverlay />;
 }
 
 function DiagnosticOverlay() {
-  const [log, setLog] = useState<string>("(no test run yet)");
+  const [log, setLog] = useState<string>("(click a test button)");
+  const [probe, setProbe] = useState<string>("probing…");
+
+  // Auto-probe: ask Tauri's asset server what it actually returns for each path,
+  // and whether the HTML is the zh page or an English fallback.
+  useEffect(() => {
+    const one = async (p: string) => {
+      try {
+        const r = await fetch(p);
+        const t = await r.text();
+        const lang = t.match(/<html[^>]*lang="([^"]+)"/i)?.[1] ?? "?";
+        const isRedirect = /REDIRECT;replace/i.test(t);
+        return `${p} → ${r.status} lang=${lang}${isRedirect ? " [ROOT-REDIRECT]" : ""} len=${t.length}`;
+      } catch (e) {
+        return `${p} → ERR ${String(e)}`;
+      }
+    };
+    (async () => {
+      const paths = ["/zh/", "/zh/index.html", "/zh", "/en/index.html"];
+      const out: string[] = [];
+      for (const p of paths) out.push(await one(p));
+      setProbe(out.join("\n"));
+    })();
+  }, []);
 
   const w = typeof window !== "undefined" ? window : undefined;
   const n = typeof navigator !== "undefined" ? navigator : undefined;
-  const detect = {
-    isTauri: isTauriRuntime(),
-    INTERNALS: !!w?.__TAURI_INTERNALS__,
-    TAURI: !!w?.__TAURI__,
-    uaHasTauri: !!n && /Tauri/i.test(n.userAgent),
-    origin: w?.location.origin ?? "",
-    path: w?.location.pathname ?? "",
-  };
+  const head = `DIAG isTauri=${isTauriRuntime()} INTERNALS=${!!w?.__TAURI_INTERNALS__} origin=${w?.location.origin ?? ""} path=${w?.location.pathname ?? ""} ua/Tauri=${!!n && /Tauri/i.test(n.userAgent)}`;
 
   const testOpenUrl = async () => {
     setLog("openUrl: trying…");
     try {
       const m = await import("@tauri-apps/plugin-opener");
       await m.openUrl("https://github.com/rockbenben/text-diff");
-      setLog("openUrl: OK (browser should have opened)");
+      setLog("openUrl: OK");
     } catch (e) {
       setLog("openUrl ERROR → " + String(e));
     }
@@ -75,10 +89,6 @@ function DiagnosticOverlay() {
       setLog("window.open ERROR → " + String(e));
     }
   };
-  const testGotoZh = () => {
-    setLog("assigning /zh/ …");
-    window.location.assign("/zh/");
-  };
 
   return (
     <div
@@ -90,17 +100,20 @@ function DiagnosticOverlay() {
         zIndex: 999999,
         background: "#000",
         color: "#3fd17a",
-        font: "12px/1.5 monospace",
+        font: "11px/1.5 monospace",
         padding: "8px 10px",
         whiteSpace: "pre-wrap",
         wordBreak: "break-all",
         borderTop: "1px solid #3fd17a",
+        maxHeight: "45vh",
+        overflow: "auto",
       }}>
-      {`DIAG  isTauri=${detect.isTauri}  __TAURI_INTERNALS__=${detect.INTERNALS}  __TAURI__=${detect.TAURI}  ua/Tauri=${detect.uaHasTauri}\norigin=${detect.origin}  path=${detect.path}`}
-      <div style={{ marginTop: 6, display: "flex", gap: 8, flexWrap: "wrap" }}>
+      {head}
+      {"\n--- asset server probe ---\n"}
+      {probe}
+      <div style={{ marginTop: 6, display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
         <button onClick={testOpenUrl} style={btn}>test openUrl</button>
         <button onClick={testWindowOpen} style={btn}>test window.open</button>
-        <button onClick={testGotoZh} style={btn}>goto /zh/</button>
         <span style={{ color: "#fff" }}>{log}</span>
       </div>
     </div>
@@ -113,5 +126,5 @@ const btn: React.CSSProperties = {
   border: "1px solid #3fd17a",
   padding: "3px 8px",
   cursor: "pointer",
-  font: "12px monospace",
+  font: "11px monospace",
 };

@@ -1,0 +1,33 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Text Diff mark — a unified diff hunk: removed (red −) / added (green +) lines
+       against context. Concept-driven (the product IS a diff), not theme-driven. -->
+  <rect width="512" height="512" fill="#15171C"/>
+
+  <!-- gutter hairline separating markers from text lines -->
+  <rect x="140" y="120" width="2" height="272" fill="#262B33"/>
+
+  <!-- changed-line full-width highlights -->
+  <rect x="80" y="200" width="360" height="40" fill="#2A1A1D"/>
+  <rect x="80" y="254" width="360" height="40" fill="#102420"/>
+  <rect x="80" y="308" width="360" height="40" fill="#102420"/>
+
+  <!-- row 1 — context -->
+  <rect x="160" y="148" width="232" height="24" rx="6" fill="#343B45"/>
+
+  <!-- row 2 — removed -->
+  <rect x="97" y="217.5" width="26" height="5" rx="2.5" fill="#F0605B"/>
+  <rect x="160" y="208" width="188" height="24" rx="6" fill="#F0605B"/>
+
+  <!-- row 3 — added -->
+  <rect x="97" y="271.5" width="26" height="5" rx="2.5" fill="#36C46B"/>
+  <rect x="107.5" y="263" width="5" height="26" rx="2.5" fill="#36C46B"/>
+  <rect x="160" y="262" width="236" height="24" rx="6" fill="#36C46B"/>
+
+  <!-- row 4 — added -->
+  <rect x="97" y="325.5" width="26" height="5" rx="2.5" fill="#36C46B"/>
+  <rect x="107.5" y="317" width="5" height="26" rx="2.5" fill="#36C46B"/>
+  <rect x="160" y="316" width="168" height="24" rx="6" fill="#36C46B"/>
+
+  <!-- row 5 — context -->
+  <rect x="160" y="370" width="208" height="24" rx="6" fill="#343B45"/>
+</svg>

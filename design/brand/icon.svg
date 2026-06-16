@@ -1,0 +1,18 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Favicon-optimized: a minimal two-line diff — one removed (red −), one added
+       (green +). Reads at 16–64px where the full hunk would muddy. -->
+  <rect width="512" height="512" fill="#15171C"/>
+
+  <rect x="150" y="150" width="2" height="212" fill="#262B33"/>
+
+  <!-- removed line -->
+  <rect x="64" y="164" width="384" height="64" fill="#2A1A1D"/>
+  <rect x="84" y="192" width="40" height="8" rx="4" fill="#F0605B"/>
+  <rect x="176" y="174" width="236" height="44" rx="8" fill="#F0605B"/>
+
+  <!-- added line -->
+  <rect x="64" y="284" width="384" height="64" fill="#102420"/>
+  <rect x="84" y="312" width="40" height="8" rx="4" fill="#36C46B"/>
+  <rect x="100" y="296" width="8" height="40" rx="4" fill="#36C46B"/>
+  <rect x="176" y="294" width="200" height="44" rx="8" fill="#36C46B"/>
+</svg>

@@ -2,13 +2,17 @@
 
 import { useEffect } from "react";
 import { useAutoUpdate } from "@/app/hooks/useAutoUpdate";
+import { useLanguagePreference } from "@/app/hooks/useLanguagePreference";
 import { isTauriRuntime, openExternalLink } from "@/app/utils/externalLink";
+import { routing } from "@/i18n/routing";
 
 // Desktop-only behaviors; no-ops outside a Tauri webview, so safe to render on web.
-// Language switching is plain soft navigation (handled by the language selector),
-// which works in the webview without touching the asset protocol — no redirect hook.
+// Language switching is plain soft navigation (handled by the language selector);
+// useLanguagePreference only soft-redirects ONCE at launch, so it remembers the
+// chosen language across launches without bouncing in-session switches.
 export default function TauriIntegration() {
   useAutoUpdate();
+  useLanguagePreference([...routing.locales]);
 
   // Send external links to the system browser. Without this, clicking an external
   // <a> would navigate the app's own webview away from the tool. One capture-phase

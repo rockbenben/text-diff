@@ -4,6 +4,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button, Dropdown, Input, Drawer, Row, Col, theme, Grid } from "antd";
 import { TranslationOutlined, CheckOutlined } from "@ant-design/icons";
 import { useLocale } from "next-intl";
+import { isTauriRuntime } from "@/app/utils/externalLink";
+import { setPreferredLanguage } from "@/app/hooks/useLanguagePreference";
 
 // ============ 语言配置 ============
 
@@ -59,6 +61,9 @@ export function LanguageSelector() {
   })();
 
   const handleLanguageChange = (key: string) => {
+    // Record the explicit choice so the desktop app reopens in it next launch.
+    // (Desktop-only; harmless to skip on web, which doesn't read the preference.)
+    if (isTauriRuntime()) setPreferredLanguage(key);
     const newPath = pathname.replace(/^\/[a-z]{2}(-[a-z]+)?/, `/${key}`);
     // Plain client-side (soft) navigation — same as the working img-prompt build.
     // Soft nav is RSC routing that never touches the webview asset-protocol path

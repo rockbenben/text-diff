@@ -52,7 +52,15 @@ export const useLanguagePreference = ({ validLanguages }: UseLanguagePreferenceO
       if (preferredLanguage && isValidLanguage(preferredLanguage, validLanguages) && preferredLanguage !== currentLanguage) {
         const newPath = pathname.replace(/^\/[a-z]{2}(-[a-z]+)?/i, `/${preferredLanguage}`);
         hasInitializedRef.current = true;
-        router.replace(newPath);
+        if (isTauriApp) {
+          // Hard-load a trailing-slashed path: Tauri's asset server resolves
+          // /zh/ → /zh/index.html, but soft RSC navigation fails over the
+          // custom protocol, which would leave the app stuck on the entry locale.
+          const slashed = newPath.endsWith("/") ? newPath : `${newPath}/`;
+          window.location.replace(slashed);
+        } else {
+          router.replace(newPath);
+        }
         return;
       }
 

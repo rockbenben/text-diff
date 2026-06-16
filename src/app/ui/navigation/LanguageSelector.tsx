@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button, Dropdown, Input, Drawer, Row, Col, theme, Grid } from "antd";
 import { TranslationOutlined, CheckOutlined } from "@ant-design/icons";
 import { useLocale } from "next-intl";
+import { isTauriRuntime } from "@/app/utils/externalLink";
 
 // ============ 语言配置 ============
 
@@ -60,10 +61,19 @@ export function LanguageSelector() {
 
   const handleLanguageChange = (key: string) => {
     const newPath = pathname.replace(/^\/[a-z]{2}(-[a-z]+)?/, `/${key}`);
+    const suffix = `${window.location.search}${window.location.hash}`;
     // usePathname 不含 query/hash —— 不补会在切语言时丢掉 ?huginn 这类
     // 功能门控参数(data-batch 的效应还会因参数消失把已选工具回写成
     // excel,localStorage 永久丢失)。点击事件里读 window.location 安全。
-    router.push(`${newPath}${window.location.search}${window.location.hash}`);
+    if (isTauriRuntime()) {
+      // Tauri's asset server only resolves directory paths with a trailing slash
+      // (/zh/ → /zh/index.html); soft RSC navigation doesn't resolve over the
+      // custom protocol, so force a hard load to a slash-terminated path.
+      const slashed = newPath.endsWith("/") ? newPath : `${newPath}/`;
+      window.location.assign(`${slashed}${suffix}`);
+      return;
+    }
+    router.push(`${newPath}${suffix}`);
   };
 
   const renderLanguageList = () => (

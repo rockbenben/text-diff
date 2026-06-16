@@ -4,8 +4,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button, Dropdown, Input, Drawer, Row, Col, theme, Grid } from "antd";
 import { TranslationOutlined, CheckOutlined } from "@ant-design/icons";
 import { useLocale } from "next-intl";
-import { isTauriRuntime } from "@/app/utils/externalLink";
-import { setPreferredLanguage } from "@/app/utils/languageStorage";
 
 // ============ 语言配置 ============
 
@@ -62,20 +60,11 @@ export function LanguageSelector() {
 
   const handleLanguageChange = (key: string) => {
     const newPath = pathname.replace(/^\/[a-z]{2}(-[a-z]+)?/, `/${key}`);
-    const suffix = `${window.location.search}${window.location.hash}`;
-    // usePathname 不含 query/hash —— 不补会在切语言时丢掉 ?huginn 这类
-    // 功能门控参数(data-batch 的效应还会因参数消失把已选工具回写成
-    // excel,localStorage 永久丢失)。点击事件里读 window.location 安全。
-    if (isTauriRuntime()) {
-      // Save the choice FIRST so the post-reload startup redirect (which reads the
-      // saved preference) doesn't bounce us back to the old language. Then hard-load
-      // a trailing-slashed path — soft RSC nav doesn't resolve over Tauri's protocol.
-      setPreferredLanguage(key);
-      const slashed = newPath.endsWith("/") ? newPath : `${newPath}/`;
-      window.location.assign(`${slashed}${suffix}`);
-      return;
-    }
-    router.push(`${newPath}${suffix}`);
+    // Plain client-side (soft) navigation — same as the working img-prompt build.
+    // Soft nav is RSC routing that never touches the webview asset-protocol path
+    // resolution, so it works in Tauri without trailingSlash/hard-nav tricks.
+    // usePathname omits query/hash; re-append them so gating params survive a switch.
+    router.push(`${newPath}${window.location.search}${window.location.hash}`);
   };
 
   const renderLanguageList = () => (

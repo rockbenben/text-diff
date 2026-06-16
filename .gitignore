@@ -41,5 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 # tauri
-src-tauri
+src-tauri/target
+src-tauri/gen/schemas
+# tauri auto-update signing keys — NEVER commit the private key
+src-tauri/*.key
+src-tauri/*.key.pub
 .gstack/

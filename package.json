@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:tauri": "cross-env TAURI_BUILD=1 next build",
     "build:lang": "node scripts/buildWithLang.js",
     "start": "next start",
     "lint": "eslint",
@@ -38,6 +39,7 @@
     "@types/react-dom": "^19",
     "@types/rtl-detect": "^1.0.3",
     "babel-plugin-react-compiler": "^1.0.0",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "tailwindcss": "^4",

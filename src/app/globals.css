@@ -1,0 +1,241 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   Interlingua — design tokens
+   Paper, ink, one Klein-blue accent. Swiss-international system:
+   visible graph grid, hairline rules, square corners, mono meta.
+   Single-source-of-truth here, mirrored in ThemesProvider's antd
+   token overrides.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --bg-dark: #121110;
+  --bg-light: #f4f2ec;
+  --ink-dark: #f0ede4;
+  --ink-light: #141310;
+  --accent: #1d35f5; /* Klein blue (light mode) */
+  --accent-soft: rgba(29, 53, 245, 0.08);
+  --rule-dark: rgba(240, 237, 228, 0.1);
+  --rule-light: rgba(20, 19, 16, 0.12);
+}
+
+html.dark {
+  color-scheme: dark;
+  /* Periwinkle shift — pure Klein blue is illegible on ink. */
+  --accent: #7a8cff;
+  --accent-soft: rgba(122, 140, 255, 0.12);
+}
+html.light {
+  color-scheme: light;
+}
+
+/* Pre-paint body bg so the canvas is up before AntD CSS-in-JS lands.
+   Avoids the flash on cold reload that's especially visible with
+   defaultTheme="dark". */
+html,
+body {
+  background-color: var(--bg-dark);
+}
+html.light,
+html.light body {
+  background-color: var(--bg-light);
+}
+
+body {
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Graph-paper grid — the Interlingua backdrop. Fixed, faint,
+   behind everything; AntD Layout is transparent so it shows
+   through. A flat drafting surface, not an atmosphere.
+   ───────────────────────────────────────────────────────────── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, rgba(240, 237, 228, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(240, 237, 228, 0.03) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+html.light body::before {
+  background-image:
+    linear-gradient(to right, rgba(20, 19, 16, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 19, 16, 0.035) 1px, transparent 1px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Typography utilities — grotesk display voice + tracked mono
+   meta. CJK falls back to the system sans stack.
+   ───────────────────────────────────────────────────────────── */
+/* Display voice = the same grotesk, pushed heavy and tight at usage sites
+   (weight 700-800, negative tracking). One family, two registers. */
+.font-display {
+  font-family: var(--font-sans), "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   AntD overrides — chrome polish only, no structural changes.
+   ───────────────────────────────────────────────────────────── */
+
+/* Minimum touch target for nav icon buttons (WCAG 2.5.8). */
+.ant-layout-header .ant-btn-icon-only {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Focus ring — the accent, not OS Highlight. Square, like everything else. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Skip-to-content link — visually hidden until keyboard-focused, then pinned
+   to the top-left so keyboard/SR users can jump past the nav to <main>. */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -48px;
+  z-index: 1000;
+  padding: 8px 16px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.18s ease;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+}
+
+/* Card hover — flat Swiss: no lift, no shadow. The accent rule draws in
+   along the bottom edge and the border sharpens. Color is the motion. */
+.ant-card.ant-card-hoverable {
+  position: relative;
+  transition: border-color 0.22s ease;
+  overflow: hidden;
+}
+.ant-card.ant-card-hoverable::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.ant-card.ant-card-hoverable:hover {
+  border-color: var(--accent) !important;
+}
+.ant-card.ant-card-hoverable:hover::after {
+  transform: scaleX(1);
+}
+
+/* Square scrollbars — drafting-table hardware, not pill thumbs. */
+@media (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--rule-dark);
+    border-radius: 0;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(240, 237, 228, 0.22);
+  }
+  html.light ::-webkit-scrollbar-thumb {
+    background: var(--rule-light);
+  }
+  html.light ::-webkit-scrollbar-thumb:hover {
+    background: rgba(20, 19, 16, 0.28);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Stagger fade-in for hero elements — used by home.tsx via
+   inline animation-delay. One orchestrated reveal on page load
+   beats scattered micro-interactions.
+   ───────────────────────────────────────────────────────────── */
+@keyframes editorial-rise {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.editorial-rise {
+  animation: editorial-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes editorial-rule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.editorial-rule {
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: editorial-rule 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.15s forwards;
+}
+
+@keyframes loading-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Blinking block caret — projection screen (subtitle progress preview). */
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editorial-rise,
+  .editorial-rule {
+    animation: none;
+    transform: none;
+  }
+  .ant-card.ant-card-hoverable {
+    transition: none;
+  }
+  [style*="loading-pulse"],
+  [style*="caret-blink"] {
+    animation: none !important;
+    opacity: 0.7 !important;
+  }
+}

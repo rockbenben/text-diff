@@ -1,0 +1,119 @@
+/* Single virtualized scroll container holding full-width rows. Each row is a
+   grid of [left cell | hairline split | right cell]; both panes therefore scroll
+   in lockstep for free. Colors come from --td-* vars set in TextDiff.tsx. */
+.diff { border: 1px solid var(--td-border); font-family: var(--td-mono); font-size: 13px; }
+.scroll { max-height: 72vh; overflow: auto; }
+/* virtualizer sizing wrapper — its height is the total measured content height */
+.sizer { position: relative; width: 100%; }
+/* each virtual item is absolutely positioned and translated to its offset */
+.vrow { position: absolute; top: 0; left: 0; width: 100%; }
+
+.row { display: grid; grid-template-columns: 1fr 1px 1fr; border-bottom: 1px solid var(--td-border-2); }
+.split { background: var(--td-border); }
+.cell { display: grid; grid-template-columns: 44px 1fr; align-items: stretch; min-width: 0; }
+.ln { text-align: right; padding: 4px 10px 4px 0; color: var(--td-text-3); background: var(--td-bg-container); border-right: 1px solid var(--td-border-2); user-select: none; font-size: 12px; position: relative; }
+.tx { padding: 4px 12px 4px 22px; white-space: pre-wrap; word-break: break-all; position: relative; min-width: 0; }
+
+.del { background: var(--td-del-bg); }
+.del .tx::before { content: "\2212"; position: absolute; left: 8px; font-weight: 700; color: var(--td-del); }
+.add { background: var(--td-add-bg); }
+.add .tx::before { content: "+"; position: absolute; left: 8px; font-weight: 700; color: var(--td-add); }
+.modLeft { background: var(--td-del-bg); }
+.modRight { background: var(--td-add-bg); }
+.gap { background: repeating-linear-gradient(45deg, transparent, transparent 5px, var(--td-border-2) 5px, var(--td-border-2) 6px); }
+.gap .ln { background: transparent; color: transparent; }
+
+/* Inline char/word changes — a "marker" treatment tuned for the Swiss/Interlingua
+   surface: a soft translucent wash of the side color for the body of the change,
+   plus a crisp 2px baseline rule in the full-strength color. The rule gives a
+   precise, intentional edge (and a non-color cue for color-blind readers); the
+   wash stays light so glyphs — Latin or CJK — read cleanly without bold or
+   recolored text. The wash is translucent so it also reads over the line tint
+   and the current-hunk highlight. */
+.fragDel { background: color-mix(in srgb, var(--td-del) 24%, transparent); border-bottom: 2px solid var(--td-del); }
+.fragAdd { background: color-mix(in srgb, var(--td-add) 24%, transparent); border-bottom: 2px solid var(--td-add); }
+.fragFirst { background: color-mix(in srgb, var(--td-accent) 28%, transparent); border-bottom: 2px solid var(--td-accent); }
+
+/* currently-navigated hunk (prev/next) — thick accent bar + outline (drawn on
+   top of the cell tints, so it stays visible on mod/add/del rows) so navigation
+   is obvious even when the diff fits the viewport and nothing scrolls */
+.current { box-shadow: inset 4px 0 0 var(--td-accent); outline: 1px solid var(--td-accent); outline-offset: -1px; position: relative; z-index: 1; }
+
+/* first difference — accent inset bar on the left cell + ▶ marker */
+.first { box-shadow: inset 2px 0 0 var(--td-accent); }
+.first .ln::before { content: "\25B6"; position: absolute; left: 4px; top: 5px; color: var(--td-accent); font-size: 9px; }
+
+/* collapsed identical run ("仅看差异") — full-width, clickable to expand */
+.fold { padding: 6px 12px; text-align: center; color: var(--td-text-3); font-size: 11px; letter-spacing: .1em; cursor: pointer; background: var(--td-bg-container); border-bottom: 1px solid var(--td-border-2); }
+.fold:hover { color: var(--td-accent); }
+
+/* ── First-difference banner — the signature "locator readout" ──────────── */
+.banner { display: flex; align-items: center; gap: 16px; padding: 12px 16px; background: var(--td-bg-container); border: 1px solid var(--td-border); border-inline-start: 2px solid var(--td-accent); cursor: pointer; transition: background .2s cubic-bezier(.65, 0, .35, 1); }
+.banner:hover { background: var(--td-accent-bg); }
+.banner:focus-visible { outline: 2px solid var(--td-accent); outline-offset: 2px; }
+.bannerOk { border-inline-start-color: var(--td-add); cursor: default; }
+.bannerBody { flex: 1; min-width: 0; }
+.bannerTag { font-family: var(--td-mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--td-text-3); margin-bottom: 4px; }
+.bannerMain { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.bannerMsg { font-weight: 600; }
+.bannerChips { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+.chip { font-family: var(--td-mono); font-size: 12.5px; padding: 1px 8px; border: 1px solid currentColor; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chipDel { color: var(--td-del); background: var(--td-del-bg); }
+.chipAdd { color: var(--td-add); background: var(--td-add-bg); }
+.arrow { color: var(--td-text-3); font-family: var(--td-mono); }
+.okIcon { color: var(--td-add); font-size: 15px; }
+.jump { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 5px; font-family: var(--td-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--td-text-3); white-space: nowrap; transition: color .2s; }
+.banner:hover .jump { color: var(--td-accent); }
+.banner:hover .jump svg { transform: translateX(2px); transition: transform .2s; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .first .ln::before { animation: tdBlink 1.3s ease-in-out 3; }
+}
+@keyframes tdBlink { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+
+/* ── Input panes ───────────────────────────────────────────────────────────
+   Each side is a hairline-framed unit with a header rail (accent tag · file ·
+   tools) over a borderless textarea, so the frame focuses as one. */
+.pane { border: 1px solid var(--td-border-2); background: var(--td-bg-container); transition: border-color .15s; }
+.pane:focus-within { border-color: var(--td-accent); }
+.paneHead { display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 10px; border-bottom: 1px solid var(--td-border-2); min-height: 38px; }
+.paneTag { display: inline-flex; align-items: center; gap: 7px; font-family: var(--td-mono); font-weight: 700; font-size: 12px; letter-spacing: .12em; color: var(--td-accent); white-space: nowrap; }
+.paneTag i { width: 7px; height: 7px; background: var(--td-accent); display: inline-block; }
+.paneFile { flex: 1; min-width: 0; font-family: var(--td-mono); font-size: 12px; color: var(--td-text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.paneTools { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ── Command bar — clusters (view · compare · navigate · actions) ──────────── */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 4px; }
+.cluster { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* ── Comparison readout — similarity figure + colored counts + totals ──────── */
+.readout { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; font-family: var(--td-mono); padding: 2px 0; }
+.metric { display: inline-flex; align-items: baseline; gap: 7px; }
+.metricLabel { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--td-text-3); }
+.metricBig { font-size: 19px; font-weight: 800; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.counts { display: inline-flex; align-items: baseline; gap: 12px; font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; }
+.cMod { color: var(--td-accent); }
+.cAdd { color: var(--td-add); }
+.cDel { color: var(--td-del); }
+.totals { color: var(--td-text-3); font-size: 12px; }
+
+/* ── Unified (inline) view ─────────────────────────────────────────────────
+   Single column: a modified row renders as a deletion line then an addition
+   line. Two line-number gutters (old | new) keep both numbers visible. */
+.urow { display: grid; grid-template-columns: 40px 40px 1fr; border-bottom: 1px solid var(--td-border-2); }
+.uln { text-align: right; padding: 4px 8px 4px 0; color: var(--td-text-3); background: var(--td-bg-container); border-right: 1px solid var(--td-border-2); user-select: none; font-size: 12px; }
+.utx { padding: 4px 12px 4px 22px; white-space: pre-wrap; word-break: break-all; position: relative; min-width: 0; }
+.del .utx::before { content: "\2212"; position: absolute; left: 8px; font-weight: 700; color: var(--td-del); }
+.add .utx::before { content: "+"; position: absolute; left: 8px; font-weight: 700; color: var(--td-add); }
+
+/* ── Overview ruler ────────────────────────────────────────────────────────
+   A thin track beside the scroll area; each change is a colored tick at its
+   proportional position. Click jumps to that hunk. */
+.withRuler { display: flex; align-items: stretch; }
+.withRuler .scroll { flex: 1; min-width: 0; }
+.ruler { position: relative; flex: 0 0 12px; width: 12px; background: var(--td-bg-container); border-inline-start: 1px solid var(--td-border-2); }
+.tick { position: absolute; left: 2px; right: 2px; cursor: pointer; opacity: .8; transition: opacity .15s; }
+.tick:hover { opacity: 1; left: 1px; right: 1px; }
+.tickMod { background: var(--td-accent); }
+.tickAdd { background: var(--td-add); }
+.tickDel { background: var(--td-del); }

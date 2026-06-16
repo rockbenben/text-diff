@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --bg: #15171C; --panel: #1A1D23; --ink: #ECEAE3; --muted: #868D97;
+    --line: #2A2F38; --gutter: #565D67;
+    --green: #36C46B; --green-t: #74E2A4; --green-bg: rgba(54,196,107,.12);
+    --red: #F0605B; --red-t: #FF918C; --red-bg: rgba(240,96,91,.13);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    background: var(--bg);
+    font-family: 'Schibsted Grotesk', system-ui, sans-serif;
+    color: var(--ink);
+    display: flex; align-items: stretch;
+    overflow: hidden; position: relative;
+  }
+  /* faint structural grid */
+  body::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: linear-gradient(var(--line) 1px, transparent 1px);
+    background-size: 100% 78.75px; opacity: .35; pointer-events: none;
+  }
+  .left {
+    flex: 1; padding: 64px 56px 64px 80px;
+    display: flex; flex-direction: column; justify-content: center; gap: 26px;
+    position: relative; z-index: 1;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 500;
+    letter-spacing: .32em; text-transform: uppercase; color: var(--muted);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .eyebrow .marks { display: inline-flex; gap: 6px; }
+  .eyebrow .marks i { width: 11px; height: 11px; display: block; }
+  .eyebrow .marks .r { background: var(--red); }
+  .eyebrow .marks .g { background: var(--green); }
+
+  .title {
+    font-weight: 800; font-size: 116px; line-height: .9;
+    letter-spacing: -.04em;
+  }
+  .title .diff { color: var(--green); }
+  .lede {
+    font-size: 36px; font-weight: 500; line-height: 1.2;
+    color: var(--ink); max-width: 18ch;
+  }
+  .lede b { color: var(--red); font-weight: 700; }
+  .lede em { color: var(--green); font-style: normal; font-weight: 700; }
+  .desc {
+    font-family: 'JetBrains Mono', monospace; font-size: 17px; line-height: 1.55;
+    color: var(--muted); max-width: 42ch;
+  }
+  .url {
+    font-family: 'JetBrains Mono', monospace; font-size: 19px; font-weight: 500;
+    color: var(--ink); display: flex; align-items: center; gap: 12px;
+  }
+  .url::before { content: ""; width: 26px; height: 2px; background: var(--green); }
+
+  /* right: a real diff panel */
+  .panel {
+    width: 472px; flex: none; align-self: center; margin-right: 72px;
+    background: var(--panel); border: 1px solid var(--line);
+    position: relative; z-index: 1;
+    box-shadow: 0 40px 80px -30px rgba(0,0,0,.7);
+  }
+  .panel .bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 20px; border-bottom: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--muted);
+  }
+  .panel .bar .dot { width: 9px; height: 9px; background: var(--gutter); }
+  .panel .bar b { color: var(--ink); font-weight: 500; }
+  .panel .bar .arrow { color: var(--green); }
+  .rows { font-family: 'JetBrains Mono', monospace; font-size: 19px; line-height: 1; }
+  .row { display: flex; align-items: center; height: 50px; }
+  .row .ln { width: 56px; text-align: right; padding-right: 16px; color: var(--gutter); font-size: 15px; }
+  .row .mk { width: 28px; text-align: center; font-weight: 700; }
+  .row .tx { flex: 1; padding-right: 20px; letter-spacing: -.01em; }
+  .row.ctx .tx { color: #9aa1ab; }
+  .row.del { background: var(--red-bg); }
+  .row.del .mk, .row.del .tx { color: var(--red-t); }
+  .row.add { background: var(--green-bg); }
+  .row.add .mk, .row.add .tx { color: var(--green-t); }
+</style>
+</head>
+<body>
+  <div class="left">
+    <div class="eyebrow">
+      <span class="marks"><i class="r"></i><i class="g"></i></span>
+      Tools&nbsp;By&nbsp;AI · Text&nbsp;Compare
+    </div>
+    <div class="title">Text<br>Diff</div>
+    <div class="lede">Compare two texts. See <em>every</em> <b>difference</b>.</div>
+    <div class="desc">
+      Character · word · line diff. Plain text, CSV/TSV &amp; INI<br>
+      with auto UTF-8 / GBK detection. Free &amp; fully offline.
+    </div>
+    <div class="url">tools.newzone.top</div>
+  </div>
+
+  <div class="panel">
+    <div class="bar"><span class="dot"></span><b>before.txt</b><span class="arrow">→</span><b>after.txt</b></div>
+    <div class="rows">
+      <div class="row ctx"><span class="ln">12</span><span class="mk"></span><span class="tx">const diff = compare(</span></div>
+      <div class="row del"><span class="ln">13</span><span class="mk">−</span><span class="tx">&nbsp;&nbsp;oldText, opts</span></div>
+      <div class="row add"><span class="ln">13</span><span class="mk">+</span><span class="tx">&nbsp;&nbsp;newText,</span></div>
+      <div class="row add"><span class="ln">14</span><span class="mk">+</span><span class="tx">&nbsp;&nbsp;{ mode: "word" }</span></div>
+      <div class="row ctx"><span class="ln">15</span><span class="mk"></span><span class="tx">);</span></div>
+    </div>
+  </div>
+</body>
+</html>

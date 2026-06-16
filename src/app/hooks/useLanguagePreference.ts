@@ -5,90 +5,80 @@ import { usePathname, useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { getPreferredLanguage, setPreferredLanguage, getCurrentLanguageFromPath, isValidLanguage } from "@/app/utils/languageStorage";
 import { tauriLanguageManager } from "@/app/utils/tauriLanguage";
-import { isTauri } from "@/app/utils/externalLink";
+import { isTauriRuntime } from "@/app/utils/externalLink";
 
 interface UseLanguagePreferenceOptions {
   validLanguages: string[];
   defaultLanguage?: string;
 }
 
-// Remembers the user's chosen language across launches. On startup it redirects
-// to the saved locale (or, on first run in the desktop app, the system locale);
-// thereafter it persists whatever locale the user navigates to.
+// Once per app session we may redirect to the remembered locale. The flag (Tauri
+// only) stops the startup redirect from bouncing an explicit in-app language
+// switch back to the saved preference — the bug that made switching impossible.
+const SESSION_REDIRECT_KEY = "textdiff_lang_session_redirect";
+
+// Remembers the user's chosen language across launches. On the first load of an
+// app session it redirects to the saved locale (or, on a fresh desktop install,
+// the system locale); after that it just persists whatever locale is shown.
 export const useLanguagePreference = ({ validLanguages }: UseLanguagePreferenceOptions) => {
   const pathname = usePathname();
   const router = useRouter();
   const currentLocale = useLocale();
   const [isInitialized, setIsInitialized] = useState(false);
-  const [isTauriApp, setIsTauriApp] = useState(false);
   const hasInitializedRef = useRef(false);
 
   useEffect(() => {
-    isTauri().then(setIsTauriApp);
-  }, []);
-
-  // Startup: redirect to the preferred/system language if it differs from the URL.
-  useEffect(() => {
     if (hasInitializedRef.current) return;
+    hasInitializedRef.current = true;
 
-    const initializeLanguage = async () => {
-      let preferredLanguage: string | null = null;
+    const tauri = isTauriRuntime();
+    const currentLanguage = getCurrentLanguageFromPath(pathname);
 
-      if (isTauriApp) {
-        preferredLanguage = await tauriLanguageManager.initializeLanguage();
-        if (!preferredLanguage) {
-          const systemLang = tauriLanguageManager.getSystemLanguage();
-          if (isValidLanguage(systemLang, validLanguages)) {
-            preferredLanguage = systemLang;
-            await tauriLanguageManager.saveLanguagePreference(systemLang);
-          }
-        }
+    // Resolve preference: saved value, else (desktop, first run) system language.
+    let preferred = getPreferredLanguage();
+    if (!preferred && tauri) {
+      const sys = tauriLanguageManager.getSystemLanguage();
+      if (isValidLanguage(sys, validLanguages)) {
+        preferred = sys;
+        setPreferredLanguage(sys);
+      }
+    }
+
+    // In Tauri, only allow ONE startup redirect per session (hard nav remounts the
+    // hook on every page, so without this an explicit switch is bounced back).
+    let alreadyRedirected = false;
+    if (tauri) {
+      try {
+        alreadyRedirected = sessionStorage.getItem(SESSION_REDIRECT_KEY) === "1";
+      } catch {}
+    }
+
+    if (!alreadyRedirected && preferred && isValidLanguage(preferred, validLanguages) && preferred !== currentLanguage) {
+      const next = pathname.replace(/^\/[a-z]{2}(-[a-z]+)?/i, `/${preferred}`);
+      if (tauri) {
+        try {
+          sessionStorage.setItem(SESSION_REDIRECT_KEY, "1");
+        } catch {}
+        // Hard nav to a trailing-slashed path — soft nav doesn't resolve over
+        // Tauri's asset protocol.
+        window.location.replace(next.endsWith("/") ? next : `${next}/`);
       } else {
-        preferredLanguage = getPreferredLanguage();
+        router.replace(next);
       }
+      return;
+    }
 
-      const currentLanguage = getCurrentLanguageFromPath(pathname);
+    setIsInitialized(true);
+  }, [pathname, router, validLanguages]);
 
-      if (preferredLanguage && isValidLanguage(preferredLanguage, validLanguages) && preferredLanguage !== currentLanguage) {
-        const newPath = pathname.replace(/^\/[a-z]{2}(-[a-z]+)?/i, `/${preferredLanguage}`);
-        hasInitializedRef.current = true;
-        if (isTauriApp) {
-          // Hard-load a trailing-slashed path: Tauri's asset server resolves
-          // /zh/ → /zh/index.html, but soft RSC navigation fails over the
-          // custom protocol, which would leave the app stuck on the entry locale.
-          const slashed = newPath.endsWith("/") ? newPath : `${newPath}/`;
-          window.location.replace(slashed);
-        } else {
-          router.replace(newPath);
-        }
-        return;
-      }
-
-      hasInitializedRef.current = true;
-      setIsInitialized(true);
-    };
-
-    initializeLanguage();
-  }, [pathname, router, validLanguages, isTauriApp]);
-
-  // Persist the locale whenever the user navigates to a new one (debounced so we
-  // don't save mid-redirect).
+  // Persist the current locale so the next launch remembers it.
   useEffect(() => {
     if (!isInitialized) return;
     const currentLanguage = getCurrentLanguageFromPath(pathname);
     if (!isValidLanguage(currentLanguage, validLanguages)) return;
+    const t = setTimeout(() => setPreferredLanguage(currentLanguage), 300);
+    return () => clearTimeout(t);
+  }, [pathname, validLanguages, isInitialized]);
 
-    const timeoutId = setTimeout(() => {
-      if (!hasInitializedRef.current) return;
-      if (isTauriApp) {
-        tauriLanguageManager.saveLanguagePreference(currentLanguage);
-      } else {
-        setPreferredLanguage(currentLanguage);
-      }
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [pathname, validLanguages, isInitialized, isTauriApp]);
-
-  return { currentLanguage: currentLocale, isInitialized, isTauriApp };
+  return { currentLanguage: currentLocale, isInitialized };
 };

@@ -5,6 +5,7 @@ import { Button, Dropdown, Input, Drawer, Row, Col, theme, Grid } from "antd";
 import { TranslationOutlined, CheckOutlined } from "@ant-design/icons";
 import { useLocale } from "next-intl";
 import { isTauriRuntime } from "@/app/utils/externalLink";
+import { setPreferredLanguage } from "@/app/utils/languageStorage";
 
 // ============ 语言配置 ============
 
@@ -66,9 +67,10 @@ export function LanguageSelector() {
     // 功能门控参数(data-batch 的效应还会因参数消失把已选工具回写成
     // excel,localStorage 永久丢失)。点击事件里读 window.location 安全。
     if (isTauriRuntime()) {
-      // Tauri's asset server only resolves directory paths with a trailing slash
-      // (/zh/ → /zh/index.html); soft RSC navigation doesn't resolve over the
-      // custom protocol, so force a hard load to a slash-terminated path.
+      // Save the choice FIRST so the post-reload startup redirect (which reads the
+      // saved preference) doesn't bounce us back to the old language. Then hard-load
+      // a trailing-slashed path — soft RSC nav doesn't resolve over Tauri's protocol.
+      setPreferredLanguage(key);
       const slashed = newPath.endsWith("/") ? newPath : `${newPath}/`;
       window.location.assign(`${slashed}${suffix}`);
       return;

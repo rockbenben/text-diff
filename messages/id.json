@@ -313,7 +313,7 @@
     "formatTsv": "TSV",
     "formatIni": "INI",
     "formatJson": "JSON",
-    "largeWarning": "Input besar (lebih dari {lines} baris). Perbandingan mungkin lambat; diff tingkat karakter dinonaktifkan.",
+    "largeWarning": "Kedua sisi terlalu berbeda dan perbandingan kehabisan waktu — tidak ada perbandingan yang dibuat. Anda dapat memaksa perbandingan penuh (mungkin lambat).",
     "computeAnyway": "Bandingkan saja",
     "firstDiff": "Perbedaan pertama",
     "jump": "Lompat",

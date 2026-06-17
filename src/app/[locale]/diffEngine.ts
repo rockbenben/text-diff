@@ -44,9 +44,32 @@ export interface DiffResult {
   hunks: { start: number; end: number }[];
   stats: { mods: number; adds: number; dels: number };
   first: FirstDiff;
+  /** true when the line diff hit DIFF_TIMEOUT_MS; rows/hunks are empty. The UI
+   *  shows a warning + "force full compare" option; a forced run clears it. */
+  aborted: boolean;
 }
 
 export { detectFormat }; // re-export for the UI's single import site
+
+// diffArrays is Myers O(n×d): cheap when the two sides are similar (the normal
+// case — milliseconds even at tens of thousands of lines) but quadratic when
+// they share almost nothing (two unrelated files), where it can run for tens of
+// seconds. Cap its run time; on abort the lib returns undefined and we return an
+// empty result flagged `aborted` (no diff). The UI surfaces a warning on
+// `aborted` and lets the user re-run with `force` (no timeout) for a full
+// comparison. So nothing freezes the tab unless the user opts in.
+const DIFF_TIMEOUT_MS = 3000;
+
+// Inline char-level diff (diffChars) is O(n×d) per modified line and unbounded in
+// aggregate — many dissimilar long lines can otherwise freeze the tab for tens of
+// seconds. The char-level pass shares the SAME deadline as the line diff: if it
+// can't finish in time (or a single pair is pathologically long), the whole result
+// is marked `aborted`, so the UI warns and the user can `force` a full, unbounded
+// run — nothing is silently dropped. A pathologically long single pair is skipped
+// only under force (where the deadline is off) so force can't hang forever.
+// Kept low because one diffChars call is uninterruptible (the deadline is only
+// checked between rows): combined ~5000 ≈ 0.6s, ~20000 ≈ 10s — so cap near 5000.
+const CHAR_LEVEL_MAX_PAIR_LEN = 5000;
 
 /** Normalize newlines and strip a leading BOM char. */
 export function normalize(text: string): string {
@@ -74,9 +97,12 @@ function inlineSpans(a: string, b: string): { aSpans: InlineSpan[]; bSpans: Inli
   return { aSpans, bSpans };
 }
 
-export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions): DiffResult {
+export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions, force = false): DiffResult {
   const a = normalize(aRaw);
   const b = normalize(bRaw);
+  // One deadline for the whole comparison (line diff + char-level enrichment).
+  // force → no limit (the user opted into a full, possibly slow, run).
+  const deadline = force ? Infinity : Date.now() + DIFF_TIMEOUT_MS;
 
   // Split into line arrays and diff THOSE (not the raw strings). Diffing line
   // arrays compares lines by content, so a trailing newline on one side — or an
@@ -92,7 +118,22 @@ export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions): Diff
     if (opts.ignoreCase) x = x.toLowerCase();
     return x;
   };
-  const parts = diffArrays(aOrigLines, bOrigLines, { comparator: (l, r) => normLine(l) === normLine(r) });
+  // force → no timeout (user opted into a full, possibly slow, comparison).
+  // `timeout` is supported by diff@7 at runtime but missing from its bundled
+  // types, so widen the options type locally rather than cast at the call site.
+  const lineDiffOptions: { comparator: (l: string, r: string) => boolean; timeout?: number } = {
+    comparator: (l, r) => normLine(l) === normLine(r),
+    timeout: force ? undefined : DIFF_TIMEOUT_MS,
+  };
+  const parts = diffArrays(aOrigLines, bOrigLines, lineDiffOptions);
+  // Aborted (sides too dissimilar to diff within budget). We deliberately do NOT
+  // synthesize an all-replace view — pairing unrelated lines as "modifications"
+  // is a misleading "everything changed" diff a user could mistake for the real
+  // result. Return an empty result flagged `aborted`; the UI shows a warning +
+  // "force full compare" instead.
+  if (!parts) {
+    return { rows: [], hunks: [], stats: { mods: 0, adds: 0, dels: 0 }, first: { kind: "same", line: 0, rowIndex: -1 }, aborted: true };
+  }
 
   // CSV/TSV header + delimiter context from side A's first line.
   const aFirstLine = a.split("\n", 1)[0] ?? "";
@@ -114,13 +155,8 @@ export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions): Diff
     const { removed, added } = pending;
     const pairs = Math.min(removed.length, added.length);
     for (let i = 0; i < pairs; i++) {
-      const row: DiffRow = { kind: "mod", aLine: aLine++, bLine: bLine++, aText: removed[i], bText: added[i] };
-      if (opts.charLevel) {
-        const s = inlineSpans(removed[i], added[i]);
-        row.aSpans = s.aSpans;
-        row.bSpans = s.bSpans;
-      }
-      rows.push(row);
+      // char-level spans are added later, in a separate abortable pass.
+      rows.push({ kind: "mod", aLine: aLine++, bLine: bLine++, aText: removed[i], bText: added[i] });
       mods++;
     }
     for (let i = pairs; i < removed.length; i++) {
@@ -165,6 +201,25 @@ export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions): Diff
   }
   flushPending();
 
+  // Char-level enrichment as a separate, abortable pass sharing the line diff's
+  // deadline: add inline spans to modified rows, but if this can't finish in time
+  // — or a single pair is pathologically long — abort to the warning instead of
+  // freezing. A forced run (deadline off) does the full thing; under force a
+  // degenerate giant pair is skipped so the forced run can't hang forever.
+  if (opts.charLevel) {
+    for (const row of rows) {
+      if (row.kind !== "mod") continue;
+      const pairLen = (row.aText?.length ?? 0) + (row.bText?.length ?? 0);
+      if (!force && (Date.now() > deadline || pairLen > CHAR_LEVEL_MAX_PAIR_LEN)) {
+        return { rows: [], hunks: [], stats: { mods: 0, adds: 0, dels: 0 }, first: { kind: "same", line: 0, rowIndex: -1 }, aborted: true };
+      }
+      if (pairLen > CHAR_LEVEL_MAX_PAIR_LEN) continue;
+      const s = inlineSpans(row.aText ?? "", row.bText ?? "");
+      row.aSpans = s.aSpans;
+      row.bSpans = s.bSpans;
+    }
+  }
+
   // Group contiguous non-same rows into hunks (block navigation).
   const hunks: { start: number; end: number }[] = [];
   for (let i = 0; i < rows.length; i++) {
@@ -192,5 +247,5 @@ export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions): Diff
     }
   }
 
-  return { rows, hunks, stats: { mods, adds, dels }, first };
+  return { rows, hunks, stats: { mods, adds, dels }, first, aborted: false };
 }

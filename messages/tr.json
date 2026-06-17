@@ -313,7 +313,7 @@
     "formatTsv": "TSV",
     "formatIni": "INI",
     "formatJson": "JSON",
-    "largeWarning": "Büyük giriş ({lines} satırdan fazla). Karşılaştırma yavaş olabilir; karakter düzeyi diff kapalı.",
+    "largeWarning": "İki taraf çok farklı ve karşılaştırma zaman aşımına uğradı — karşılaştırma oluşturulmadı. Tam karşılaştırmayı zorlayabilirsiniz (yavaş olabilir).",
     "computeAnyway": "Yine de karşılaştır",
     "firstDiff": "İlk fark",
     "jump": "Git",

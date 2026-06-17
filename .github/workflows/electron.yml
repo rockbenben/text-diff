@@ -1,15 +1,26 @@
 name: Build Electron (Windows unpacked)
 
-# 仅手动触发的便捷构建:内网用的 Electron 桌面版。
+# 手动触发,或 push 一个 `v*` tag 时触发:内网用的 Electron 桌面版。
 # 应用代码在 feat/electron-desktop 分支,所以这里显式 checkout 该分支。
-# 产物为 win-unpacked 目录(下载时 GitHub 会自动打包成 zip),免解压、启动快。
 # 注意:此处固定了分支名;若将来该分支合并/改名,需同步更新下面的 ref。
+#
+# 产物为 win-unpacked 目录,会:
+#   1. 作为 workflow artifact 上传(下载时 GitHub 自动打包成 zip,内网下载用);
+#   2. tag 触发时,额外打包成 zip 上传到对应的 GitHub Release。
+#
+# Release 由 “Build Desktop App”(Tauri)workflow 创建(草稿),tag 相同。
+# 本 workflow 只是把 Electron 产物追加到那个 Release,所以会先等它出现。
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "v*"
 
 jobs:
   build:
     runs-on: windows-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,7 +28,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: yarn
 
       - name: Install dependencies
@@ -35,3 +46,36 @@ jobs:
           name: TextDiff-unpacked
           path: dist-electron/win-unpacked
           if-no-files-found: error
+
+      # 仅在 tag 触发时把产物追加到 Release。手动触发没有 Release,跳过。
+      - name: Zip unpacked app
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          7z a "TextDiff_${VERSION}_win-unpacked.zip" "./dist-electron/win-unpacked"
+          echo "APP_VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Attach unpacked zip to the release
+        if: github.event_name == 'push'
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.ref_name }}"
+          # Tauri workflow 会创建这个(草稿)Release;它要编译 Rust(四平台
+          # 矩阵),通常比 Electron 慢很多,所以这里轮询等待 Release 出现
+          # (最多约 20 分钟);超时仍未出现就报错退出,便于排查。
+          for i in $(seq 1 40); do
+            if gh release view "$TAG" >/dev/null 2>&1; then
+              echo "Release $TAG is ready."
+              break
+            fi
+            if [ "$i" -eq 40 ]; then
+              echo "::error::Release $TAG never appeared; is the Tauri workflow running for this tag?"
+              exit 1
+            fi
+            echo "Release $TAG not ready yet, waiting... ($i/40)"
+            sleep 30
+          done
+          gh release upload "$TAG" "TextDiff_${APP_VERSION}_win-unpacked.zip" --clobber

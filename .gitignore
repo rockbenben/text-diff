@@ -47,3 +47,6 @@ src-tauri/gen/schemas
 src-tauri/*.key
 src-tauri/*.key.pub
 .gstack/
+
+# electron build output
+dist-electron/

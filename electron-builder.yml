@@ -4,6 +4,7 @@ directories:
   output: dist-electron
 files:
   - electron/**
+  - "!electron/*.test.js"
   - package.json
 extraResources:
   - from: out

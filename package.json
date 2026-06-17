@@ -12,7 +12,7 @@
     "outdated": "ncu",
     "electron": "electron .",
     "electron:dev": "node scripts/electron-dev.js",
-    "electron:build": "next build && electron-builder --win portable",
+    "electron:build": "next build && electron-builder --win dir",
     "test:electron": "node --test electron/*.test.js"
   },
   "dependencies": {

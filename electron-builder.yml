@@ -12,7 +12,5 @@ extraResources:
   - from: build/icon.png
     to: icon.png
 win:
-  target: portable
+  target: dir
   icon: build/icon.png
-portable:
-  artifactName: TextDiff-${version}-portable.exe

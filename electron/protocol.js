@@ -17,7 +17,9 @@ function handleProtocol(outDir) {
     const { pathname } = new URL(request.url);
     const filePath = resolveAssetPath(outDir, pathname, fs.existsSync);
     // net.fetch 读取 file:// URL 并自动推断 Content-Type。
-    return net.fetch(url.pathToFileURL(filePath).toString());
+    return net.fetch(url.pathToFileURL(filePath).toString()).catch(
+      () => new Response("Not found", { status: 404 })
+    );
   });
 }
 

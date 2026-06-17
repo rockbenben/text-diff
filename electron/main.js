@@ -4,6 +4,7 @@ const { SCHEME } = require("./constants");
 const { registerScheme, handleProtocol } = require("./protocol");
 const { createStore } = require("./store");
 const { startUrl, trackLocale } = require("./locale");
+const { createWindowStateKeeper } = require("./window-state");
 
 const isDev = process.env.ELECTRON_DEV === "1";
 const OUT_DIR = app.isPackaged
@@ -19,6 +20,7 @@ if (!gotLock) {
 } else {
   let win = null;
   const store = createStore(app.getPath("userData"));
+  const windowState = createWindowStateKeeper(store);
 
   app.on("second-instance", () => {
     if (win) {
@@ -29,14 +31,17 @@ if (!gotLock) {
   });
 
   function createWindow() {
+    const s = windowState.saved;
     win = new BrowserWindow({
-      width: 1200,
-      height: 800,
+      width: s.width,
+      height: s.height,
+      x: s.x,
+      y: s.y,
       show: false,
       webPreferences: { contextIsolation: true, nodeIntegration: false },
     });
 
-    // <-- WINDOW-STATE-HOOK (Task 5):windowState.track(win)
+    windowState.track(win);
     trackLocale(win, store);
 
     if (isDev) {

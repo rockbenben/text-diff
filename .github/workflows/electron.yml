@@ -1,22 +1,22 @@
 name: Build Electron (Windows unpacked)
 
+# Manual run only — standalone build for testing this branch in isolation.
+# Releases are driven from `main` (the release hub): a `v*` tag on main runs
+# main's copy of this workflow with `ref: feat/electron-desktop`, builds, and
+# uploads the win-unpacked zip to the Tauri-created Release. Tagging this branch
+# is therefore intentionally NOT a trigger, and there is no release step here.
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22 # electron@42 requires node >= 22.12
           cache: yarn
 
       - name: Install dependencies
@@ -34,14 +34,3 @@ jobs:
           name: TextDiff-unpacked
           path: dist-electron/win-unpacked
           if-no-files-found: error
-
-      - name: Zip unpacked for release
-        if: startsWith(github.ref, 'refs/tags/v')
-        shell: pwsh
-        run: Compress-Archive -Path dist-electron/win-unpacked/* -DestinationPath dist-electron/TextDiff-${{ github.ref_name }}-win.zip
-
-      - name: Publish release on tag
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist-electron/*.zip

@@ -313,7 +313,7 @@
     "formatTsv": "TSV",
     "formatIni": "INI",
     "formatJson": "JSON",
-    "largeWarning": "內容較大（超過 {lines} 行）。繼續比對可能較慢，且字元級比對會自動關閉。",
+    "largeWarning": "兩側差異過大，比對已逾時，暫未產生對比。可強制進行完整比對（可能較慢）。",
     "computeAnyway": "仍要比對",
     "firstDiff": "首處差異",
     "jump": "跳轉",

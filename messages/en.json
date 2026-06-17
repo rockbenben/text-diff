@@ -313,7 +313,7 @@
     "formatTsv": "TSV",
     "formatIni": "INI",
     "formatJson": "JSON",
-    "largeWarning": "Large input (over {lines} lines). Comparing may be slow; character-level diff is turned off.",
+    "largeWarning": "The two sides differ too much and the comparison timed out — no diff was generated. You can force a full comparison (may be slow).",
     "computeAnyway": "Compare anyway",
     "firstDiff": "First difference",
     "jump": "Jump",

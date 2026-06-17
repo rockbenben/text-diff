@@ -313,7 +313,7 @@
     "formatTsv": "TSV",
     "formatIni": "INI",
     "formatJson": "JSON",
-    "largeWarning": "入力が大きすぎます（{lines} 行超）。比較に時間がかかる場合があり、文字レベル diff は無効になります。",
+    "largeWarning": "差分が大きすぎて比較がタイムアウトしました。対比は生成されていません。完全な比較を強制できます（時間がかかる場合があります）。",
     "computeAnyway": "それでも比較する",
     "firstDiff": "最初の差異",
     "jump": "ジャンプ",

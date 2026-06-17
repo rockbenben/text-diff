@@ -313,7 +313,7 @@
     "formatTsv": "TSV",
     "formatIni": "INI",
     "formatJson": "JSON",
-    "largeWarning": "Entrée volumineuse (plus de {lines} lignes). La comparaison peut être lente ; la diff au niveau des caractères est désactivée.",
+    "largeWarning": "Les deux côtés diffèrent trop et la comparaison a expiré — aucune comparaison générée. Vous pouvez forcer une comparaison complète (peut être lente).",
     "computeAnyway": "Comparer quand même",
     "firstDiff": "Première différence",
     "jump": "Aller à",

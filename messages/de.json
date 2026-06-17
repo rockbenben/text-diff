@@ -313,7 +313,7 @@
     "formatTsv": "TSV",
     "formatIni": "INI",
     "formatJson": "JSON",
-    "largeWarning": "Große Eingabe (über {lines} Zeilen). Der Vergleich kann langsam sein; Diff auf Zeichenebene ist deaktiviert.",
+    "largeWarning": "Die beiden Seiten unterscheiden sich zu stark und der Vergleich hat das Zeitlimit überschritten – es wurde kein Diff erzeugt. Du kannst einen vollständigen Vergleich erzwingen (kann langsam sein).",
     "computeAnyway": "Trotzdem vergleichen",
     "firstDiff": "Erster Unterschied",
     "jump": "Springen",

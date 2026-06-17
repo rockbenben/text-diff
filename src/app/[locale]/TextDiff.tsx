@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useDeferredValue, useMemo, useRef, useState } from "react";
-import { Alert, App, Button, Checkbox, Divider, Input, Segmented, Select, Space, theme, Tooltip, Typography, Upload } from "antd";
+import { Alert, App, Button, Checkbox, Divider, Segmented, Select, Space, theme, Tooltip, Typography, Upload } from "antd";
 import { SwapOutlined, UpOutlined, DownOutlined, ClearOutlined, CopyOutlined, DownloadOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import { createPatch } from "diff";
@@ -13,17 +13,18 @@ import { computeDiff, detectFormat } from "./diffEngine";
 import type { FormatKind } from "./formats";
 import DiffPane, { type DiffPaneHandle } from "./DiffPane";
 import FirstDiffBanner from "./FirstDiffBanner";
+import CodeInput from "./CodeInput";
 import styles from "./textDiff.module.css";
 
-const { TextArea } = Input;
 const ENCODINGS = ["utf-8", "gbk", "big5", "utf-16le"] as const;
 const FORMATS: FormatKind[] = ["plain", "csv", "tsv", "ini", "json"];
 // Limit the OS file dialog to mainstream text formats (user can still pick "all files").
 const ACCEPT = ".txt,.csv,.tsv,.json,.ini,.conf,.properties,.md,.markdown,.log,.xml,.yml,.yaml,.html,.css,.js,.jsx,.ts,.tsx,.srt,.vtt,text/*";
-const LARGE_LINES = 5000; // beyond this, warn before running the O(n×m) line diff
 
 interface SideState { text: string; bytes: ArrayBuffer | null; filename: string | null; encoding: string; }
 const emptySide: SideState = { text: "", bytes: null, filename: null, encoding: "utf-8" };
+
+const countLines = (s: string) => (s === "" ? 0 : s.split("\n").length);
 
 const TextDiff = () => {
   const t = useTranslations("TextDiff");
@@ -41,7 +42,7 @@ const TextDiff = () => {
   const [context, setContext] = useLocalStorage("text-diff-context", 1);
   const [view, setView] = useLocalStorage<"split" | "unified">("text-diff-view", "split");
   const [hunkIdx, setHunkIdx] = useState(0);
-  const [forceCompute, setForceCompute] = useState(false); // user opted to diff a large input anyway
+  const [forceCompute, setForceCompute] = useState(false); // user opted into a full diff after a timeout
   const { copyToClipboard } = useCopyToClipboard();
 
   const paneRef = useRef<DiffPaneHandle>(null);
@@ -62,18 +63,33 @@ const TextDiff = () => {
     [formatOverride, a.filename, b.filename, aText, bText],
   );
 
-  const tooLarge = useMemo(
-    () => bothPresent && Math.max(aText.split("\n").length, bText.split("\n").length) > LARGE_LINES,
-    [bothPresent, aText, bText],
-  );
+  // Any content change re-arms the timeout guard: a forced full compare applies
+  // only to the inputs it was requested for, not to whatever is typed next.
+  // (Render-time reset per React's "adjust state when inputs change" pattern,
+  // same as prevResult below — guarded so it can't loop.)
+  const [prevInputs, setPrevInputs] = useState({ a: aText, b: bText });
+  const inputsChanged = prevInputs.a !== aText || prevInputs.b !== bText;
+  if (inputsChanged) {
+    setPrevInputs({ a: aText, b: bText });
+    setForceCompute(false);
+  }
+  // Apply the reset THIS render: `forceCompute` state lags by one render, so
+  // without this an edit after a force would run one full (slow) compare before
+  // the timeout guard re-arms on the next render.
+  const effectiveForce = forceCompute && !inputsChanged;
 
-  const result = useMemo(
+  // The diff is hard-bounded by DIFF_TIMEOUT_MS: if the two sides are too
+  // dissimilar to finish in time it returns `aborted`. A forced run re-computes
+  // with no timeout for a full, possibly slow, comparison the user asked for.
+  const computed = useMemo(
     () =>
-      bothPresent && (!tooLarge || forceCompute)
-        ? computeDiff(aText, bText, { format, ignoreWhitespace, ignoreCase, charLevel: charLevel && !tooLarge })
-        : null,
-    [bothPresent, tooLarge, forceCompute, aText, bText, format, ignoreWhitespace, ignoreCase, charLevel],
+      bothPresent ? computeDiff(aText, bText, { format, ignoreWhitespace, ignoreCase, charLevel }, effectiveForce) : null,
+    [bothPresent, effectiveForce, aText, bText, format, ignoreWhitespace, ignoreCase, charLevel],
   );
+  // On timeout show only the warning — no diff. `result` is null'd so every diff
+  // surface (banner, toolbar, readout, pane) skips, leaving the warning + force.
+  const aborted = !!computed?.aborted;
+  const result = aborted ? null : computed;
 
   // When the diff recomputes (text/options changed), the old block index is
   // stale — reset it so the "i / n" counter can't show an impossible i > n.
@@ -94,7 +110,6 @@ const TextDiff = () => {
         if (seq !== loadSeq.current[side]) return; // superseded by a newer load or a user edit
         const next: SideState = { text, bytes: buffer, filename: file.name, encoding: "utf-8" };
         (side === "a" ? setA : setB)(next);
-        setForceCompute(false); // new content — re-evaluate the large-input gate
         if (/�/.test(text)) message.warning(t("notTextFile"));
       } catch {
         message.error(t("notTextFile"));
@@ -126,6 +141,8 @@ const TextDiff = () => {
   // Export the comparison as a standard unified diff (.patch) — pasteable into
   // `git apply`, review tools, etc. Header names fall back to A/B when typed in.
   const exportPatch = () => {
+    // Export is an explicit user action — let it run to completion even on a large
+    // raw diff (slow is acceptable when the user clicked it), rather than failing.
     const patch = createPatch(b.filename ?? "diff", a.text, b.text, a.filename ?? t("sideA"), b.filename ?? t("sideB"));
     void downloadFile(patch, (b.filename ?? "text") + ".patch");
     message.success(t("exportDone"));
@@ -163,6 +180,7 @@ const TextDiff = () => {
     "--td-border": token.colorBorder,
     "--td-border-2": token.colorBorderSecondary,
     "--td-bg-container": token.colorBgContainer,
+    "--td-text": token.colorText,
     "--td-text-3": token.colorTextTertiary,
     "--td-accent": token.colorPrimary,
     "--td-accent-bg": token.colorPrimaryBg,
@@ -197,13 +215,11 @@ const TextDiff = () => {
               options={ENCODINGS.map((enc) => ({ value: enc, label: enc }))} />
           </span>
         </div>
-        <TextArea
-          value={s.text} onChange={(e) => editText(side, e.target.value)}
-          variant="borderless"
+        <CodeInput
+          value={s.text} onChange={(text) => editText(side, text)}
           onDragOver={(e) => { if (e.dataTransfer.types.includes("Files")) e.preventDefault(); }}
           onDrop={(e) => { const f = e.dataTransfer.files?.[0]; if (f) { e.preventDefault(); loadFile(side, f); } }}
-          placeholder={t("pasteHere")} autoSize={{ minRows: 6, maxRows: 14 }}
-          style={{ fontFamily: token.fontFamilyCode, fontSize: 13 }} />
+          placeholder={t("pasteHere")} minRows={6} maxRows={14} />
       </div>
     );
   };
@@ -217,11 +233,12 @@ const TextDiff = () => {
           {renderSide("b")}
         </div>
 
-        {bothPresent && tooLarge && !forceCompute && (
+        {aborted && (
           <Alert
             type="warning"
             showIcon
-            message={t("largeWarning", { lines: LARGE_LINES })}
+            title={t("largeWarning")}
+            description={t("linesAB", { a: countLines(aText), b: countLines(bText) })}
             action={
               <Button size="small" onClick={() => setForceCompute(true)}>
                 {t("computeAnyway")}
@@ -252,7 +269,7 @@ const TextDiff = () => {
               </Tooltip>
             </span>
 
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
 
             {/* Compare — what gets compared */}
             <span className={styles.cluster}>
@@ -260,12 +277,12 @@ const TextDiff = () => {
                 size="small" value={formatOverride} onChange={setFormatOverride} style={{ width: 130 }}
                 options={[{ value: "auto", label: `${t("detectedAs")}: ${t(("format" + format[0].toUpperCase() + format.slice(1)) as never)}` },
                   ...FORMATS.map((fmt) => ({ value: fmt, label: t(("format" + fmt[0].toUpperCase() + fmt.slice(1)) as never) }))]} />
-              <Checkbox checked={charLevel} disabled={tooLarge} onChange={(e) => setCharLevel(e.target.checked)}>{t("charLevel")}</Checkbox>
+              <Checkbox checked={charLevel} onChange={(e) => setCharLevel(e.target.checked)}>{t("charLevel")}</Checkbox>
               <Checkbox checked={ignoreWhitespace} onChange={(e) => setIgnoreWhitespace(e.target.checked)}>{t("ignoreWhitespace")}</Checkbox>
               <Checkbox checked={ignoreCase} onChange={(e) => setIgnoreCase(e.target.checked)}>{t("ignoreCase")}</Checkbox>
             </span>
 
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
 
             {/* Navigate */}
             <Space.Compact>
@@ -276,7 +293,7 @@ const TextDiff = () => {
               <Button icon={<DownOutlined />} title={t("next")} aria-label={t("next")} onClick={() => gotoHunk(hunkIdx + 1)} disabled={!result.hunks.length} />
             </Space.Compact>
 
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
 
             {/* Actions */}
             <span className={styles.cluster}>

@@ -82,6 +82,31 @@
 .paneFile { flex: 1; min-width: 0; font-family: var(--td-mono); font-size: 12px; color: var(--td-text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .paneTools { display: inline-flex; align-items: center; gap: 6px; }
 
+/* Line-numbered editor body: a number gutter beside a wrapping textarea. A
+   hidden mirror (.mirror) with identical box + wrap rules measures where each
+   logical line starts; numbers are then absolutely positioned at those tops, so
+   a wrapped line keeps a single number pinned to its first row. Metrics
+   (line-height 20, font 13, 8px vertical pad) mirror CodeInput.tsx. */
+.editor { display: flex; align-items: stretch; overflow: hidden; }
+.gutter { flex: 0 0 auto; overflow: hidden; position: relative; background: var(--td-bg-container); border-inline-end: 1px solid var(--td-border-2); }
+.gutterInner { position: relative; will-change: transform; }
+.gutterNum { position: absolute; left: 0; right: 8px; height: 20px; line-height: 20px; text-align: right; font-family: var(--td-mono); font-size: 12px; color: var(--td-text-3); user-select: none; font-variant-numeric: tabular-nums; }
+
+.taWrap { position: relative; flex: 1; min-width: 0; }
+/* identical to .codeArea for box + wrapping; hidden, measured only */
+.mirror,
+.codeArea {
+  box-sizing: border-box; padding: 8px 12px; margin: 0;
+  font-family: var(--td-mono); font-size: 13px; line-height: 20px;
+  white-space: pre-wrap; overflow-wrap: anywhere; word-break: normal;
+}
+.mirror { position: absolute; top: 0; left: 0; visibility: hidden; pointer-events: none; z-index: -1; }
+.codeArea {
+  display: block; width: 100%;
+  border: 0; outline: none; resize: none; background: transparent; color: var(--td-text);
+  overflow-x: hidden; overflow-y: auto;
+}
+
 /* ── Command bar — clusters (view · compare · navigate · actions) ──────────── */
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 4px; }
 .cluster { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }

@@ -2,7 +2,3 @@
 # will have compiled files and executables
 /target/
 /gen/schemas
-
-# Bundled WebView2 fixed-version runtime (~180MB, fetched by scripts/fetch-webview2-runtime.ps1)
-/Microsoft.WebView2.FixedVersionRuntime.*/
-/*.cab

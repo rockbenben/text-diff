@@ -3,6 +3,7 @@ const path = require("path");
 const { SCHEME } = require("./constants");
 const { registerScheme, handleProtocol } = require("./protocol");
 const { createStore } = require("./store");
+const { startUrl, trackLocale } = require("./locale");
 
 const isDev = process.env.ELECTRON_DEV === "1";
 const OUT_DIR = app.isPackaged
@@ -36,12 +37,12 @@ if (!gotLock) {
     });
 
     // <-- WINDOW-STATE-HOOK (Task 5):windowState.track(win)
-    // <-- LOCALE-HOOK (Task 4):trackLocale(win, store)
+    trackLocale(win, store);
 
     if (isDev) {
       win.loadURL("http://localhost:3000");
     } else {
-      win.loadURL(`${SCHEME}://local/`); // <-- START-URL-HOOK (Task 4):换成 startUrl(store)
+      win.loadURL(startUrl(store));
     }
     win.once("ready-to-show", () => win.show());
     return win;

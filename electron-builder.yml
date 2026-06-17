@@ -1,0 +1,17 @@
+appId: top.newzone.textdiff
+productName: TextDiff
+directories:
+  output: dist-electron
+files:
+  - electron/**
+  - package.json
+extraResources:
+  - from: out
+    to: out
+  - from: build/icon.png
+    to: icon.png
+win:
+  target: portable
+  icon: build/icon.png
+portable:
+  artifactName: TextDiff-${version}-portable.exe

@@ -1,15 +1,15 @@
 name: Build Desktop App
 
-# Manual run, or push a tag like `v3.0.0`.
+# Manual run only. Releases are driven from `main` (the release hub): a `v*`
+# tag on main triggers main's copy of this workflow with `ref: feat/tauri-desktop`
+# so both Tauri and Electron build off one tag. Tagging this branch is therefore
+# intentionally NOT a trigger — keep tags on main to avoid double releases.
 # Produces signed installers for Windows / macOS / Linux and a DRAFT GitHub
 # Release with the updater manifest (latest.json) attached. Publish the draft
 # (un-draft it) to actually roll the update out to existing installs — the
 # updater endpoint resolves `releases/latest`, which ignores drafts.
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - "v*"
 
 jobs:
   publish-tauri:

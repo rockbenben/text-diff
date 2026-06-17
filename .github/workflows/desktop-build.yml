@@ -30,7 +30,11 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
+      # 应用代码在 feat/tauri-desktop 分支,所以这里显式 checkout 该分支。
+      # 注意:此处固定了分支名;若将来该分支合并/改名,需同步更新下面的 ref。
       - uses: actions/checkout@v6
+        with:
+          ref: feat/tauri-desktop
 
       - name: Install Linux dependencies
         if: matrix.platform == 'ubuntu-22.04'

@@ -5,11 +5,15 @@ const { registerScheme, handleProtocol } = require("./protocol");
 const { createStore } = require("./store");
 const { startUrl, trackLocale } = require("./locale");
 const { createWindowStateKeeper } = require("./window-state");
+const { setupTray } = require("./tray");
 
 const isDev = process.env.ELECTRON_DEV === "1";
 const OUT_DIR = app.isPackaged
   ? path.join(process.resourcesPath, "out")
   : path.join(__dirname, "..", "out");
+const ICON_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, "icon.png")
+  : path.join(__dirname, "..", "build", "icon.png");
 
 // 协议方案必须在 ready 前注册。
 registerScheme();
@@ -19,6 +23,7 @@ if (!gotLock) {
   app.quit();
 } else {
   let win = null;
+  let tray = null;
   const store = createStore(app.getPath("userData"));
   const windowState = createWindowStateKeeper(store);
 
@@ -56,7 +61,7 @@ if (!gotLock) {
   app.whenReady().then(() => {
     if (!isDev) handleProtocol(OUT_DIR);
     createWindow();
-    // <-- TRAY-HOOK (Task 7):setupTray(app, () => win, ICON_PATH)
+    tray = setupTray(app, () => win, ICON_PATH);
 
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();

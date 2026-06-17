@@ -296,7 +296,7 @@
     "formatTsv": "TSV",
     "formatIni": "INI",
     "formatJson": "JSON",
-    "largeWarning": "内容较大（超过 {lines} 行）。继续比对可能较慢，且字符级比对会自动关闭。",
+    "largeWarning": "两侧差异过大，比对已超时，暂未生成对比。可强制进行完整比对（可能较慢）。",
     "computeAnyway": "仍要比对",
     "firstDiff": "首处差异",
     "jump": "跳转",

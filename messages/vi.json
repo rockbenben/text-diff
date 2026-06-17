@@ -313,7 +313,7 @@
     "formatTsv": "TSV",
     "formatIni": "INI",
     "formatJson": "JSON",
-    "largeWarning": "Đầu vào lớn (hơn {lines} dòng). So sánh có thể chậm; diff mức ký tự đã tắt.",
+    "largeWarning": "Hai bên khác nhau quá nhiều và việc so sánh đã hết thời gian — chưa tạo bản so sánh. Bạn có thể buộc so sánh đầy đủ (có thể chậm).",
     "computeAnyway": "Vẫn so sánh",
     "firstDiff": "Khác biệt đầu tiên",
     "jump": "Đi đến",

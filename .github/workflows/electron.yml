@@ -2,7 +2,12 @@ name: Build Electron (Windows unpacked)
 
 # 手动触发,或 push 一个 `v*` tag 时触发:内网用的 Electron 桌面版。
 # 应用代码在 feat/electron-desktop 分支,所以这里显式 checkout 该分支。
-# 注意:此处固定了分支名;若将来该分支合并/改名,需同步更新下面的 ref。
+# 注意:此处固定了分支名;若将来该分支合并/改名,需同步更新下方 checkout 的 ref。
+#
+# 此 workflow 只存在于 main(桌面发布中枢):tag 触发时 GitHub 用“被 tag 的 main
+# commit”里的定义。feat/electron-desktop 不保留 workflow 副本(会与 main 漂移)——
+# 无论打 tag 还是手动 “Run workflow”,都从 main 触发;下方 pin 的 ref 保证仍构建该
+# 分支的代码。在 main 打一个 v* tag 即可同时驱动本 workflow 与 Tauri workflow。
 #
 # 产物为 win-unpacked 目录,会:
 #   1. 作为 workflow artifact 上传(下载时 GitHub 自动打包成 zip,内网下载用);

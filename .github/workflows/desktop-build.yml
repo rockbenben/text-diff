@@ -5,6 +5,13 @@ name: Build Desktop App
 # Release with the updater manifest (latest.json) attached. Publish the draft
 # (un-draft it) to actually roll the update out to existing installs — the
 # updater endpoint resolves `releases/latest`, which ignores drafts.
+#
+# This workflow lives ONLY on main (the desktop release hub): a tag push runs the
+# definition from the tagged main commit. The feat/tauri-desktop branch keeps no
+# workflow copy (it would drift from main) — trigger both tag pushes and manual
+# "Run workflow" from main; the pinned `ref` below builds that branch's app code
+# either way. One v* tag on main drives both this (Tauri) and the Electron
+# workflow, producing one shared Release.
 on:
   workflow_dispatch:
   push:

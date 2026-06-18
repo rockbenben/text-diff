@@ -31,6 +31,13 @@ jobs:
           node-version: lts/*
           cache: yarn
 
+      # tag 触发时,用 tag(去掉前缀 v)作为应用版本写入 package.json,让构建出的
+      # win-unpacked 内嵌版本与 Release 一致。手动构建无 tag,跳过,沿用分支当前版本。
+      - name: Sync version from tag
+        if: github.event_name == 'push'
+        shell: bash
+        run: npm pkg set version="${GITHUB_REF_NAME#v}"
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
@@ -52,7 +59,9 @@ jobs:
         if: github.event_name == 'push'
         shell: bash
         run: |
-          VERSION=$(node -p "require('./package.json').version")
+          # 版本号取自 tag(去掉前缀 v),保证压缩包名与 Release 版本一致。
+          # 不要用 feat 分支的 package.json:它可能滞后于 tag,导致命名错版本。
+          VERSION="${GITHUB_REF_NAME#v}"
           7z a "TextDiff_${VERSION}_win-unpacked.zip" "./dist-electron/win-unpacked"
           echo "APP_VERSION=$VERSION" >> "$GITHUB_ENV"
 

@@ -58,6 +58,15 @@ jobs:
         with:
           workspaces: "./src-tauri -> target"
 
+      # tag 触发时,用 tag(去掉前缀 v)作为应用版本写入 package.json;随后的
+      # update-version 会把它同步进 tauri.conf.json,于是安装包文件名、应用内嵌
+      # 版本、以及 tagName(v__VERSION__)全部 == git tag,彻底消除版本错位。
+      # 手动构建无 tag,跳过,沿用 feat/tauri-desktop 当前版本。
+      - name: Sync version from tag
+        if: github.event_name == 'push'
+        shell: bash
+        run: npm pkg set version="${GITHUB_REF_NAME#v}"
+
       - name: Install frontend dependencies
         run: |
           yarn update-version

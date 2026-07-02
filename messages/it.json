@@ -1,6 +1,5 @@
 {
   "common": {
-    "supportEscapeChars": "Supporta caratteri escape: \\r\n (nuova riga), \\r (ritorno), \\t (tab), \\s (spazio), \\\\ (barra rovesciata)",
     "skipToContent": "Vai al contenuto principale",
     "fileProcessFailed": "Elaborazione del file non riuscita — controlla la codifica o prova un altro file",
     "fileReadFailed": "Lettura del file non riuscita",
@@ -166,7 +165,6 @@
     "errorHint5xx": "Errore del server, riprova più tardi",
     "errorHintRelay": "Errore di rete (probabilmente CORS): attiva \"Relay API\" nelle impostazioni API",
     "errorHintRelay403": "L'API ha restituito 403 Forbidden: attiva \"Relay API\" nelle impostazioni API",
-    "errorHintGeminiKey": "Impossibile raggiungere Gemini: controlla prima la rete (alcune reti non raggiungono direttamente i servizi Google). Se la rete funziona, dal 19 giugno 2026 Google rifiuta le chiavi API senza restrizioni — rigenera la chiave in AI Studio (limitata per impostazione predefinita) o aggiungi una restrizione Gemini API alla vecchia chiave nella console Google Cloud",
     "rateLimitCooldown": "Limite di richieste raggiunto — breve pausa, nuovo tentativo automatico"
   },
   "tools": {
@@ -201,10 +199,6 @@
     "dataBatch": {
       "title": "Elaboratore di Testo",
       "description": "Elaborazione batch di dati Excel — deduplicazione, estrazione colonne, fusione, regole concatenate"
-    },
-    "textJoiner": {
-      "title": "Unificatore di Testo",
-      "description": "Unisci più colonne di testo riga per riga con modelli per generare in batch CSV, SQL e JSON"
     },
     "jsonValueExtractor": {
       "title": "Estrattore Valore JSON",
@@ -292,7 +286,7 @@
     "textParser": "Strumenti Testo",
     "jsonParser": "Strumenti JSON",
     "dataParser": "Strumenti Dati",
-    "otherTools": "Altri strumenti",
+    "otherTools": "Altri Strumenti",
     "externalTools": {
       "legendtalk": "Tavola rotonda dei pensatori IA",
       "imgprompt": "Prompt per immagini IA"
@@ -339,8 +333,6 @@
     "fill": "Carica file",
     "clear": "Cancella",
     "swap": "Scambia A/B",
-    "maximize": "Ingrandisci",
-    "exitMaximize": "Esci da ingrandimento",
     "prev": "Precedente",
     "next": "Successivo",
     "diffOnly": "Solo differenze",

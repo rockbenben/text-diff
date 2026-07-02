@@ -292,7 +292,11 @@
     "textParser": "টেক্সট টুল",
     "jsonParser": "JSON টুল",
     "dataParser": "ডেটা টুল",
+<<<<<<< HEAD
     "otherTools": "আরও টুল",
+=======
+    "otherTools": "অন্যান্য টুল",
+>>>>>>> c77190c (chore(i18n): update locale message catalogs)
     "externalTools": {
       "legendtalk": "AI চিন্তাবিদ গোলটেবিল",
       "imgprompt": "AI ইমেজ প্রম্পট"

@@ -1,6 +1,5 @@
 {
   "common": {
-    "supportEscapeChars": "Supporte caractères d'échappement : \\r\n (nouvelle ligne), \\r (retour), \\t (tab), \\s (espace), \\\\ (antislash)",
     "skipToContent": "Aller au contenu principal",
     "fileProcessFailed": "Échec du traitement du fichier — vérifiez son encodage ou essayez-en un autre",
     "fileReadFailed": "Échec de la lecture du fichier",
@@ -166,7 +165,6 @@
     "errorHint5xx": "Erreur serveur, veuillez réessayer plus tard",
     "errorHintRelay": "Erreur réseau (probablement CORS) — activez « Relais API » dans les paramètres API",
     "errorHintRelay403": "L'API a renvoyé 403 Forbidden — activez « Relais API » dans les paramètres API",
-    "errorHintGeminiKey": "Impossible de joindre Gemini : vérifiez d'abord votre réseau (certains réseaux ne peuvent pas atteindre directement les services Google). Si le réseau fonctionne, Google rejette depuis le 19 juin 2026 les clés API sans restriction — régénérez votre clé dans AI Studio (restreinte par défaut) ou ajoutez une restriction Gemini API à l'ancienne clé dans la console Google Cloud",
     "rateLimitCooldown": "Limite de requêtes atteinte — courte pause, nouvelle tentative automatique"
   },
   "tools": {
@@ -201,10 +199,6 @@
     "dataBatch": {
       "title": "Processeur de texte",
       "description": "Traitement par lots de données Excel — déduplication, extraction de colonnes, fusion, règles enchaînées"
-    },
-    "textJoiner": {
-      "title": "Fusionneur de Texte",
-      "description": "Fusionnez plusieurs colonnes de texte ligne par ligne avec des modèles pour générer en lot du CSV, SQL et JSON"
     },
     "jsonValueExtractor": {
       "title": "Extracteur Valeur JSON",
@@ -246,7 +240,7 @@
       "title": "Text Diff",
       "description": "Comparez deux textes ou fichiers côte à côte et repérez la première différence.",
       "metaTitle": "Text Diff : Comparer textes et fichiers en ligne",
-      "metaDescription": "Comparez deux textes ou fichiers en ligne, surlignage côte à côte indiquant la ligne et la colonne de la première différence.",
+      "metaDescription": "Comparez deux textes ou fichiers en ligne avec une mise en évidence côte à côte, indiquant la ligne et la colonne exactes où ils diffèrent en premier.",
       "faq": [
         {
           "q": "Quels formats de fichiers sont supportés pour la comparaison ?",
@@ -292,7 +286,7 @@
     "textParser": "Outils Texte",
     "jsonParser": "Outils JSON",
     "dataParser": "Outils Données",
-    "otherTools": "Plus d'outils",
+    "otherTools": "Autres Outils",
     "externalTools": {
       "legendtalk": "Table ronde des penseurs IA",
       "imgprompt": "Prompts d'images IA"
@@ -339,8 +333,6 @@
     "fill": "Charger un fichier",
     "clear": "Effacer",
     "swap": "Échanger A/B",
-    "maximize": "Agrandir",
-    "exitMaximize": "Quitter l'agrandissement",
     "prev": "Précédent",
     "next": "Suivant",
     "diffOnly": "Différences uniquement",

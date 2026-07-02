@@ -1,6 +1,5 @@
 {
   "common": {
-    "supportEscapeChars": "Soporta caracteres escape: \\r\n (nueva línea), \\r (retorno), \\t (tab), \\s (espacio), \\\\ (barra invertida)",
     "skipToContent": "Saltar al contenido principal",
     "fileProcessFailed": "No se pudo procesar el archivo: comprueba su codificación o prueba con otro",
     "fileReadFailed": "No se pudo leer el archivo",
@@ -166,7 +165,6 @@
     "errorHint5xx": "Error del servidor, inténtelo más tarde",
     "errorHintRelay": "Error de red (posiblemente CORS): active \"Relé API\" en los ajustes de API",
     "errorHintRelay403": "La API devolvió 403 Forbidden: active \"Relé API\" en los ajustes de API",
-    "errorHintGeminiKey": "No se puede conectar con Gemini: compruebe primero su red (algunas redes no pueden acceder directamente a los servicios de Google). Si la red funciona, desde el 19 de junio de 2026 Google rechaza las claves API sin restricciones — regenere su clave en AI Studio (restringida por defecto) o añada una restricción de Gemini API a la clave antigua en la consola de Google Cloud",
     "rateLimitCooldown": "Límite de solicitudes alcanzado — pausa breve, se reintentará automáticamente"
   },
   "tools": {
@@ -201,10 +199,6 @@
     "dataBatch": {
       "title": "Procesador de texto",
       "description": "Procesamiento por lotes de datos Excel — deduplicación, extracción por columnas, fusión, reglas encadenadas"
-    },
-    "textJoiner": {
-      "title": "Unificador de Texto",
-      "description": "Combina varias columnas de texto línea por línea con plantillas para generar en lote CSV, SQL y JSON"
     },
     "jsonValueExtractor": {
       "title": "Extractor Valor JSON",
@@ -292,7 +286,7 @@
     "textParser": "Herramientas Texto",
     "jsonParser": "Herramientas JSON",
     "dataParser": "Herramientas Datos",
-    "otherTools": "Más herramientas",
+    "otherTools": "Otras Herramientas",
     "externalTools": {
       "legendtalk": "Mesa redonda de pensadores IA",
       "imgprompt": "Prompts de imágenes IA"
@@ -300,11 +294,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI | Herramientas de Traducción y Dev con IA",
-    "description": "ToolsByAI: 17 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador.",
+    "description": "ToolsByAI: 17 herramientas open source gratis para traducción de subtítulos, Markdown, JSON i18n y procesamiento por lotes. 25+ motores IA.",
     "homeTitle": "Suite ToolsByAI",
     "homeDescription": "20+ herramientas para traducción, texto, JSON y conversión de datos. Impulsa la eficiencia de desarrolladores y creadores.",
     "ogTitle": "ToolsByAI | Herramientas de Traducción y Dev con IA",
-    "ogDescription": "ToolsByAI: 17 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador."
+    "ogDescription": "ToolsByAI: 17 herramientas open source gratis para traducción de subtítulos, Markdown, JSON i18n y procesamiento por lotes. 25+ motores IA."
   },
   "CopyToClipboard": {
     "empty": "Contenido vacío, nada que copiar",
@@ -339,8 +333,6 @@
     "fill": "Cargar archivo",
     "clear": "Limpiar",
     "swap": "Intercambiar A/B",
-    "maximize": "Ampliar",
-    "exitMaximize": "Salir de la ampliación",
     "prev": "Anterior",
     "next": "Siguiente",
     "diffOnly": "Solo diferencias",

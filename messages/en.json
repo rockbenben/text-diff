@@ -1,6 +1,5 @@
 {
   "common": {
-    "supportEscapeChars": "Supports escape chars: \\n (newline), \\r (return), \\t (tab), \\s (space), \\\\ (backslash)",
     "skipToContent": "Skip to main content",
     "fileProcessFailed": "Failed to process the file — check its encoding or try another",
     "fileReadFailed": "Failed to read the file",
@@ -166,7 +165,6 @@
     "errorHint5xx": "Server error, please retry later",
     "errorHintRelay": "Network error (possibly CORS) — enable \"API Relay\" in API Settings",
     "errorHintRelay403": "The API returned 403 Forbidden — enable \"API Relay\" in API Settings",
-    "errorHintGeminiKey": "Cannot reach Gemini: check your network first (some networks cannot reach Google services directly). If the network is fine, Google has been rejecting unrestricted API keys since June 19, 2026 — regenerate your key in AI Studio (restricted by default) or add a Gemini API restriction to the old key in Google Cloud Console",
     "rateLimitCooldown": "Rate limited — pausing briefly, will retry automatically"
   },
   "tools": {
@@ -201,10 +199,6 @@
     "dataBatch": {
       "title": "Batch Data Processor",
       "description": "Excel batch data processing — dedup, column extraction, text merge, custom rules chained in sequence"
-    },
-    "textJoiner": {
-      "title": "Text Joiner",
-      "description": "Merge multiple text columns line by line with templates to batch-generate CSV, SQL, and JSON"
     },
     "jsonValueExtractor": {
       "title": "JSON Field Value Extractor",
@@ -292,7 +286,7 @@
     "textParser": "Text Tools",
     "jsonParser": "JSON Tools",
     "dataParser": "Data Tools",
-    "otherTools": "More Tools",
+    "otherTools": "Other Tools",
     "externalTools": {
       "legendtalk": "AI Thinkers Roundtable",
       "imgprompt": "AI Image Prompts"
@@ -339,8 +333,6 @@
     "fill": "Load file",
     "clear": "Clear",
     "swap": "Swap A/B",
-    "maximize": "Maximize",
-    "exitMaximize": "Exit maximize",
     "prev": "Previous",
     "next": "Next",
     "diffOnly": "Only differences",

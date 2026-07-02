@@ -60,6 +60,7 @@
     "exportedFile": "已导出",
     "extractedText": "提取的文本",
     "translating": "翻译中",
+    "translateDone": "翻译完成",
     "multiTranslating": "正在翻译，目标语言共",
     "model": "模型",
     "sameLanguageTarget": "源语言与目标语言相同，已自动调整目标语言为",
@@ -103,7 +104,7 @@
     "requestTimeoutSec": "超时时间",
     "requestTimeoutSecTooltip": "单次请求的最大等待时间（秒）。LLM 思考耗时较长，建议 180 秒以上",
     "customExportFilename": "导出文件名格式",
-    "customExportFilenameTooltip": "'{'name'}' = 原始文件名, '{'lang'}' = 语言, '{'ext'}' = 扩展名, '{'date'}' = 日期, '{'time'}' = 时间",
+    "customExportFilenameTooltip": "'{'name'}' = 原始文件名, '{'lang'}' = 语言, '{'ext'}' = 扩展名, '{'date'}' = 日期, '{'time'}' = 时间；多语言模式会自动加 '{'lang'}' 防止文件名冲突",
     "partialFailureTitle": "翻译失败 {count} 行",
     "partialFailureDesc": "失败的行已用原文占位（不影响文件结构）。这种失败大多是网络抖动或翻译服务临时不稳定——免费服务和自建服务器特别容易碰到，不是你的设置问题。点「再试一次」即可继续，已成功的行走缓存不会重翻；如果还是失败，稍后再点或换个翻译服务试试。也可点「查看失败行」自己处理。",
     "retryFailedLines": "再试一次",
@@ -135,6 +136,7 @@
     "translategemmaUnavailable": "TranslateGemma 服务暂时连不上，请确认本地服务器（LM Studio / llama.cpp / Ollama）已启动且 URL 正确。",
     "networkUnavailable": "翻译服务暂时连不上，可能是网络或服务的临时问题。稍后再试，或换一个翻译服务。",
     "translationTimeout": "翻译请求超时，可能是网络较慢或翻译服务响应慢。稍后再试，或换一个翻译服务。",
+    "translationTimeoutLocal": "本地模型翻译超时。本地大模型可能陷入复读循环——请在高级设置中调低 max_tokens（输出上限），并确认所选源语言与文本实际语言一致。",
     "langGroupCommon": "常用",
     "langGroupEurope": "欧洲",
     "langGroupMiddleEast": "中东",
@@ -198,7 +200,43 @@
       "title": "文本对照",
       "description": "在线对比两段文本或文件，双栏高亮差异并精确定位首处不同，支持 CSV/INI",
       "metaTitle": "文本对照 - 在线文本/文件对比 diff，精确定位首处差异",
-      "metaDescription": "本地双栏对比两段文本或文件，逐行高亮差异并定位第几行、第几列起不同，支持纯文本、CSV/TSV、INI，自动识别 UTF-8/GBK 编码。"
+      "metaDescription": "本地双栏对比两段文本或文件，逐行高亮差异并定位第几行、第几列起不同，支持纯文本、CSV/TSV、INI，自动识别 UTF-8/GBK/Big5/UTF-16LE 编码。",
+      "faq": [
+        {
+          "q": "支持哪些文件格式的对比？",
+          "a": "支持纯文本、CSV、TSV、INI、JSON 五种格式。工具会根据文件扩展名或内容自动检测格式，也可手动切换。CSV/TSV 模式会按列对齐差异，INI 模式按键值对比，让结构化数据的改动一目了然。"
+        },
+        {
+          "q": "两段文本差异太大，对比超时怎么办？",
+          "a": "工具内置超时保护，差异过大时会暂停并提示。点击「仍要比对」可强制完成完整对比（可能较慢）。建议先用「仅看差异」模式聚焦不同之处，或调整「前后行数」减少显示范围。"
+        },
+        {
+          "q": "怎么忽略空格或大小写差异？",
+          "a": "勾选「忽略首尾空白」可忽略行首行尾空格差异，勾选「忽略大小写」可忽略字母大小写差异。两个选项可同时启用，适合对比格式化后的代码或配置文件。"
+        },
+        {
+          "q": "对比结果可以导出吗？",
+          "a": "可以。点击「导出 diff」按钮，会生成标准 unified diff（.patch）文件，可直接用于 git apply、代码评审工具或版本控制系统。文件名默认取自右侧文件名。"
+        },
+        {
+          "q": "支持哪些编码格式？",
+          "a": "自动识别 UTF-8、GBK、Big5、UTF-16LE 等常见编码。上传文件后会显示检测到的编码，也可手动切换编码重新解码。适合对比不同系统导出的配置文件或日志。"
+        },
+        {
+          "q": "文本会上传到服务器吗？",
+          "a": "完全本地处理：文本读取、解析、对比全部在浏览器内完成，不上传任何服务器。适合对比敏感配置文件、私有代码或包含密钥的文档。"
+        }
+      ],
+      "features": [
+        "双栏高亮对比，精确定位首处差异位置",
+        "支持纯文本、CSV、TSV、INI、JSON 五种格式",
+        "自动识别 UTF-8、GBK、Big5、UTF-16LE 编码",
+        "忽略空白、忽略大小写、字符级比对三种模式",
+        "并排/行内两种视图切换",
+        "差异块导航，快速跳转定位",
+        "导出为标准 .patch 文件，兼容 git apply",
+        "大文本超时保护，可强制完整比对"
+      ]
     },
     "dataBatch": {
       "title": "数据批处理",
@@ -248,7 +286,11 @@
     "textParser": "文本处理",
     "jsonParser": "JSON 处理",
     "dataParser": "数据转换",
-    "otherTools": "其他工具"
+    "otherTools": "其他工具",
+    "externalTools": {
+      "legendtalk": "AI 思想家圆桌",
+      "imgprompt": "AI 绘图提示词"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI | 免费开源的 AI 翻译与数据处理工具集",
@@ -265,7 +307,7 @@
     "failure": "复制失败，请手动复制"
   },
   "TextDiff": {
-    "clientDescription": "在线对比两段文本或文件，双栏高亮所有差异，并一句话告诉你「第几行、第几个字段起不同」。适合核对代码、配置文件、CSV/表格数据的改动，支持纯文本、CSV/TSV、INI，自动识别 UTF-8 / GBK 编码。",
+    "clientDescription": "在线对比两段文本或文件，双栏高亮所有差异，并一句话告诉你「第几行、第几个字段起不同」。适合核对代码、配置文件、CSV/表格数据的改动，支持纯文本、CSV/TSV、INI，自动识别 UTF-8 / GBK / Big5 / UTF-16LE 编码。",
     "sideA": "A",
     "sideB": "B",
     "pasteHere": "在此粘贴或输入文本，或拖入文件",

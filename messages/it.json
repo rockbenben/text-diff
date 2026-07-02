@@ -54,6 +54,7 @@
     "exportedFile": "Esportato",
     "extractedText": "Testo Estratto",
     "translating": "Traduzione in corso...",
+    "translateDone": "Traduzione completata",
     "multiTranslating": "Traduzione in corso, totale lingue:",
     "model": "Modello",
     "sameLanguageTarget": "Lingue sorgente e destinazione uguali; destinazione adattata automaticamente a",
@@ -97,7 +98,7 @@
     "requestTimeoutSec": "Timeout",
     "requestTimeoutSecTooltip": "Attesa massima per richiesta (secondi). Il pensiero LLM richiede più tempo; si consigliano 180 s o più.",
     "customExportFilename": "Modello nome file",
-    "customExportFilenameTooltip": "'{'name'}' = nome originale, '{'lang'}' = lingua, '{'ext'}' = estensione, '{'date'}' = data, '{'time'}' = ora",
+    "customExportFilenameTooltip": "'{'name'}' = nome originale, '{'lang'}' = lingua, '{'ext'}' = estensione, '{'date'}' = data, '{'time'}' = ora; in modalità multilingua '{'lang'}' viene aggiunto automaticamente per evitare conflitti di nome",
     "partialFailureTitle": "{count} riga/righe non riuscite",
     "partialFailureDesc": "Le righe non riuscite hanno mantenuto il testo originale come segnaposto, il file rimane utilizzabile. Questi fallimenti sono solitamente fluttuazioni di rete o instabilità temporanea del servizio di traduzione — i servizi gratuiti e i server auto-ospitati sono particolarmente soggetti a questo, e non è un problema della tua configurazione. Fai clic su Riprova per continuare (le righe riuscite vengono dalla cache, senza ritraduzione); se continua a fallire, riprova più tardi o prova un altro servizio di traduzione. O fai clic su Visualizza righe non riuscite per gestirle manualmente.",
     "retryFailedLines": "Riprova",
@@ -135,6 +136,7 @@
     "translategemmaUnavailable": "Il servizio TranslateGemma è temporaneamente irraggiungibile, assicurati che il tuo server locale (LM Studio / llama.cpp / Ollama) sia in esecuzione e l'URL sia corretto.",
     "networkUnavailable": "Il servizio di traduzione è temporaneamente irraggiungibile — potrebbe essere un problema di rete o il servizio ha un piccolo intoppo. Riprova più tardi o passa a un altro servizio di traduzione.",
     "translationTimeout": "La richiesta di traduzione è scaduta — potrebbe essere una rete lenta o il servizio impiega troppo tempo a rispondere. Riprova più tardi o passa a un altro servizio di traduzione.",
+    "translationTimeoutLocal": "Traduzione con modello locale scaduta. Un LLM locale può bloccarsi in un ciclo di ripetizione: riduci max_tokens (il limite di output) nelle Impostazioni avanzate e assicurati che la lingua di origine selezionata corrisponda al testo effettivo.",
     "langGroupCommon": "Comuni",
     "langGroupEurope": "Europa",
     "langGroupMiddleEast": "Medio Oriente",
@@ -238,7 +240,43 @@
       "title": "Text Diff",
       "description": "Confronta due testi o file affiancati e individua la prima differenza.",
       "metaTitle": "Text Diff: Confronto testi e file online",
-      "metaDescription": "Confronta due testi o file online con evidenziazione affiancata, indicando la riga e la colonna esatte dove differiscono per la prima volta."
+      "metaDescription": "Confronta due testi o file online con evidenziazione affiancata, indicando la riga e la colonna esatte dove differiscono per la prima volta.",
+      "faq": [
+        {
+          "q": "Quali formati di file sono supportati per il confronto?",
+          "a": "Cinque formati supportati: testo semplice, CSV, TSV, INI e JSON. Lo strumento rileva automaticamente il formato dall'estensione del file o dal contenuto, oppure puoi cambiare manualmente. La modalità CSV/TSV allinea le differenze per colonna, la modalità INI confronta le coppie chiave-valore, rendendo facili da individuare le modifiche strutturali."
+        },
+        {
+          "q": "Cosa succede se i due testi sono troppo diversi e il confronto va in timeout?",
+          "a": "Lo strumento ha una protezione integrata contro il timeout — quando le differenze sono troppo grandi, si ferma e mostra un avviso. Clicca su 'Confronta comunque' per forzare un confronto completo (potrebbe essere più lento). Prova la modalità 'Solo diff' per concentrarti sulle differenze, o regola 'Righe di contesto' per ridurre la portata della visualizzazione."
+        },
+        {
+          "q": "Come ignoro le differenze di spazi o di maiuscole/minuscole?",
+          "a": "Seleziona 'Ignora spazi iniziali/finali' per saltare le differenze di spazi all'inizio/fine, e 'Ignora maiuscole/minuscole' per ignorare le differenze di maiuscole/minuscole. Entrambe possono essere attivate contemporaneamente — utile per confrontare codice formattato o file di configurazione."
+        },
+        {
+          "q": "Posso esportare il risultato del confronto?",
+          "a": "Sì. Clicca su 'Esporta diff' per generare un file unified diff (.patch) standard, compatibile con git apply, strumenti di revisione del codice e sistemi di controllo versione. Il nome del file predefinito è quello del file di destra."
+        },
+        {
+          "q": "Quali codifiche sono supportate?",
+          "a": "Rileva automaticamente UTF-8, GBK, Big5, UTF-16LE e altre codifiche comuni. Dopo aver caricato un file, la codifica rilevata viene visualizzata — puoi anche cambiare manualmente la codifica per decodificare nuovamente. Ideale per confrontare file di configurazione o log esportati da sistemi diversi."
+        },
+        {
+          "q": "I miei testi vengono caricati su un server?",
+          "a": "Elaborazione completamente locale: lettura, analisi e confronto del testo avvengono tutti nel tuo browser — nulla viene caricato su alcun server. Sicuro per confrontare file di configurazione sensibili, codice privato o documenti contenenti segreti."
+        }
+      ],
+      "features": [
+        "Evidenziazione affiancata con posizione precisa della prima differenza",
+        "Supporta formati testo semplice, CSV, TSV, INI, JSON",
+        "Rilevamento automatico delle codifiche UTF-8, GBK, Big5, UTF-16LE",
+        "Modalità ignora spazi, ignora maiuscole/minuscole, diff a livello di carattere",
+        "Passaggio tra vista separata e unita",
+        "Navigazione per blocchi diff per salti rapidi",
+        "Esportazione come file .patch standard, compatibile con git apply",
+        "Protezione timeout per testi grandi con opzione di confronto forzato"
+      ]
     }
   },
   "navigation": {
@@ -248,7 +286,11 @@
     "textParser": "Strumenti Testo",
     "jsonParser": "Strumenti JSON",
     "dataParser": "Strumenti Dati",
-    "otherTools": "Altri Strumenti"
+    "otherTools": "Altri Strumenti",
+    "externalTools": {
+      "legendtalk": "Tavola rotonda dei pensatori IA",
+      "imgprompt": "Prompt per immagini IA"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI - Utility Sviluppatori & Traduzione IA Online",
@@ -282,7 +324,7 @@
     "goHome": "Torna alla home"
   },
   "TextDiff": {
-    "clientDescription": "Confronta due testi o file nel tuo browser: evidenziazione affiancata di ogni differenza, con un indicatore alla riga e al campo esatti in cui divergono per la prima volta. Funziona con testo semplice, CSV/TSV e INI, con rilevamento automatico della codifica UTF-8 / GBK.",
+    "clientDescription": "Confronta due testi o file nel tuo browser: evidenziazione affiancata di ogni differenza, con un indicatore alla riga e al campo esatti in cui divergono per la prima volta. Funziona con testo semplice, CSV/TSV e INI, con rilevamento automatico della codifica UTF-8 / GBK / Big5 / UTF-16LE.",
     "sideA": "A",
     "sideB": "B",
     "pasteHere": "Incolla o digita il testo qui, o trascina un file",

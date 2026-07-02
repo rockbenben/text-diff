@@ -54,6 +54,7 @@
     "exportedFile": "Dışa Aktarıldı",
     "extractedText": "Çıkarılan Metin",
     "translating": "Çevriliyor...",
+    "translateDone": "Çeviri tamamlandı",
     "multiTranslating": "Çevriliyor, toplam dil:",
     "model": "Model",
     "sameLanguageTarget": "Kaynak ve hedef diller aynı; hedef otomatik olarak şuna ayarlandı:",
@@ -97,7 +98,7 @@
     "requestTimeoutSec": "Zaman Aşımı",
     "requestTimeoutSecTooltip": "İstek başına maksimum bekleme süresi (saniye). LLM düşünmesi daha uzun sürer; 180 saniye veya daha fazlası önerilir.",
     "customExportFilename": "Dışa Aktarma Dosya Adı Kalıbı",
-    "customExportFilenameTooltip": "'{'name'}' = orijinal dosya adı, '{'lang'}' = dil, '{'ext'}' = uzantı, '{'date'}' = tarih, '{'time'}' = saat",
+    "customExportFilenameTooltip": "'{'name'}' = orijinal dosya adı, '{'lang'}' = dil, '{'ext'}' = uzantı, '{'date'}' = tarih, '{'time'}' = saat; çok dilli modda ad çakışmalarını önlemek için '{'lang'}' otomatik eklenir",
     "partialFailureTitle": "{count} satır çevrilemedi",
     "partialFailureDesc": "Başarısız satırlar yer tutucu olarak orijinal metni korudu, dosya kullanılabilir kalır. Bu tür hatalar genellikle ağ dalgalanmaları veya çeviri hizmetinin geçici kararsızlığından kaynaklanır — ücretsiz hizmetler ve kendi barındırılan sunucular özellikle bu duruma eğilimlidir ve sizin yapılandırmanızla ilgili bir sorun değildir. Devam etmek için Yeniden Dene'ye tıklayın (başarılı satırlar önbellekten gelir, yeniden çevrilmez); hata devam ederse, daha sonra tekrar deneyin veya başka bir çeviri hizmetine geçin. Veya manuel olarak işlemek için Başarısız satırları gör'e tıklayın.",
     "retryFailedLines": "Yeniden dene",
@@ -135,6 +136,7 @@
     "translategemmaUnavailable": "TranslateGemma hizmetine geçici olarak ulaşılamıyor, yerel sunucunuzun (LM Studio / llama.cpp / Ollama) çalıştığından ve URL'nin doğru olduğundan emin olun.",
     "networkUnavailable": "Çeviri hizmetine geçici olarak ulaşılamıyor — ağ sorunu veya hizmette geçici bir aksaklık olabilir. Lütfen daha sonra tekrar deneyin veya başka bir çeviri hizmetine geçin.",
     "translationTimeout": "Çeviri isteği zaman aşımına uğradı — yavaş bir ağ veya hizmet yanıt vermekte gecikiyor olabilir. Lütfen daha sonra tekrar deneyin veya başka bir çeviri hizmetine geçin.",
+    "translationTimeoutLocal": "Yerel model çevirisi zaman aşımına uğradı. Yerel bir LLM tekrar döngüsünde takılabilir — Gelişmiş Ayarlar'da max_tokens (çıktı sınırı) değerini düşürün ve seçili kaynak dilin gerçek metinle eşleştiğinden emin olun.",
     "langGroupCommon": "Yaygın",
     "langGroupEurope": "Avrupa",
     "langGroupMiddleEast": "Orta Doğu",
@@ -238,7 +240,43 @@
       "title": "Text Diff",
       "description": "İki metni veya dosyayı yan yana karşılaştırın ve ilk farkı bulun.",
       "metaTitle": "Text Diff: Metin ve Dosyaları Online Karşılaştır",
-      "metaDescription": "İki metni veya dosyayı yan yana vurgulama ile çevrimiçi karşılaştırın; ilk farklılığın bulunduğu satır ve sütun gösterilir."
+      "metaDescription": "İki metni veya dosyayı yan yana vurgulama ile çevrimiçi karşılaştırın; ilk farklılığın bulunduğu satır ve sütun gösterilir.",
+      "faq": [
+        {
+          "q": "Karşılaştırma için hangi dosya formatları destekleniyor?",
+          "a": "Beş format destekleniyor: düz metin, CSV, TSV, INI ve JSON. Araç, dosya uzantısından veya içeriğinden formatı otomatik algılar veya manuel olarak geçiş yapabilirsiniz. CSV/TSV modu farkları sütunlara göre hizalar, INI modu anahtar-değer çiftlerini karşılaştırır, yapısal değişiklikleri kolayca tespit etmenizi sağlar."
+        },
+        {
+          "q": "İki metin çok farklıysa ve karşılaştırma zaman aşımına uğrarsa ne olur?",
+          "a": "Aracın dahili bir zaman aşımı koruması vardır — farklar çok büyük olduğunda duraklar ve bir uyarı gösterir. Zorunlu tam karşılaştırma için 'Yine de Karşılaştır' tıklayın (daha yavaş olabilir). Farklara odaklanmak için 'Yalnızca Fark' modunu deneyin veya görüntüleme kapsamını azaltmak için 'Bağlam Satırları' ayarını değiştirin."
+        },
+        {
+          "q": "Boşluk veya büyük/küçük harf farklarını nasıl yok sayarım?",
+          "a": "Baştaki/sondaki boşluk farklarını atlamak için 'Baştaki/Sondaki Boşlukları Yok Say'ı ve harf büyük/küçük harf farklarını yok saymak için 'Büyük/Küçük Harf Yok Say'ı işaretleyin. Her ikisi aynı anda etkinleştirilebilir — biçimlendirilmiş kod veya yapılandırma dosyalarını karşılaştırmak için faydalıdır."
+        },
+        {
+          "q": "Karşılaştırma sonucunu dışa aktarabilir miyim?",
+          "a": "Evet. Git apply, kod inceleme araçları ve sürüm kontrol sistemleriyle uyumlu standart bir unified diff (.patch) dosyası oluşturmak için 'Diff Dışa Aktar'ı tıklayın. Dosya adı varsayılan olarak sağ taraftaki dosya adıdır."
+        },
+        {
+          "q": "Hangi kodlamalar destekleniyor?",
+          "a": "UTF-8, GBK, Big5, UTF-16LE ve diğer yaygın kodlamaları otomatik algılar. Dosya yüklendikten sonra algılanan kodlama görüntülenir — kodlamayı manuel olarak değiştirerek yeniden çözümleyebilirsiniz. Farklı sistemlerden dışa aktarılan yapılandırma dosyalarını veya günlükleri karşılaştırmak için idealdir."
+        },
+        {
+          "q": "Metinlerim sunucuya yükleniyor mu?",
+          "a": "Tamamen yerel işleme: metin okuma, ayrıştırma ve karşılaştırma tarayıcınızda gerçekleşir — hiçbir şey sunucuya yüklenmez. Hassas yapılandırma dosyalarını, özel kodu veya gizli bilgiler içeren belgeleri karşılaştırmak için güvenlidir."
+        }
+      ],
+      "features": [
+        "İlk farkın kesin konumuyla yan yana vurgulama",
+        "Düz metin, CSV, TSV, INI, JSON formatlarını destekler",
+        "UTF-8, GBK, Big5, UTF-16LE kodlamalarını otomatik algılama",
+        "Boşlukları yok say, büyük/küçük harf yok say, karakter düzeyinde diff modları",
+        "Ayrılmış ve birleşik görünüm geçişi",
+        "Hızlı atlama için diff bloğu gezintisi",
+        "Standart .patch dosyası olarak dışa aktarma, git apply ile uyumlu",
+        "Zorunlu karşılaştırma seçeneğiyle büyük metinler için zaman aşımı koruması"
+      ]
     }
   },
   "navigation": {
@@ -248,7 +286,11 @@
     "textParser": "Metin Araçları",
     "jsonParser": "JSON Araçları",
     "dataParser": "Veri Araçları",
-    "otherTools": "Diğer Araçlar"
+    "otherTools": "Diğer Araçlar",
+    "externalTools": {
+      "legendtalk": "AI Düşünürler Yuvarlak Masası",
+      "imgprompt": "AI Görsel İstemleri"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI - Geliştiriciler İçin Yapay Zeka ve Veri Araçları",
@@ -282,7 +324,7 @@
     "goHome": "Ana Sayfaya Dön"
   },
   "TextDiff": {
-    "clientDescription": "Tarayıcınızda iki metni veya dosyayı karşılaştırın: her farkın yan yana vurgulanması ve ilk ayrışmanın gerçekleştiği satır ile alanı gösteren bir gösterge. Düz metin, CSV/TSV ve INI dosyalarını destekler; UTF-8 / GBK kodlamasını otomatik olarak algılar.",
+    "clientDescription": "Tarayıcınızda iki metni veya dosyayı karşılaştırın: her farkın yan yana vurgulanması ve ilk ayrışmanın gerçekleştiği satır ile alanı gösteren bir gösterge. Düz metin, CSV/TSV ve INI dosyalarını destekler; UTF-8 / GBK / Big5 / UTF-16LE kodlamasını otomatik olarak algılar.",
     "sideA": "A",
     "sideB": "B",
     "pasteHere": "Metni buraya yapıştırın veya yazın ya da bir dosya bırakın",

@@ -54,10 +54,11 @@ export { detectFormat }; // re-export for the UI's single import site
 // diffArrays is Myers O(n×d): cheap when the two sides are similar (the normal
 // case — milliseconds even at tens of thousands of lines) but quadratic when
 // they share almost nothing (two unrelated files), where it can run for tens of
-// seconds. Cap its run time; on abort the lib returns undefined and we return an
-// empty result flagged `aborted` (no diff). The UI surfaces a warning on
-// `aborted` and lets the user re-run with `force` (no timeout) for a full
-// comparison. So nothing freezes the tab unless the user opts in.
+// seconds. Cap its run time with diff's `timeout` option; on abort diff returns
+// undefined (its abortable overload types this) and we return an empty result
+// flagged `aborted` (no diff). The UI surfaces a warning on `aborted` and lets the
+// user re-run with `force` (no timeout) for a full comparison. So nothing freezes
+// the tab unless the user opts in.
 const DIFF_TIMEOUT_MS = 3000;
 
 // Inline char-level diff (diffChars) is O(n×d) per modified line and unbounded in
@@ -82,16 +83,30 @@ function splitLines(value: string): string[] {
   return lines;
 }
 
-function inlineSpans(a: string, b: string): { aSpans: InlineSpan[]; bSpans: InlineSpan[] } {
-  const parts = diffChars(a, b);
+function inlineSpans(a: string, b: string, ignoreCase: boolean): { aSpans: InlineSpan[]; bSpans: InlineSpan[] } {
+  // ignoreCase here keeps char-level highlighting consistent with line matching:
+  // when the user ignores case, characters that differ only in case aren't marked
+  // as changed. (diffChars has no ignoreWhitespace option, so that one can't apply.)
+  const parts = diffChars(a, b, { ignoreCase });
   const aSpans: InlineSpan[] = [];
   const bSpans: InlineSpan[] = [];
+  // For a common run, diffChars reports the NEW string's value (so under ignoreCase
+  // it carries B's casing). The B span can use it directly, but the A span must show
+  // A's own casing, so track A's cursor and slice A's original substring. (When
+  // ignoreCase is off the run is identical on both sides, so the slice equals
+  // p.value — no behavior change.) A advances on removed + common runs.
+  let aPos = 0;
   for (const p of parts) {
-    if (p.added) bSpans.push({ text: p.value, changed: true });
-    else if (p.removed) aSpans.push({ text: p.value, changed: true });
-    else {
-      aSpans.push({ text: p.value, changed: false });
+    const len = p.value.length;
+    if (p.added) {
+      bSpans.push({ text: p.value, changed: true });
+    } else if (p.removed) {
+      aSpans.push({ text: p.value, changed: true });
+      aPos += len;
+    } else {
+      aSpans.push({ text: a.slice(aPos, aPos + len), changed: false });
       bSpans.push({ text: p.value, changed: false });
+      aPos += len;
     }
   }
   return { aSpans, bSpans };
@@ -118,14 +133,14 @@ export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions, force
     if (opts.ignoreCase) x = x.toLowerCase();
     return x;
   };
-  // force → no timeout (user opted into a full, possibly slow, comparison).
-  // `timeout` is supported by diff@7 at runtime but missing from its bundled
-  // types, so widen the options type locally rather than cast at the call site.
-  const lineDiffOptions: { comparator: (l: string, r: string) => boolean; timeout?: number } = {
-    comparator: (l, r) => normLine(l) === normLine(r),
-    timeout: force ? undefined : DIFF_TIMEOUT_MS,
-  };
-  const parts = diffArrays(aOrigLines, bOrigLines, lineDiffOptions);
+  // diff@9 has two native overloads: pass a `timeout` and it returns undefined on
+  // abort; omit it and it always returns a result. Branch on `force` (which drops
+  // the timeout for an opted-in full run) so each call hits the matching overload —
+  // the union then types `parts` as `… | undefined`, which the guard below handles.
+  const comparator = (l: string, r: string) => normLine(l) === normLine(r);
+  const parts = force
+    ? diffArrays(aOrigLines, bOrigLines, { comparator })
+    : diffArrays(aOrigLines, bOrigLines, { comparator, timeout: DIFF_TIMEOUT_MS });
   // Aborted (sides too dissimilar to diff within budget). We deliberately do NOT
   // synthesize an all-replace view — pairing unrelated lines as "modifications"
   // is a misleading "everything changed" diff a user could mistake for the real
@@ -172,7 +187,7 @@ export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions, force
   };
 
   for (const part of parts) {
-    const count = part.count ?? part.value.length;
+    const count = part.count; // diff@9 types count as a guaranteed number
     if (part.removed) {
       // Recover original A lines
       const origSlice = aOrigLines.slice(aIdx, aIdx + count);
@@ -214,7 +229,7 @@ export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions, force
         return { rows: [], hunks: [], stats: { mods: 0, adds: 0, dels: 0 }, first: { kind: "same", line: 0, rowIndex: -1 }, aborted: true };
       }
       if (pairLen > CHAR_LEVEL_MAX_PAIR_LEN) continue;
-      const s = inlineSpans(row.aText ?? "", row.bText ?? "");
+      const s = inlineSpans(row.aText ?? "", row.bText ?? "", opts.ignoreCase);
       row.aSpans = s.aSpans;
       row.bSpans = s.bSpans;
     }

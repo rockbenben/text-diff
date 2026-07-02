@@ -54,6 +54,7 @@
     "exportedFile": "Diekspor",
     "extractedText": "Teks Diekstrak",
     "translating": "Menerjemahkan...",
+    "translateDone": "Terjemahan selesai",
     "multiTranslating": "Menerjemahkan, total bahasa:",
     "model": "Model",
     "sameLanguageTarget": "Bahasa sumber dan target sama; target otomatis disesuaikan ke",
@@ -97,7 +98,7 @@
     "requestTimeoutSec": "Batas Waktu",
     "requestTimeoutSecTooltip": "Waktu tunggu maksimum per permintaan (detik). Pemikiran LLM membutuhkan waktu lebih lama; direkomendasikan 180 detik atau lebih.",
     "customExportFilename": "Pola Nama File Ekspor",
-    "customExportFilenameTooltip": "'{'name'}' = nama file asli, '{'lang'}' = bahasa, '{'ext'}' = ekstensi, '{'date'}' = tanggal, '{'time'}' = waktu",
+    "customExportFilenameTooltip": "'{'name'}' = nama file asli, '{'lang'}' = bahasa, '{'ext'}' = ekstensi, '{'date'}' = tanggal, '{'time'}' = waktu; dalam mode multibahasa, '{'lang'}' ditambahkan otomatis untuk mencegah bentrokan nama",
     "partialFailureTitle": "{count} baris gagal diterjemahkan",
     "partialFailureDesc": "Baris yang gagal mempertahankan teks asli sebagai placeholder, file tetap dapat digunakan. Kegagalan semacam ini biasanya disebabkan oleh fluktuasi jaringan atau ketidakstabilan sementara layanan terjemahan — layanan gratis dan server yang di-host sendiri sangat rentan, dan ini bukan masalah konfigurasi Anda. Klik Coba lagi untuk melanjutkan (baris yang berhasil berasal dari cache, tanpa penerjemahan ulang); jika tetap gagal, coba lagi nanti atau beralih ke layanan terjemahan lain. Atau klik Lihat baris yang gagal untuk menanganinya secara manual.",
     "retryFailedLines": "Coba lagi",
@@ -135,6 +136,7 @@
     "translategemmaUnavailable": "Layanan TranslateGemma sementara tidak dapat dijangkau, pastikan server lokal Anda (LM Studio / llama.cpp / Ollama) sedang berjalan dan URL sudah benar.",
     "networkUnavailable": "Layanan terjemahan sementara tidak dapat dijangkau — bisa jadi masalah jaringan atau gangguan sementara pada layanan. Silakan coba lagi nanti atau beralih ke layanan terjemahan lain.",
     "translationTimeout": "Permintaan terjemahan habis waktu — bisa jadi jaringan lambat atau layanan terlalu lama merespons. Silakan coba lagi nanti atau beralih ke layanan terjemahan lain.",
+    "translationTimeoutLocal": "Penerjemahan model lokal kehabisan waktu. LLM lokal bisa macet dalam perulangan berulang — turunkan max_tokens (batas keluaran) di Pengaturan Lanjutan, dan pastikan bahasa sumber yang dipilih sesuai dengan teks sebenarnya.",
     "langGroupCommon": "Umum",
     "langGroupEurope": "Eropa",
     "langGroupMiddleEast": "Timur Tengah",
@@ -238,7 +240,43 @@
       "title": "Text Diff",
       "description": "Bandingkan dua teks atau file berdampingan dan temukan perbedaan pertama.",
       "metaTitle": "Text Diff: Bandingkan Teks dan File Online",
-      "metaDescription": "Bandingkan dua teks atau file secara online dengan penyorotan berdampingan, menunjukkan baris dan kolom tepat tempat keduanya pertama berbeda."
+      "metaDescription": "Bandingkan dua teks atau file secara online dengan penyorotan berdampingan, menunjukkan baris dan kolom tepat tempat keduanya pertama berbeda.",
+      "faq": [
+        {
+          "q": "Format file apa yang didukung untuk perbandingan?",
+          "a": "Lima format didukung: teks biasa, CSV, TSV, INI, dan JSON. Alat ini mendeteksi format secara otomatis dari ekstensi atau konten file, atau Anda dapat beralih secara manual. Mode CSV/TSV menyelaraskan perbedaan per kolom, mode INI membandingkan pasangan kunci-nilai, membuat perubahan struktural mudah dikenali."
+        },
+        {
+          "q": "Bagaimana jika dua teks terlalu berbeda dan perbandingan habis waktu?",
+          "a": "Alat ini memiliki pelindung batas waktu — ketika perbedaan terlalu besar, alat ini berhenti sejenak dan menampilkan peringatan. Klik 'Tetap Bandingkan' untuk memaksa perbandingan lengkap (mungkin lebih lambat). Coba mode 'Hanya Diff' untuk fokus pada perbedaan, atau sesuaikan 'Baris Konteks' untuk mengurangi cakupan tampilan."
+        },
+        {
+          "q": "Bagaimana cara mengabaikan perbedaan spasi atau huruf besar/kecil?",
+          "a": "Centang 'Abaikan Spasi Awal/Akhir' untuk melewati perbedaan spasi di awal/akhir, dan 'Abaikan Huruf Besar/Kecil' untuk mengabaikan perbedaan huruf besar/kecil. Keduanya dapat diaktifkan secara bersamaan — berguna untuk membandingkan kode yang diformat atau file konfigurasi."
+        },
+        {
+          "q": "Bisakah saya mengekspor hasil perbandingan?",
+          "a": "Ya. Klik 'Ekspor Diff' untuk menghasilkan file unified diff (.patch) standar, kompatibel dengan git apply, alat ulasan kode, dan sistem kontrol versi. Nama file default adalah nama file sisi kanan."
+        },
+        {
+          "q": "Enkripsi apa yang didukung?",
+          "a": "Mendeteksi secara otomatis UTF-8, GBK, Big5, UTF-16LE, dan enkripsi umum lainnya. Setelah mengunggah file, enkripsi yang terdeteksi ditampilkan — Anda juga dapat beralih enkripsi secara manual untuk mendekode ulang. Ideal untuk membandingkan file konfigurasi atau log yang diekspor dari sistem berbeda."
+        },
+        {
+          "q": "Apakah teks saya diunggah ke server?",
+          "a": "Pemrosesan sepenuhnya lokal: pembacaan, penguraian, dan perbandingan teks semuanya terjadi di browser Anda — tidak ada yang diunggah ke server mana pun. Aman untuk membandingkan file konfigurasi sensitif, kode pribadi, atau dokumen yang berisi rahasia."
+        }
+      ],
+      "features": [
+        "Penyorotan berdampingan dengan lokasi perbedaan pertama yang tepat",
+        "Mendukung format teks biasa, CSV, TSV, INI, JSON",
+        "Deteksi otomatis enkripsi UTF-8, GBK, Big5, UTF-16LE",
+        "Mode abaikan spasi, abaikan huruf besar/kecil, diff tingkat karakter",
+        "Beralih antara tampilan terpisah dan terpadu",
+        "Navigasi blok diff untuk lompatan cepat",
+        "Ekspor sebagai file .patch standar, kompatibel dengan git apply",
+        "Pelindung batas waktu untuk teks besar dengan opsi perbandingan paksa"
+      ]
     }
   },
   "navigation": {
@@ -248,7 +286,11 @@
     "textParser": "Alat Teks",
     "jsonParser": "Alat JSON",
     "dataParser": "Alat Data",
-    "otherTools": "Alat Lainnya"
+    "otherTools": "Alat Lainnya",
+    "externalTools": {
+      "legendtalk": "Meja Bundar Pemikir AI",
+      "imgprompt": "Prompt Gambar AI"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI - Peralatan Data & Terjemahan AI untuk Developer",
@@ -282,7 +324,7 @@
     "goHome": "Kembali ke Beranda"
   },
   "TextDiff": {
-    "clientDescription": "Bandingkan dua teks atau file di browser Anda: penyorotan berdampingan setiap perbedaan, dengan penunjuk ke baris dan kolom tepat tempat keduanya pertama kali berbeda. Mendukung teks biasa, CSV/TSV, dan INI, dengan deteksi encoding otomatis UTF-8 / GBK.",
+    "clientDescription": "Bandingkan dua teks atau file di browser Anda: penyorotan berdampingan setiap perbedaan, dengan penunjuk ke baris dan kolom tepat tempat keduanya pertama kali berbeda. Mendukung teks biasa, CSV/TSV, dan INI, dengan deteksi encoding otomatis UTF-8 / GBK / Big5 / UTF-16LE.",
     "sideA": "A",
     "sideB": "B",
     "pasteHere": "Tempel atau ketik teks di sini, atau jatuhkan file",

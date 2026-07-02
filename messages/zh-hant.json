@@ -60,6 +60,7 @@
     "exportedFile": "已匯出",
     "extractedText": "提取的文字",
     "translating": "翻譯中",
+    "translateDone": "翻譯完成",
     "multiTranslating": "正在翻譯，目標語言共",
     "model": "模型",
     "sameLanguageTarget": "源語言與目標語言相同，已自動調整目標語言為",
@@ -103,7 +104,7 @@
     "requestTimeoutSec": "超時時間",
     "requestTimeoutSecTooltip": "單次請求的最大等待時間（秒）。LLM 思考耗時較長，建議 180 秒以上",
     "customExportFilename": "匯出檔案名稱格式",
-    "customExportFilenameTooltip": "'{'name'}' = 原始檔案名稱, '{'lang'}' = 語言, '{'ext'}' = 副檔名, '{'date'}' = 日期, '{'time'}' = 時間",
+    "customExportFilenameTooltip": "'{'name'}' = 原始檔案名稱, '{'lang'}' = 語言, '{'ext'}' = 副檔名, '{'date'}' = 日期, '{'time'}' = 時間；多語言模式會自動加 '{'lang'}' 防止檔名衝突",
     "partialFailureTitle": "翻譯失敗 {count} 行",
     "partialFailureDesc": "失敗的行已用原文佔位（不影響檔案結構）。這種失敗大多是網路抖動或翻譯服務臨時不穩定——免費服務和自建伺服器特別容易碰到，不是你的設定問題。點「再試一次」即可繼續，已成功的行走快取不會重翻；如果還是失敗，稍後再點或換個翻譯服務試試。也可點「查看失敗行」自己處理。",
     "retryFailedLines": "再試一次",
@@ -135,6 +136,7 @@
     "translategemmaUnavailable": "TranslateGemma 服務暫時連不上，請確認本機伺服器（LM Studio / llama.cpp / Ollama）已啟動且 URL 正確。",
     "networkUnavailable": "翻譯服務暫時連不上，可能是網路或服務的臨時問題。稍後再試，或換一個翻譯服務。",
     "translationTimeout": "翻譯請求逾時，可能是網路較慢或翻譯服務回應慢。稍後再試，或換一個翻譯服務。",
+    "translationTimeoutLocal": "本地模型翻譯逾時。本地大模型可能陷入複讀迴圈——請在進階設定中調低 max_tokens（輸出上限），並確認所選來源語言與文字實際語言一致。",
     "langGroupCommon": "常用",
     "langGroupEurope": "歐洲",
     "langGroupMiddleEast": "中東",
@@ -238,7 +240,43 @@
       "title": "文字比對",
       "description": "並排比較兩段文字或檔案，標示首處差異的確切位置。",
       "metaTitle": "文字比對：線上文字與檔案差異比較",
-      "metaDescription": "線上並排比較兩段文字或檔案，高亮所有差異，精確標示首處不同的行號與欄位。"
+      "metaDescription": "線上並排比較兩段文字或檔案，高亮所有差異，精確標示首處不同的行號與欄位。",
+      "faq": [
+        {
+          "q": "支援哪些檔案格式進行比較？",
+          "a": "支援五種格式：純文字、CSV、TSV、INI 和 JSON。工具會根據副檔名或內容自動偵測格式，也可手動切換。CSV/TSV 模式按欄對齊差異，INI 模式比較鍵值對，輕鬆發現結構性變更。"
+        },
+        {
+          "q": "如果兩段文字差異太大導致比較逾時怎麼辦？",
+          "a": "工具內建逾時保護機制——當差異過大時會暫停並顯示警告。點擊「強制比較」可進行完整比對（可能較慢）。嘗試「僅差異」模式聚焦差異，或調整「上下文行數」減少顯示範圍。"
+        },
+        {
+          "q": "如何忽略空白或大小寫差異？",
+          "a": "勾選「忽略前後空白」跳過首尾空格差異，勾選「忽略大小寫」忽略字母大小寫差異。兩者可同時啟用——適用於比較格式化的程式碼或設定檔。"
+        },
+        {
+          "q": "能否匯出差異比較結果？",
+          "a": "可以。點擊「匯出差異」生成標準的統一差異（.patch）檔案，相容於 git apply、程式碼審查工具和版本控制系統。檔名預設為右側檔案名稱。"
+        },
+        {
+          "q": "支援哪些編碼格式？",
+          "a": "自動偵測 UTF-8、GBK、Big5、UTF-16LE 及其他常見編碼。上傳檔案後會顯示偵測到的編碼——也可手動切換編碼重新解碼。適用於比較從不同系統匯出的設定檔或日誌。"
+        },
+        {
+          "q": "我的文字會上傳到伺服器嗎？",
+          "a": "完全本地處理：文字讀取、解析和比較都在瀏覽器中進行——不會上傳到任何伺服器。可安全比較敏感設定檔、私人程式碼或包含機密的文件。"
+        }
+      ],
+      "features": [
+        "並排高亮顯示，精確標示首處差異位置",
+        "支援純文字、CSV、TSV、INI、JSON 格式",
+        "自動偵測 UTF-8、GBK、Big5、UTF-16LE 編碼",
+        "忽略空白、忽略大小寫、字元級差異模式",
+        "分割和統一視圖切換",
+        "差異區塊導航，快速跳動",
+        "匯出標準 .patch 檔案，相容於 git apply",
+        "大型文字逾時保護，支援強制比較選項"
+      ]
     }
   },
   "navigation": {
@@ -248,7 +286,11 @@
     "textParser": "文字處理",
     "jsonParser": "JSON 處理",
     "dataParser": "資料轉換",
-    "otherTools": "其他工具"
+    "otherTools": "其他工具",
+    "externalTools": {
+      "legendtalk": "AI 思想家圓桌",
+      "imgprompt": "AI 繪圖提示詞"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI | 免費開源的 AI 翻譯與資料處理工具集",
@@ -282,7 +324,7 @@
     "goHome": "返回首頁"
   },
   "TextDiff": {
-    "clientDescription": "在瀏覽器中對比兩段文字或檔案，雙欄高亮所有差異，並標示首處不同的行號與欄位。支援純文字、CSV/TSV 及 INI 格式，自動偵測 UTF-8 / GBK 編碼。",
+    "clientDescription": "在瀏覽器中對比兩段文字或檔案，雙欄高亮所有差異，並標示首處不同的行號與欄位。支援純文字、CSV/TSV 及 INI 格式，自動偵測 UTF-8 / GBK / Big5 / UTF-16LE 編碼。",
     "sideA": "A",
     "sideB": "B",
     "pasteHere": "貼上或輸入文字，或拖曳檔案至此",

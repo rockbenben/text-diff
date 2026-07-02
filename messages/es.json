@@ -56,6 +56,7 @@
     "batchDownloaded": "Procesamiento completo, el archivo se descargó automáticamente",
     "extractedText": "Texto Extraído",
     "translating": "Traduciendo...",
+    "translateDone": "Traducción completada",
     "multiTranslating": "Traduciendo, total idiomas:",
     "model": "Modelo",
     "sameLanguageTarget": "Idiomas origen y destino iguales; destino ajustado automáticamente a",
@@ -110,7 +111,7 @@
     "requestTimeoutSec": "Tiempo de espera",
     "requestTimeoutSecTooltip": "Espera máxima por solicitud (segundos). El pensamiento de LLM tarda más; se recomiendan 180 s o más.",
     "customExportFilename": "Patrón de nombre de archivo",
-    "customExportFilenameTooltip": "'{'name'}' = nombre original, '{'lang'}' = idioma, '{'ext'}' = extensión, '{'date'}' = fecha, '{'time'}' = hora",
+    "customExportFilenameTooltip": "'{'name'}' = nombre original, '{'lang'}' = idioma, '{'ext'}' = extensión, '{'date'}' = fecha, '{'time'}' = hora; en modo multiidioma se agrega '{'lang'}' automáticamente para evitar conflictos de nombres",
     "partialFailureTitle": "{count} línea(s) fallaron",
     "partialFailureDesc": "Las líneas fallidas conservaron el texto original como marcador de posición, manteniendo el archivo utilizable. Estos fallos suelen ser interrupciones de red o problemas temporales del servicio de traducción — los servicios gratuitos y los servidores autoalojados son especialmente propensos a esto, y no es un problema de tu configuración. Haz clic en Reintentar para continuar (las líneas exitosas vienen de la caché, sin retraducción); si sigue fallando, inténtalo más tarde o prueba otro servicio de traducción. O haz clic en Ver líneas fallidas para gestionarlas manualmente.",
     "retryFailedLines": "Reintentar",
@@ -135,6 +136,7 @@
     "translategemmaUnavailable": "El servicio TranslateGemma está temporalmente inaccesible, asegúrate de que tu servidor local (LM Studio / llama.cpp / Ollama) esté en ejecución y la URL sea correcta.",
     "networkUnavailable": "El servicio de traducción está temporalmente inaccesible — podría ser un problema de red o el servicio está teniendo un percance. Inténtalo de nuevo más tarde o cambia a otro servicio de traducción.",
     "translationTimeout": "La solicitud de traducción agotó el tiempo de espera — podría ser una red lenta o el servicio está tardando demasiado en responder. Inténtalo de nuevo más tarde o cambia a otro servicio de traducción.",
+    "translationTimeoutLocal": "Se agotó el tiempo de la traducción con el modelo local. Un LLM local puede quedarse atascado en un bucle de repetición: reduce max_tokens (el límite de salida) en la configuración avanzada y asegúrate de que el idioma de origen seleccionado coincida con el texto real.",
     "langGroupCommon": "Comunes",
     "langGroupEurope": "Europa",
     "langGroupMiddleEast": "Oriente Medio",
@@ -238,7 +240,43 @@
       "title": "Text Diff",
       "description": "Compare dos textos o archivos en paralelo y localice la primera diferencia.",
       "metaTitle": "Text Diff: Comparar textos y archivos online",
-      "metaDescription": "Compare dos textos o archivos online con resaltado en paralelo, localizando la línea y columna exactas donde difieren por primera vez."
+      "metaDescription": "Compare dos textos o archivos online con resaltado en paralelo, localizando la línea y columna exactas donde difieren por primera vez.",
+      "faq": [
+        {
+          "q": "¿Qué formatos de archivo se admiten para comparación?",
+          "a": "Cinco formatos admitidos: texto plano, CSV, TSV, INI y JSON. La herramienta detecta automáticamente el formatopor la extensión o contenido, o puede cambiar manualmente. El modo CSV/TSV alinea diferencias por columna, el modo INI compara pares clave-valor, facilitando detectar cambios estructurales."
+        },
+        {
+          "q": "¿Qué pasa si los dos textos son demasiado diferentes y la comparación expira?",
+          "a": "La herramienta tiene protección contra tiempo de espera — cuando las diferencias son demasiado grandes, se pausa y muestra una advertencia. Haga clic en 'Comparar de todos modos' para forzar una comparación completa (puede ser más lenta). Pruebe el modo 'Solo diferencias' para enfocarse en las diferencias, o ajuste 'Líneas de contexto' para reducir el alcance de visualización."
+        },
+        {
+          "q": "¿Cómo ignoro diferencias de espacios en blanco o mayúsculas/minúsculas?",
+          "a": "Marque 'Ignorar espacios en blanco iniciales/finales' para omitir diferencias de espacios al inicio/fin, e 'Ignorar mayúsculas/minúsculas' para ignorar diferencias de capitalización. Ambos pueden habilitarse simultáneamente — útil para comparar código formateado o archivos de configuración."
+        },
+        {
+          "q": "¿Puedo exportar el resultado de la comparación?",
+          "a": "Sí. Haga clic en 'Exportar diff' para generar un archivo de diff unificado estándar (.patch), compatible con git apply, herramientas de revisión de código y sistemas de control de versiones. El nombre del archivo por defecto es el del archivo lado derecho."
+        },
+        {
+          "q": "¿Qué codificaciones se admiten?",
+          "a": "Detecta automáticamente UTF-8, GBK, Big5, UTF-16LE y otras codificaciones comunes. Después de subir un archivo, se muestra la codificación detectada — también puede cambiar manualmente la codificación para redecodificar. Ideal para comparar archivos de configuración o registros exportados de diferentes sistemas."
+        },
+        {
+          "q": "¿Mis textos se suben a un servidor?",
+          "a": "Procesamiento completamente local: la lectura, análisis y comparación de texto ocurre en su navegador — nada se sube a ningún servidor. Seguro para comparar archivos de configuración sensibles, código privado o documentos que contengan secretos."
+        }
+      ],
+      "features": [
+        "Resaltado lado a lado con ubicación precisa de la primera diferencia",
+        "Soporta formatos texto plano, CSV, TSV, INI, JSON",
+        "Detección automática de codificaciones UTF-8, GBK, Big5, UTF-16LE",
+        "Modos ignorar espacios en blanco, ignorar mayúsculas/minúsculas, diff a nivel de carácter",
+        "Alternancia entre vista dividida y unificada",
+        "Navegación por bloques de diff para saltar rápidamente",
+        "Exportación como archivo .patch estándar, compatible con git apply",
+        "Protección contra tiempo de espera para textos grandes con opción de forzar comparación"
+      ]
     }
   },
   "navigation": {
@@ -248,7 +286,11 @@
     "textParser": "Herramientas Texto",
     "jsonParser": "Herramientas JSON",
     "dataParser": "Herramientas Datos",
-    "otherTools": "Otras Herramientas"
+    "otherTools": "Otras Herramientas",
+    "externalTools": {
+      "legendtalk": "Mesa redonda de pensadores IA",
+      "imgprompt": "Prompts de imágenes IA"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI | Herramientas de Traducción y Dev con IA",
@@ -282,7 +324,7 @@
     "goHome": "Volver al inicio"
   },
   "TextDiff": {
-    "clientDescription": "Compare dos textos o archivos en su navegador: resaltado en paralelo de cada diferencia, con un indicador a la línea y campo exactos donde divergen por primera vez. Funciona con texto plano, CSV/TSV e INI, con detección automática de codificación UTF-8 / GBK.",
+    "clientDescription": "Compare dos textos o archivos en su navegador: resaltado en paralelo de cada diferencia, con un indicador a la línea y campo exactos donde divergen por primera vez. Funciona con texto plano, CSV/TSV e INI, con detección automática de codificación UTF-8 / GBK / Big5 / UTF-16LE.",
     "sideA": "A",
     "sideB": "B",
     "pasteHere": "Pegue o escriba texto aquí, o suelte un archivo",

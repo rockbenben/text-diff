@@ -56,6 +56,7 @@
     "batchDownloaded": "Processing complete, file downloaded automatically",
     "extractedText": "Extracted Text",
     "translating": "Translating",
+    "translateDone": "Translation complete",
     "multiTranslating": "Translating, total target languages:",
     "model": "Model",
     "sameLanguageTarget": "Source and target languages are the same; automatically adjusted target to",
@@ -110,7 +111,7 @@
     "requestTimeoutSec": "Timeout",
     "requestTimeoutSecTooltip": "Maximum wait per request (seconds). LLM thinking takes longer; 180s or more recommended.",
     "customExportFilename": "Export Filename Pattern",
-    "customExportFilenameTooltip": "'{'name'}' = original filename, '{'lang'}' = language, '{'ext'}' = extension, '{'date'}' = date, '{'time'}' = time",
+    "customExportFilenameTooltip": "'{'name'}' = original filename, '{'lang'}' = language, '{'ext'}' = extension, '{'date'}' = date, '{'time'}' = time; in multi-language mode '{'lang'}' is added automatically to avoid name clashes",
     "partialFailureTitle": "{count} line(s) failed",
     "partialFailureDesc": "Failed lines kept the original text as a placeholder, so the file stays usable. These failures are usually network blips or temporary upstream hiccups — free services and self-hosted servers are especially prone to this, and it's not a problem with your setup. Click Retry to continue (successful lines come from cache, no re-translation); if it still fails, try again later or switch to a different translation service. Or click View failed lines to handle them manually.",
     "retryFailedLines": "Retry",
@@ -135,6 +136,7 @@
     "translategemmaUnavailable": "TranslateGemma service is temporarily unreachable, please make sure your local server (LM Studio / llama.cpp / Ollama) is running and the URL is correct.",
     "networkUnavailable": "Translation service is temporarily unreachable — could be a network issue or the service is having a hiccup. Please try again later, or switch to a different translation service.",
     "translationTimeout": "Translation request timed out — could be a slow network or the service is taking too long to respond. Please try again later, or switch to a different translation service.",
+    "translationTimeoutLocal": "Local model translation timed out. A local LLM can get stuck in a repeat loop — lower max_tokens (the output cap) in Advanced Settings, and make sure the selected source language matches the actual text.",
     "langGroupCommon": "Common",
     "langGroupEurope": "Europe",
     "langGroupMiddleEast": "Middle East",
@@ -238,7 +240,43 @@
       "title": "Text Diff",
       "description": "Compare two texts or files side by side and pinpoint the first difference.",
       "metaTitle": "Text Diff: Online Text & File Compare, Find Differences",
-      "metaDescription": "Compare two texts or files online with side-by-side highlighting, pinpointing the exact line and column where they first differ."
+      "metaDescription": "Compare two texts or files online with side-by-side highlighting, pinpointing the exact line and column where they first differ.",
+      "faq": [
+        {
+          "q": "Which file formats are supported for comparison?",
+          "a": "Five formats supported: plain text, CSV, TSV, INI, and JSON. The tool auto-detects format from file extension or content, or you can switch manually. CSV/TSV mode aligns differences by column, INI mode compares key-value pairs, making structural changes easy to spot."
+        },
+        {
+          "q": "What if the two texts are too different and comparison times out?",
+          "a": "The tool has a built-in timeout guard — when differences are too large, it pauses and shows a warning. Click 'Compare Anyway' to force a full comparison (may be slower). Try 'Diff Only' mode to focus on differences, or adjust 'Context Lines' to reduce the display scope."
+        },
+        {
+          "q": "How do I ignore whitespace or case differences?",
+          "a": "Check 'Ignore Leading/Trailing Whitespace' to skip leading/trailing space differences, and 'Ignore Case' to ignore letter case differences. Both can be enabled simultaneously — useful for comparing formatted code or config files."
+        },
+        {
+          "q": "Can I export the comparison result?",
+          "a": "Yes. Click 'Export Diff' to generate a standard unified diff (.patch) file, compatible with git apply, code review tools, and version control systems. The filename defaults to the right-side file name."
+        },
+        {
+          "q": "Which encodings are supported?",
+          "a": "Auto-detects UTF-8, GBK, Big5, UTF-16LE, and other common encodings. After uploading a file, the detected encoding is displayed — you can also manually switch encoding to re-decode. Ideal for comparing config files or logs exported from different systems."
+        },
+        {
+          "q": "Are my texts uploaded to a server?",
+          "a": "Fully local processing: text reading, parsing, and comparison all happen in your browser — nothing is uploaded to any server. Safe for comparing sensitive config files, private code, or documents containing secrets."
+        }
+      ],
+      "features": [
+        "Side-by-side highlighting with precise first-diff location",
+        "Supports plain text, CSV, TSV, INI, JSON formats",
+        "Auto-detects UTF-8, GBK, Big5, UTF-16LE encodings",
+        "Ignore whitespace, ignore case, character-level diff modes",
+        "Split and unified view toggle",
+        "Diff block navigation for quick jumping",
+        "Export as standard .patch file, compatible with git apply",
+        "Timeout guard for large texts with force-compare option"
+      ]
     }
   },
   "navigation": {
@@ -248,7 +286,11 @@
     "textParser": "Text Tools",
     "jsonParser": "JSON Tools",
     "dataParser": "Data Tools",
-    "otherTools": "Other Tools"
+    "otherTools": "Other Tools",
+    "externalTools": {
+      "legendtalk": "AI Thinkers Roundtable",
+      "imgprompt": "AI Image Prompts"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI | Free Open Source AI Translation & Data Tools",
@@ -282,7 +324,7 @@
     "goHome": "Back to Home"
   },
   "TextDiff": {
-    "clientDescription": "Compare two texts or files in your browser: side-by-side highlighting of every difference, plus a one-line pointer to the exact line and field where they first diverge. Works on plain text, CSV/TSV and INI, with automatic UTF-8 / GBK encoding detection.",
+    "clientDescription": "Compare two texts or files in your browser: side-by-side highlighting of every difference, plus a one-line pointer to the exact line and field where they first diverge. Works on plain text, CSV/TSV and INI, with automatic UTF-8 / GBK / Big5 / UTF-16LE encoding detection.",
     "sideA": "A",
     "sideB": "B",
     "pasteHere": "Paste or type text here, or drop a file",

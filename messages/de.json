@@ -56,6 +56,7 @@
     "batchDownloaded": "Verarbeitung abgeschlossen, Datei wurde automatisch heruntergeladen",
     "extractedText": "Extrahierter Text",
     "translating": "Übersetze...",
+    "translateDone": "Übersetzung abgeschlossen",
     "multiTranslating": "Übersetze, Zielsprachen gesamt:",
     "model": "Modell",
     "sameLanguageTarget": "Quell- und Zielsprache sind gleich; Zielsprache automatisch angepasst auf",
@@ -110,7 +111,7 @@
     "requestTimeoutSec": "Zeitüberschreitung",
     "requestTimeoutSecTooltip": "Maximale Wartezeit pro Anfrage (in Sekunden). Das Denken von LLMs dauert länger; 180 Sekunden oder mehr werden empfohlen.",
     "customExportFilename": "Dateinamenmuster",
-    "customExportFilenameTooltip": "'{'name'}' = Originalname, '{'lang'}' = Sprache, '{'ext'}' = Endung, '{'date'}' = Datum, '{'time'}' = Zeit",
+    "customExportFilenameTooltip": "'{'name'}' = Originalname, '{'lang'}' = Sprache, '{'ext'}' = Endung, '{'date'}' = Datum, '{'time'}' = Zeit; im Mehrsprachenmodus wird '{'lang'}' automatisch hinzugefügt, um Namenskonflikte zu vermeiden",
     "partialFailureTitle": "{count} Zeile(n) fehlgeschlagen",
     "partialFailureDesc": "Fehlgeschlagene Zeilen behielten den Originaltext als Platzhalter, sodass die Datei nutzbar bleibt. Solche Fehler sind meist Netzwerkschwankungen oder vorübergehende Probleme des Übersetzungsdienstes — kostenlose Dienste und selbst gehostete Server sind besonders anfällig, und es ist kein Konfigurationsproblem auf deiner Seite. Klicke auf Erneut versuchen, um fortzufahren (erfolgreiche Zeilen kommen aus dem Cache, ohne erneute Übersetzung); wenn es weiterhin fehlschlägt, versuche es später erneut oder probiere einen anderen Übersetzungsdienst. Oder klicke auf Fehlgeschlagene Zeilen anzeigen, um sie manuell zu bearbeiten.",
     "retryFailedLines": "Erneut versuchen",
@@ -135,6 +136,7 @@
     "translategemmaUnavailable": "Der TranslateGemma-Dienst ist vorübergehend nicht erreichbar, stelle sicher, dass dein lokaler Server (LM Studio / llama.cpp / Ollama) läuft und die URL korrekt ist.",
     "networkUnavailable": "Der Übersetzungsdienst ist vorübergehend nicht erreichbar — möglicherweise ein Netzwerkproblem oder der Dienst hat einen kurzen Aussetzer. Versuche es später erneut oder wechsle zu einem anderen Übersetzungsdienst.",
     "translationTimeout": "Die Übersetzungsanfrage hat das Zeitlimit überschritten — möglicherweise ein langsames Netzwerk oder der Dienst braucht zu lange zum Antworten. Versuche es später erneut oder wechsle zu einem anderen Übersetzungsdienst.",
+    "translationTimeoutLocal": "Zeitüberschreitung bei der Übersetzung mit lokalem Modell. Ein lokales LLM kann in einer Wiederholungsschleife hängen bleiben — verringern Sie max_tokens (das Ausgabelimit) in den erweiterten Einstellungen und stellen Sie sicher, dass die gewählte Ausgangssprache zum tatsächlichen Text passt.",
     "langGroupCommon": "Häufig",
     "langGroupEurope": "Europa",
     "langGroupMiddleEast": "Naher Osten",
@@ -238,7 +240,43 @@
       "title": "Text Diff",
       "description": "Vergleichen Sie zwei Texte oder Dateien nebeneinander und finden Sie den ersten Unterschied.",
       "metaTitle": "Text Diff: Texte und Dateien online vergleichen",
-      "metaDescription": "Texte und Dateien online nebeneinander vergleichen, mit genauer Angabe der Zeile und Spalte, wo sie zuerst abweichen."
+      "metaDescription": "Texte und Dateien online nebeneinander vergleichen, mit genauer Angabe der Zeile und Spalte, wo sie zuerst abweichen.",
+      "faq": [
+        {
+          "q": "Welche Dateiformate werden für den Vergleich unterstützt?",
+          "a": "Fünf Formate unterstützt: Klartext, CSV, TSV, INI und JSON. Das Tool erkennt das Format automatisch anhand der Dateiendung oder des Inhalts, oder Sie können manuell wechseln. Der CSV/TSV-Modus richtet Unterschiede nach Spalten aus, der INI-Modus vergleicht Schlüssel-Wert-Paare, sodass strukturelle Änderungen leicht erkennbar sind."
+        },
+        {
+          "q": "Was passiert, wenn die zwei Texte zu unterschiedlich sind und der Vergleich zeitüberschreitung?",
+          "a": "Das Tool hat einen eingebauten Timeout-Schutz — wenn die Unterschiede zu groß sind, pausiert es und zeigt eine Warnung an. Klicken Sie auf 'Trotzdem vergleichen', um einen vollständigen Vergleich zu erzwingen (kann langsamer sein). Versuchen Sie den Modus 'Nur Unterschiede', um sich auf die Unterschiede zu konzentrieren, oder passen Sie 'Kontextzeilen' an, um den Anzeigeumfang zu reduzieren."
+        },
+        {
+          "q": "Wie ignoriere ich Leerzeichen- oder Groß-/Kleinschreibung-Unterschiede?",
+          "a": "Aktivieren Sie 'Führende/Nachfolgende Leerzeichen ignorieren', um Leerzeichen-Unterschiede am Anfang/Ende zu überspringen, und 'Groß-/Kleinschreibung ignorieren', um Unterschiede in der Groß-/Kleinschreibung zu ignorieren. Beide können gleichzeitig aktiviert werden — nützlich für den Vergleich formatierter Code- oder Konfigurationsdateien."
+        },
+        {
+          "q": "Kann ich das Vergleichsergebnis exportieren?",
+          "a": "Ja. Klicken Sie auf 'Diff exportieren', um eine standardisierte unified diff (.patch) Datei zu erstellen, die mit git apply, Code-Review-Tools und Versionskontrollsystemen kompatibel ist. Der Dateiname ist standardmäßig der Name der rechten Datei."
+        },
+        {
+          "q": "Welche Kodierungen werden unterstützt?",
+          "a": "Erkennt automatisch UTF-8, GBK, Big5, UTF-16LE und andere gängige Kodierungen. Nach dem Hochladen einer Datei wird die erkannte Kodierung angezeigt — Sie können auch manuell die Kodierung wechseln, um neu zu dekodieren. Ideal zum Vergleichen von Konfigurationsdateien oder Logs aus verschiedenen Systemen."
+        },
+        {
+          "q": "Werden meine Texte auf einen Server hochgeladen?",
+          "a": "Vollständig lokale Verarbeitung: Text lesen, parsen und vergleichen geschieht in Ihrem Browser — nichts wird auf einen Server hochgeladen. Sicher zum Vergleichen sensibler Konfigurationsdateien, privatem Code oder Dokumenten mit Geheimnissen."
+        }
+      ],
+      "features": [
+        "Nebeneinander-Hervorhebung mit genauer Position der ersten Differenz",
+        "Unterstützt Klartext, CSV, TSV, INI, JSON Formate",
+        "Automatische Erkennung von UTF-8, GBK, Big5, UTF-16LE Kodierungen",
+        "Modi: Leerzeichen ignorieren, Groß-/Kleinschreibung ignorieren, zeichenweiser Diff",
+        "Umschalten zwischen geteilter und einheitlicher Ansicht",
+        "Diff-Block-Navigation zum schnellen Springen",
+        "Export als standardisierte .patch-Datei, kompatibel mit git apply",
+        "Timeout-Schutz für große Texte mit Option zum erzwungenen Vergleich"
+      ]
     }
   },
   "navigation": {
@@ -248,7 +286,11 @@
     "textParser": "Text-Tools",
     "jsonParser": "JSON-Tools",
     "dataParser": "Daten-Tools",
-    "otherTools": "Andere Tools"
+    "otherTools": "Andere Tools",
+    "externalTools": {
+      "legendtalk": "KI-Denkerrunde",
+      "imgprompt": "KI-Bild-Prompts"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI | Kostenlose KI-Dev- & Übersetzungstools",
@@ -282,7 +324,7 @@
     "goHome": "Zur Startseite"
   },
   "TextDiff": {
-    "clientDescription": "Vergleichen Sie zwei Texte oder Dateien im Browser: nebeneinander hervorgehobene Unterschiede mit einem Hinweis auf die genaue Zeile und das Feld, wo sie zuerst abweichen. Unterstützt Klartext, CSV/TSV und INI mit automatischer UTF-8 / GBK-Erkennung.",
+    "clientDescription": "Vergleichen Sie zwei Texte oder Dateien im Browser: nebeneinander hervorgehobene Unterschiede mit einem Hinweis auf die genaue Zeile und das Feld, wo sie zuerst abweichen. Unterstützt Klartext, CSV/TSV und INI mit automatischer UTF-8 / GBK / Big5 / UTF-16LE-Erkennung.",
     "sideA": "A",
     "sideB": "B",
     "pasteHere": "Text hier einfügen oder eingeben, oder Datei ablegen",

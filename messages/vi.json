@@ -54,6 +54,7 @@
     "exportedFile": "Đã xuất",
     "extractedText": "Văn bản đã trích xuất",
     "translating": "Đang dịch...",
+    "translateDone": "Đã dịch xong",
     "multiTranslating": "Đang dịch, tổng số ngôn ngữ:",
     "model": "Mô hình",
     "sameLanguageTarget": "Ngôn ngữ nguồn và đích giống nhau; đích tự động điều chỉnh thành",
@@ -97,7 +98,7 @@
     "requestTimeoutSec": "Thời gian chờ",
     "requestTimeoutSecTooltip": "Thời gian chờ tối đa mỗi yêu cầu (giây). LLM suy nghĩ mất nhiều thời gian hơn; khuyến nghị 180 giây trở lên.",
     "customExportFilename": "Mẫu tên tệp xuất",
-    "customExportFilenameTooltip": "'{'name'}' = tên tệp gốc, '{'lang'}' = ngôn ngữ, '{'ext'}' = phần mở rộng, '{'date'}' = ngày, '{'time'}' = thời gian",
+    "customExportFilenameTooltip": "'{'name'}' = tên tệp gốc, '{'lang'}' = ngôn ngữ, '{'ext'}' = phần mở rộng, '{'date'}' = ngày, '{'time'}' = thời gian; ở chế độ đa ngôn ngữ, '{'lang'}' được thêm tự động để tránh trùng tên",
     "partialFailureTitle": "{count} dòng dịch thất bại",
     "partialFailureDesc": "Các dòng thất bại đã giữ nguyên văn bản gốc làm chỗ giữ chỗ, tệp vẫn dùng được. Những thất bại này thường do biến động mạng hoặc dịch vụ dịch tạm thời không ổn định — dịch vụ miễn phí và máy chủ tự lưu trữ đặc biệt dễ gặp, và không phải do cấu hình của bạn. Nhấp Thử lại để tiếp tục (các dòng thành công đến từ bộ nhớ đệm, không dịch lại); nếu vẫn thất bại, hãy thử lại sau hoặc chuyển sang dịch vụ dịch khác. Hoặc nhấp Xem các dòng thất bại để xử lý thủ công.",
     "retryFailedLines": "Thử lại",
@@ -135,6 +136,7 @@
     "translategemmaUnavailable": "Dịch vụ TranslateGemma tạm thời không kết nối được, hãy đảm bảo máy chủ cục bộ của bạn (LM Studio / llama.cpp / Ollama) đang chạy và URL chính xác.",
     "networkUnavailable": "Dịch vụ dịch tạm thời không kết nối được — có thể là sự cố mạng hoặc dịch vụ đang gặp trục trặc tạm thời. Vui lòng thử lại sau hoặc chuyển sang dịch vụ dịch khác.",
     "translationTimeout": "Yêu cầu dịch đã hết thời gian — có thể là mạng chậm hoặc dịch vụ phản hồi quá lâu. Vui lòng thử lại sau hoặc chuyển sang dịch vụ dịch khác.",
+    "translationTimeoutLocal": "Dịch bằng mô hình cục bộ đã hết thời gian. Một LLM cục bộ có thể bị kẹt trong vòng lặp lặp lại — hãy giảm max_tokens (giới hạn đầu ra) trong Cài đặt nâng cao và đảm bảo ngôn ngữ nguồn đã chọn khớp với văn bản thực tế.",
     "langGroupCommon": "Phổ biến",
     "langGroupEurope": "Châu Âu",
     "langGroupMiddleEast": "Trung Đông",
@@ -238,7 +240,43 @@
       "title": "Text Diff",
       "description": "So sánh hai văn bản hoặc tệp song song và xác định điểm khác biệt đầu tiên.",
       "metaTitle": "Text Diff: So sánh văn bản và tệp trực tuyến",
-      "metaDescription": "So sánh hai văn bản hoặc tệp trực tuyến với làm nổi bật song song, chỉ rõ dòng và cột chính xác nơi đầu tiên khác nhau."
+      "metaDescription": "So sánh hai văn bản hoặc tệp trực tuyến với làm nổi bật song song, chỉ rõ dòng và cột chính xác nơi đầu tiên khác nhau.",
+      "faq": [
+        {
+          "q": "Các định dạng tệp được hỗ trợ để so sánh là gì?",
+          "a": "Năm định dạng được hỗ trợ: văn bản thuần, CSV, TSV, INI và JSON. Công cụ tự động phát hiện định dạng từ phần mở rộng tệp hoặc nội dung, hoặc bạn có thể chuyển đổi thủ công. Chế độ CSV/TSV căn chỉnh các điểm khác biệt theo cột, chế độ INI so sánh các cặp khóa-giá trị, giúp dễ dàng nhận ra các thay đổi cấu trúc."
+        },
+        {
+          "q": "Nếu hai văn bản quá khác nhau và quá trình so sánh hết thời gian chờ thì sao?",
+          "a": "Công cụ có bảo vệ thời gian chờ — khi các điểm khác biệt quá lớn, nó sẽ tạm dừng và hiển thị cảnh báo. Nhấn 'Vẫn so sánh' để buộc thực hiện so sánh đầy đủ (có thể chậm hơn). Thử chế độ 'Chỉ khác biệt' để tập trung vào sự khác biệt, hoặc điều chỉnh 'Dòng ngữ cảnh' để giảm phạm vi hiển thị."
+        },
+        {
+          "q": "Làm thế nào để bỏ qua khoảng trắng hoặc sự khác biệt về chữ hoa/chữ thường?",
+          "a": "Chọn 'Bỏ qua khoảng trắng đầu/cuối' để bỏ qua sự khác biệt về khoảng trắng ở đầu và cuối, và 'Bỏ qua chữ hoa/thường' để bỏ qua sự khác biệt về viết hoa. Cả hai có thể được bật đồng thời — hữu ích khi so sánh mã được định dạng hoặc tệp cấu hình."
+        },
+        {
+          "q": "Tôi có thể xuất kết quả so sánh không?",
+          "a": "Có. Nhấn 'Xuất diff' để tạo tệp unified diff (.patch) tiêu chuẩn, tương thích với git apply, công cụ đánh giá mã và hệ thống kiểm soát phiên bản. Tên tệp mặc định là tên tệp bên phải."
+        },
+        {
+          "q": "Các mã hóa được hỗ trợ là gì?",
+          "a": "Tự động phát hiện UTF-8, GBK, Big5, UTF-16LE và các mã hóa phổ biến khác. Sau khi tải lên tệp, mã hóa được phát hiện sẽ được hiển thị — bạn cũng có thể chuyển đổi mã hóa thủ công để giải mã lại. Lý tưởng để so sánh tệp cấu hình hoặc nhật ký được xuất từ các hệ thống khác nhau."
+        },
+        {
+          "q": "Văn bản của tôi có được tải lên máy chủ không?",
+          "a": "Xử lý hoàn toàn cục bộ: đọc, phân tích và so sánh văn bản đều diễn ra trong trình duyệt của bạn — không có gì được tải lên máy chủ. An toàn để so sánh tệp cấu hình nhạy cảm, mã riêng tư hoặc tài liệu chứa bí mật."
+        }
+      ],
+      "features": [
+        "Làm nổi bật song song với vị trí chính xác của sự khác biệt đầu tiên",
+        "Hỗ trợ định dạng văn bản thuần, CSV, TSV, INI, JSON",
+        "Tự động phát hiện mã hóa UTF-8, GBK, Big5, UTF-16LE",
+        "Các chế độ bỏ qua khoảng trắng, bỏ qua chữ hoa/thường, diff theo ký tự",
+        "Chuyển đổi giữa chế độ xem phân tách và thống nhất",
+        "Điều hướng khối diff để nhảy nhanh",
+        "Xuất dưới dạng tệp .patch tiêu chuẩn, tương thích với git apply",
+        "Bảo vệ thời gian chờ cho văn bản lớn với tùy chọn buộc so sánh"
+      ]
     }
   },
   "navigation": {
@@ -248,7 +286,11 @@
     "textParser": "Công cụ Văn bản",
     "jsonParser": "Công cụ JSON",
     "dataParser": "Công cụ Dữ liệu",
-    "otherTools": "Công cụ Khác"
+    "otherTools": "Công cụ Khác",
+    "externalTools": {
+      "legendtalk": "Bàn tròn nhà tư tưởng AI",
+      "imgprompt": "Câu lệnh tạo ảnh AI"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI - Bộ Công Cụ Dịch Thuật & Dữ Liệu AI Online",
@@ -282,7 +324,7 @@
     "goHome": "Về trang chủ"
   },
   "TextDiff": {
-    "clientDescription": "So sánh hai văn bản hoặc tệp ngay trên trình duyệt: làm nổi bật song song từng điểm khác biệt, kèm chỉ báo đến đúng dòng và trường đầu tiên phân kỳ. Hỗ trợ văn bản thuần, CSV/TSV và INI, với tự động nhận diện mã hóa UTF-8 / GBK.",
+    "clientDescription": "So sánh hai văn bản hoặc tệp ngay trên trình duyệt: làm nổi bật song song từng điểm khác biệt, kèm chỉ báo đến đúng dòng và trường đầu tiên phân kỳ. Hỗ trợ văn bản thuần, CSV/TSV và INI, với tự động nhận diện mã hóa UTF-8 / GBK / Big5 / UTF-16LE.",
     "sideA": "A",
     "sideB": "B",
     "pasteHere": "Dán hoặc nhập văn bản tại đây, hoặc thả tệp vào",

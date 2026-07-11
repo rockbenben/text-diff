@@ -256,9 +256,11 @@ export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions, force
       const field = locateFirstField(opts.format, r.aText ?? "", r.bText ?? "", { header, delimiter });
       first = { kind: "mod", line: r.bLine ?? r.aLine ?? 0, field, before: field.before, after: field.after, rowIndex: firstIdx };
     } else if (r.kind === "del") {
-      first = { kind: "del", line: r.aLine ?? 0, rowIndex: firstIdx };
+      // Carry the removed line so the banner can show WHAT was deleted, not just where.
+      first = { kind: "del", line: r.aLine ?? 0, before: r.aText, rowIndex: firstIdx };
     } else {
-      first = { kind: "add", line: r.bLine ?? 0, rowIndex: firstIdx };
+      // Carry the added line so the banner can show WHAT was added, not just where.
+      first = { kind: "add", line: r.bLine ?? 0, after: r.bText, rowIndex: firstIdx };
     }
   }
 

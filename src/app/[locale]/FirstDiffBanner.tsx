@@ -33,7 +33,27 @@ const FirstDiffBanner = ({ first, onJump }: Props) => {
   else if (first.field?.name) message = t("locIni", { line: first.line, name: first.field.name });
   else message = t("locPlain", { line: first.line, char: (first.field?.charIndex ?? 0) + 1 });
 
-  const showChips = first.kind === "mod" && first.before !== undefined;
+  // Every change kind shows WHAT changed, not just where: mod shows before→after,
+  // del/add show the removed/added line as a single chip (blank lines carry no
+  // content, so their chip is skipped — the location line already says it all).
+  const delLine = first.before?.trim();
+  const addLine = first.after?.trim();
+  const chips =
+    first.kind === "mod" && first.before !== undefined ? (
+      <span className={styles.bannerChips}>
+        <span className={`${styles.chip} ${styles.chipDel}`} title={first.before}>{first.before}</span>
+        <span className={styles.arrow}>→</span>
+        <span className={`${styles.chip} ${styles.chipAdd}`} title={first.after}>{first.after}</span>
+      </span>
+    ) : first.kind === "del" && delLine ? (
+      <span className={styles.bannerChips}>
+        <span className={`${styles.chip} ${styles.chipDel}`} title={first.before}>{delLine}</span>
+      </span>
+    ) : first.kind === "add" && addLine ? (
+      <span className={styles.bannerChips}>
+        <span className={`${styles.chip} ${styles.chipAdd}`} title={first.after}>{addLine}</span>
+      </span>
+    ) : null;
 
   return (
     <div
@@ -46,13 +66,7 @@ const FirstDiffBanner = ({ first, onJump }: Props) => {
         <div className={styles.bannerTag}>{t("firstDiff")}</div>
         <div className={styles.bannerMain}>
           <span className={styles.bannerMsg}>{message}</span>
-          {showChips && (
-            <span className={styles.bannerChips}>
-              <span className={`${styles.chip} ${styles.chipDel}`} title={first.before}>{first.before}</span>
-              <span className={styles.arrow}>→</span>
-              <span className={`${styles.chip} ${styles.chipAdd}`} title={first.after}>{first.after}</span>
-            </span>
-          )}
+          {chips}
         </div>
       </div>
       <span className={styles.jump}>{t("jump")} <RightOutlined /></span>

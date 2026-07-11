@@ -1,7 +1,44 @@
 /* Single virtualized scroll container holding full-width rows. Each row is a
    grid of [left cell | hairline split | right cell]; both panes therefore scroll
    in lockstep for free. Colors come from --td-* vars set in TextDiff.tsx. */
-.diff { border: 1px solid var(--td-border); font-family: var(--td-mono); font-size: 13px; }
+/* Theme vars are driven by the html.light / html.dark class (set by next-themes
+   BEFORE first paint) — NOT antd's JS tokens. antd tokens render dark-by-default
+   during SSR + the first client render (ThemesProvider's `mounted ? … : true`
+   gate), which flashed the panes/input black on every refresh in light mode
+   while globals.css had already pre-painted the page light. Driving the vars
+   from the DOM theme class is hydration-proof. Values mirror ThemesProvider's
+   antd tokens (the single source of truth); dark is the default face to match
+   defaultTheme="dark", and --td-accent reuses globals.css's per-class --accent. */
+.surface {
+  --td-mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --td-bg-container: #191815;
+  --td-border: rgba(240, 237, 228, 0.28);
+  --td-border-2: rgba(240, 237, 228, 0.10);
+  --td-text: rgba(240, 237, 228, 0.85);
+  --td-text-3: rgba(240, 237, 228, 0.45);
+  --td-accent: var(--accent);
+  --td-accent-bg: rgba(122, 140, 255, 0.10);
+  --td-del: #d15546;
+  --td-add: #44a978;
+  /* Row/chip tints are an EQUAL-weight wash of each accent over the container
+     bg, so deletions and additions read at the same visual weight in both
+     themes — antd's colorErrorBg/colorSuccessBg are seeded from differently-
+     weighted hues and come out lopsided (near-white pink vs muddy grey-green). */
+  --td-del-wash: color-mix(in srgb, var(--td-del) 13%, var(--td-bg-container));
+  --td-add-wash: color-mix(in srgb, var(--td-add) 13%, var(--td-bg-container));
+}
+:global(html.light) .surface {
+  --td-bg-container: #fcfbf7;
+  --td-border: rgba(20, 19, 16, 0.30);
+  --td-border-2: rgba(20, 19, 16, 0.12);
+  --td-text: rgba(20, 19, 16, 0.88);
+  --td-text-3: rgba(20, 19, 16, 0.45);
+  --td-accent-bg: rgba(29, 53, 245, 0.06);
+  --td-del: #d02b1f;
+  --td-add: #1e8a5a;
+}
+
+.diff { border: 1px solid var(--td-border); font-family: var(--td-mono); font-size: 14px; }
 .scroll { max-height: 72vh; overflow: auto; }
 /* virtualizer sizing wrapper — its height is the total measured content height */
 .sizer { position: relative; width: 100%; }
@@ -9,17 +46,23 @@
 .vrow { position: absolute; top: 0; left: 0; width: 100%; }
 
 .row { display: grid; grid-template-columns: 1fr 1px 1fr; border-bottom: 1px solid var(--td-border-2); }
+
+/* A row inside a change block is clickable to make that block current (same as
+   prev/next + the overview ruler). A left accent bar on hover advertises it
+   without shifting layout. */
+.selectable { cursor: pointer; }
+.selectable:hover { box-shadow: inset 3px 0 0 var(--td-accent); }
 .split { background: var(--td-border); }
 .cell { display: grid; grid-template-columns: 44px 1fr; align-items: stretch; min-width: 0; }
-.ln { text-align: right; padding: 4px 10px 4px 0; color: var(--td-text-3); background: var(--td-bg-container); border-right: 1px solid var(--td-border-2); user-select: none; font-size: 12px; position: relative; }
+.ln { text-align: right; padding: 4px 10px 4px 0; color: var(--td-text-3); background: var(--td-bg-container); border-right: 1px solid var(--td-border-2); user-select: none; font-size: 13px; position: relative; }
 .tx { padding: 4px 12px 4px 22px; white-space: pre-wrap; word-break: break-all; position: relative; min-width: 0; }
 
-.del { background: var(--td-del-bg); }
+.del { background: var(--td-del-wash); }
 .del .tx::before { content: "\2212"; position: absolute; left: 8px; font-weight: 700; color: var(--td-del); }
-.add { background: var(--td-add-bg); }
+.add { background: var(--td-add-wash); }
 .add .tx::before { content: "+"; position: absolute; left: 8px; font-weight: 700; color: var(--td-add); }
-.modLeft { background: var(--td-del-bg); }
-.modRight { background: var(--td-add-bg); }
+.modLeft { background: var(--td-del-wash); }
+.modRight { background: var(--td-add-wash); }
 .gap { background: repeating-linear-gradient(45deg, transparent, transparent 5px, var(--td-border-2) 5px, var(--td-border-2) 6px); }
 .gap .ln { background: transparent; color: transparent; }
 
@@ -58,8 +101,8 @@
 .bannerMsg { font-weight: 600; }
 .bannerChips { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
 .chip { font-family: var(--td-mono); font-size: 12.5px; padding: 1px 8px; border: 1px solid currentColor; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.chipDel { color: var(--td-del); background: var(--td-del-bg); }
-.chipAdd { color: var(--td-add); background: var(--td-add-bg); }
+.chipDel { color: var(--td-del); background: var(--td-del-wash); }
+.chipAdd { color: var(--td-add); background: var(--td-add-wash); }
 .arrow { color: var(--td-text-3); font-family: var(--td-mono); }
 .okIcon { color: var(--td-add); font-size: 15px; }
 .jump { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 5px; font-family: var(--td-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--td-text-3); white-space: nowrap; transition: color .2s; }
@@ -86,18 +129,18 @@
    hidden mirror (.mirror) with identical box + wrap rules measures where each
    logical line starts; numbers are then absolutely positioned at those tops, so
    a wrapped line keeps a single number pinned to its first row. Metrics
-   (line-height 20, font 13, 8px vertical pad) mirror CodeInput.tsx. */
+   (line-height 20, font 14, 8px vertical pad) mirror CodeInput.tsx. */
 .editor { display: flex; align-items: stretch; overflow: hidden; }
 .gutter { flex: 0 0 auto; overflow: hidden; position: relative; background: var(--td-bg-container); border-inline-end: 1px solid var(--td-border-2); }
 .gutterInner { position: relative; will-change: transform; }
-.gutterNum { position: absolute; left: 0; right: 8px; height: 20px; line-height: 20px; text-align: right; font-family: var(--td-mono); font-size: 12px; color: var(--td-text-3); user-select: none; font-variant-numeric: tabular-nums; }
+.gutterNum { position: absolute; left: 0; right: 8px; height: 20px; line-height: 20px; text-align: right; font-family: var(--td-mono); font-size: 13px; color: var(--td-text-3); user-select: none; font-variant-numeric: tabular-nums; }
 
 .taWrap { position: relative; flex: 1; min-width: 0; }
 /* identical to .codeArea for box + wrapping; hidden, measured only */
 .mirror,
 .codeArea {
   box-sizing: border-box; padding: 8px 12px; margin: 0;
-  font-family: var(--td-mono); font-size: 13px; line-height: 20px;
+  font-family: var(--td-mono); font-size: 14px; line-height: 20px;
   white-space: pre-wrap; overflow-wrap: anywhere; word-break: normal;
 }
 .mirror { position: absolute; top: 0; left: 0; visibility: hidden; pointer-events: none; z-index: -1; }
@@ -126,7 +169,7 @@
    Single column: a modified row renders as a deletion line then an addition
    line. Two line-number gutters (old | new) keep both numbers visible. */
 .urow { display: grid; grid-template-columns: 40px 40px 1fr; border-bottom: 1px solid var(--td-border-2); }
-.uln { text-align: right; padding: 4px 8px 4px 0; color: var(--td-text-3); background: var(--td-bg-container); border-right: 1px solid var(--td-border-2); user-select: none; font-size: 12px; }
+.uln { text-align: right; padding: 4px 8px 4px 0; color: var(--td-text-3); background: var(--td-bg-container); border-right: 1px solid var(--td-border-2); user-select: none; font-size: 13px; }
 .utx { padding: 4px 12px 4px 22px; white-space: pre-wrap; word-break: break-all; position: relative; min-width: 0; }
 .del .utx::before { content: "\2212"; position: absolute; left: 8px; font-weight: 700; color: var(--td-del); }
 .add .utx::before { content: "+"; position: absolute; left: 8px; font-weight: 700; color: var(--td-add); }
@@ -142,3 +185,18 @@
 .tickMod { background: var(--td-accent); }
 .tickAdd { background: var(--td-add); }
 .tickDel { background: var(--td-del); }
+
+/* ── Fullscreen (maximized) diff ─────────────────────────────────────────────
+   A fixed overlay so the whole viewport becomes diff — for spotting changes on
+   a large screen. A slim rail keeps the readout + view/nav controls in reach;
+   the diff itself flex-fills the rest (no 72vh cap). */
+/* Inline result zone: same vertical rhythm the surrounding antd Space provides
+   (16px) between the readout and the diff, and above it from the command bar. */
+.resultZone { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+.overlay { position: fixed; inset: 0; z-index: 1000; background: var(--td-bg-container); display: flex; flex-direction: column; outline: none; }
+.overlayHead { display: flex; align-items: center; gap: 10px 20px; flex-wrap: wrap; padding: 10px 16px; border-bottom: 1px solid var(--td-border); }
+.overlayHead .readout { flex: 0 0 auto; }
+.overlayControls { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-inline-start: auto; }
+.diffFill { flex: 1; min-height: 0; display: flex; flex-direction: column; border: 0; }
+.diffFill .withRuler { flex: 1; min-height: 0; }
+.diffFill .scroll { max-height: none; }

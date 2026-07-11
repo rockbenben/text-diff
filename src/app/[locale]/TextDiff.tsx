@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useDeferredValue, useMemo, useRef, useState } from "react";
-import { Alert, App, Button, Checkbox, Divider, Segmented, Select, Space, theme, Tooltip, Typography, Upload } from "antd";
-import { SwapOutlined, UpOutlined, DownOutlined, ClearOutlined, CopyOutlined, DownloadOutlined } from "@ant-design/icons";
+import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { Alert, App, Button, Checkbox, Divider, Segmented, Select, Space, Tooltip, Typography, Upload } from "antd";
+import { SwapOutlined, UpOutlined, DownOutlined, ClearOutlined, CopyOutlined, DownloadOutlined, FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import { createPatch } from "diff";
-import { decodeFileBytes, normalizeNewlines, downloadFile } from "@/app/utils";
+import { decodeFileBytes, normalizeNewlines, downloadFile, getFileTypePresetConfig } from "@/app/utils";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 import { useIsMobile } from "@/app/hooks/useIsMobile";
@@ -18,8 +18,10 @@ import styles from "./textDiff.module.css";
 
 const ENCODINGS = ["utf-8", "gbk", "big5", "utf-16le"] as const;
 const FORMATS: FormatKind[] = ["plain", "csv", "tsv", "ini", "json"];
-// Limit the OS file dialog to mainstream text formats (user can still pick "all files").
-const ACCEPT = ".txt,.csv,.tsv,.json,.ini,.conf,.properties,.md,.markdown,.log,.xml,.yml,.yaml,.html,.css,.js,.jsx,.ts,.tsx,.srt,.vtt,text/*";
+// Shared richText preset (single source of truth in fileTypes.ts) + the text/*
+// MIME wildcard so any text file passes the OS dialog's default filter (user can
+// still switch to "all files").
+const ACCEPT = `${getFileTypePresetConfig("richText").accept},text/*`;
 
 interface SideState { text: string; bytes: ArrayBuffer | null; filename: string | null; encoding: string; }
 const emptySide: SideState = { text: "", bytes: null, filename: null, encoding: "utf-8" };
@@ -29,7 +31,6 @@ const countLines = (s: string) => (s === "" ? 0 : s.split("\n").length);
 const TextDiff = () => {
   const t = useTranslations("TextDiff");
   const { message } = App.useApp();
-  const { token } = theme.useToken();
   const isMobile = useIsMobile();
 
   const [a, setA] = useState<SideState>(emptySide);
@@ -43,9 +44,11 @@ const TextDiff = () => {
   const [view, setView] = useLocalStorage<"split" | "unified">("text-diff-view", "split");
   const [hunkIdx, setHunkIdx] = useState(0);
   const [forceCompute, setForceCompute] = useState(false); // user opted into a full diff after a timeout
+  const [maximized, setMaximized] = useState(false); // fullscreen the diff for large-screen comparison
   const { copyToClipboard } = useCopyToClipboard();
 
   const paneRef = useRef<DiffPaneHandle>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   // Per-side load sequence: a file decode is async (jschardet lazy-load), so a
   // stale onload could otherwise clobber text the user typed (or a newer file)
   // while it was decoding. Any mutation bumps the side's seq to supersede it.
@@ -136,7 +139,26 @@ const TextDiff = () => {
   };
 
   const swap = () => { loadSeq.current.a++; loadSeq.current.b++; setA(b); setB(a); };
-  const clearAll = () => { loadSeq.current.a++; loadSeq.current.b++; setA(emptySide); setB(emptySide); setHunkIdx(0); setForceCompute(false); };
+  const clearAll = () => { loadSeq.current.a++; loadSeq.current.b++; setA(emptySide); setB(emptySide); setHunkIdx(0); setForceCompute(false); setMaximized(false); };
+
+  // While maximized: Esc exits, and the page body is scroll-locked behind the
+  // fixed overlay so a stray wheel/trackpad scroll can't move the hidden page.
+  useEffect(() => {
+    if (!maximized) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMaximized(false); };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = prevOverflow; };
+  }, [maximized]);
+
+  // On entering fullscreen, move focus into the overlay — the page behind is inert,
+  // so focus must not stay on a now-unreachable control. No scroll handling needed:
+  // the DiffPane sits in a stable position (never remounts across the toggle), so it
+  // simply keeps its current scroll — entering fullscreen doesn't jump the view.
+  useEffect(() => {
+    if (maximized) overlayRef.current?.focus();
+  }, [maximized]);
 
   // Export the comparison as a standard unified diff (.patch) — pasteable into
   // `git apply`, review tools, etc. Header names fall back to A/B when typed in.
@@ -153,6 +175,13 @@ const TextDiff = () => {
     const clamped = (idx + result.hunks.length) % result.hunks.length;
     setHunkIdx(clamped);
     paneRef.current?.scrollToHunk(result.hunks[clamped].start);
+  };
+
+  // Row-click select: make that block current WITHOUT scroll-centering — the row
+  // the user clicked is already in view, so jumping it to center would be jarring.
+  const selectHunk = (idx: number) => {
+    if (!result || result.hunks.length === 0) return;
+    setHunkIdx((idx + result.hunks.length) % result.hunks.length);
   };
 
   // Comparison readout, derived purely from the diff rows: per-side line totals
@@ -175,24 +204,6 @@ const TextDiff = () => {
   // actually scrolls.
   const activeHunk = result && result.hunks.length ? result.hunks[Math.min(hunkIdx, result.hunks.length - 1)] : undefined;
 
-  const cssVars = {
-    "--td-mono": token.fontFamilyCode,
-    "--td-border": token.colorBorder,
-    "--td-border-2": token.colorBorderSecondary,
-    "--td-bg-container": token.colorBgContainer,
-    "--td-text": token.colorText,
-    "--td-text-3": token.colorTextTertiary,
-    "--td-accent": token.colorPrimary,
-    "--td-accent-bg": token.colorPrimaryBg,
-    "--td-accent-bg-strong": token.colorPrimaryBgHover,
-    "--td-del": token.colorError,
-    "--td-del-bg": token.colorErrorBg,
-    "--td-del-bg-2": token.colorErrorBgHover,
-    "--td-add": token.colorSuccess,
-    "--td-add-bg": token.colorSuccessBg,
-    "--td-add-bg-2": token.colorSuccessBgHover,
-  } as React.CSSProperties;
-
   const renderSide = (side: "a" | "b") => {
     const s = side === "a" ? a : b;
     return (
@@ -206,26 +217,64 @@ const TextDiff = () => {
             {s.filename ?? t("manualInput")}
           </span>
           <span className={styles.paneTools}>
+            {/* Encoding only matters for decoding uploaded bytes — surface it
+                contextually once a file is loaded, not as a dead disabled
+                control that clutters the manual-input default state. */}
+            {s.bytes && (
+              <Select
+                size="small" value={s.encoding} style={{ width: 96 }}
+                onChange={(enc) => changeEncoding(side, enc)}
+                options={ENCODINGS.map((enc) => ({ value: enc, label: enc }))} />
+            )}
             <Upload accept={ACCEPT} beforeUpload={(f) => loadFile(side, f)} showUploadList={false} maxCount={1}>
               <Button size="small" type="text">{t("fill")}</Button>
             </Upload>
-            <Select
-              size="small" value={s.bytes ? s.encoding : undefined} placeholder="—" disabled={!s.bytes} style={{ width: 96 }}
-              onChange={(enc) => changeEncoding(side, enc)}
-              options={ENCODINGS.map((enc) => ({ value: enc, label: enc }))} />
           </span>
         </div>
         <CodeInput
           value={s.text} onChange={(text) => editText(side, text)}
           onDragOver={(e) => { if (e.dataTransfer.types.includes("Files")) e.preventDefault(); }}
           onDrop={(e) => { const f = e.dataTransfer.files?.[0]; if (f) { e.preventDefault(); loadFile(side, f); } }}
-          placeholder={t("pasteHere")} minRows={6} maxRows={14} />
+          placeholder={t("pasteHere")} minRows={10} maxRows={16} />
       </div>
     );
   };
 
+  // Readout + DiffPane are rendered in exactly ONE place at a time (inline, or
+  // inside the fullscreen overlay) so the single paneRef/virtualizer is never
+  // duplicated. The overlay reuses these same elements.
+  const readout = result && (
+    <div className={styles.readout}>
+      {compare && (
+        <span className={styles.metric}>
+          <span className={styles.metricLabel}>{t("similarityLabel")}</span>
+          <span className={styles.metricBig} style={{ color: compare.similarity === 100 ? "var(--td-add)" : "var(--td-text)" }}>{compare.similarity}%</span>
+        </span>
+      )}
+      <Tooltip title={t("stats", { count: result.stats.mods + result.stats.adds + result.stats.dels, mods: result.stats.mods, adds: result.stats.adds, dels: result.stats.dels })}>
+        <span className={styles.counts}>
+          <span className={styles.cMod}>~{result.stats.mods}</span>
+          <span className={styles.cAdd}>+{result.stats.adds}</span>
+          <span className={styles.cDel}>−{result.stats.dels}</span>
+        </span>
+      </Tooltip>
+      {compare && <span className={styles.totals}>{t("linesAB", { a: compare.aLines, b: compare.bLines })}</span>}
+      {format === "json" && (
+        <Typography.Text type="warning" style={{ fontSize: 12 }}>
+          {t("jsonAsText")}
+        </Typography.Text>
+      )}
+    </div>
+  );
+  const diffPane = result && (
+    <DiffPane ref={paneRef} result={result} diffOnly={diffOnly} context={context} view={view} activeHunk={activeHunk} onSelectHunk={gotoHunk} onPickHunk={selectHunk} maximized={maximized} />
+  );
+
   return (
-    <div style={cssVars}>
+    <div className={styles.surface}>
+      {/* Background goes inert while maximized so Tab/AT can't reach the controls
+          hidden behind the fixed overlay. */}
+      <div inert={maximized || undefined}>
       <Space orientation="vertical" size="middle" style={{ width: "100%" }}>
         {/* Inputs first — you type/drop on top, results flow below. */}
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
@@ -287,7 +336,7 @@ const TextDiff = () => {
             {/* Navigate */}
             <Space.Compact>
               <Button icon={<UpOutlined />} title={t("prev")} aria-label={t("prev")} onClick={() => gotoHunk(hunkIdx - 1)} disabled={!result.hunks.length} />
-              <Button style={{ pointerEvents: "none", fontFamily: token.fontFamilyCode }}>
+              <Button style={{ pointerEvents: "none", fontFamily: "var(--td-mono)" }}>
                 {result.hunks.length ? t("blockNav", { i: hunkIdx + 1, n: result.hunks.length }) : "0 / 0"}
               </Button>
               <Button icon={<DownOutlined />} title={t("next")} aria-label={t("next")} onClick={() => gotoHunk(hunkIdx + 1)} disabled={!result.hunks.length} />
@@ -297,6 +346,7 @@ const TextDiff = () => {
 
             {/* Actions */}
             <span className={styles.cluster}>
+              <Button icon={<FullscreenOutlined />} onClick={() => setMaximized(true)}>{t("maximize")}</Button>
               <Button icon={<SwapOutlined />} onClick={swap}>{t("swap")}</Button>
               <Space.Compact>
                 <Button icon={<CopyOutlined />} onClick={() => copyToClipboard(a.text, t("sideA"))}>{t("copyA")}</Button>
@@ -310,33 +360,47 @@ const TextDiff = () => {
           </div>
         )}
 
-        {result && (
-          <>
-            <div className={styles.readout}>
-              {compare && (
-                <span className={styles.metric}>
-                  <span className={styles.metricLabel}>{t("similarityLabel")}</span>
-                  <span className={styles.metricBig} style={{ color: compare.similarity === 100 ? token.colorSuccess : token.colorText }}>{compare.similarity}%</span>
-                </span>
-              )}
-              <Tooltip title={t("stats", { count: result.stats.mods + result.stats.adds + result.stats.dels, mods: result.stats.mods, adds: result.stats.adds, dels: result.stats.dels })}>
-                <span className={styles.counts}>
-                  <span className={styles.cMod}>~{result.stats.mods}</span>
-                  <span className={styles.cAdd}>+{result.stats.adds}</span>
-                  <span className={styles.cDel}>−{result.stats.dels}</span>
-                </span>
-              </Tooltip>
-              {compare && <span className={styles.totals}>{t("linesAB", { a: compare.aLines, b: compare.bLines })}</span>}
-              {format === "json" && (
-                <Typography.Text type="warning" style={{ fontSize: 12 }}>
-                  {t("jsonAsText")}
-                </Typography.Text>
-              )}
-            </div>
-            <DiffPane ref={paneRef} result={result} diffOnly={diffOnly} context={context} view={view} activeHunk={activeHunk} onSelectHunk={gotoHunk} />
-          </>
-        )}
       </Space>
+      </div>
+
+      {/* Result zone — a STABLE sibling rendered in the SAME position whether inline
+          or maximized, so the DiffPane never remounts and simply keeps its scroll
+          across the toggle (no jump-to-top). Lives OUTSIDE the inert wrapper so it
+          stays interactive as the fullscreen overlay. */}
+      {result && (
+        <div
+          ref={overlayRef}
+          className={maximized ? styles.overlay : styles.resultZone}
+          {...(maximized ? { tabIndex: -1, role: "dialog", "aria-modal": true, "aria-label": t("maximize") } : {})}>
+          {maximized ? (
+            <div className={styles.overlayHead}>
+              {readout}
+              <span className={styles.overlayControls}>
+                <Segmented<"split" | "unified">
+                  value={view}
+                  onChange={setView}
+                  options={[
+                    { value: "split", label: t("viewSplit") },
+                    { value: "unified", label: t("viewUnified") },
+                  ]}
+                />
+                <Checkbox checked={diffOnly} onChange={(e) => setDiffOnly(e.target.checked)}>{t("diffOnly")}</Checkbox>
+                <Space.Compact>
+                  <Button icon={<UpOutlined />} title={t("prev")} aria-label={t("prev")} onClick={() => gotoHunk(hunkIdx - 1)} disabled={!result.hunks.length} />
+                  <Button style={{ pointerEvents: "none", fontFamily: "var(--td-mono)" }}>
+                    {result.hunks.length ? t("blockNav", { i: hunkIdx + 1, n: result.hunks.length }) : "0 / 0"}
+                  </Button>
+                  <Button icon={<DownOutlined />} title={t("next")} aria-label={t("next")} onClick={() => gotoHunk(hunkIdx + 1)} disabled={!result.hunks.length} />
+                </Space.Compact>
+                <Button icon={<FullscreenExitOutlined />} onClick={() => setMaximized(false)}>{t("exitMaximize")}</Button>
+              </span>
+            </div>
+          ) : (
+            readout
+          )}
+          {diffPane}
+        </div>
+      )}
     </div>
   );
 };

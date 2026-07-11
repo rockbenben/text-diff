@@ -7,7 +7,7 @@ import styles from "./textDiff.module.css";
 // where each logical line starts. They MUST match (font, size, line-height,
 // padding, wrap rules) or the line numbers drift from the wrapped rows.
 const LINE_HEIGHT = 20;
-const FONT_SIZE = 13;
+const FONT_SIZE = 14;
 const PAD_Y = 8;
 
 // The gutter builds one number + one mirror <div> per logical line. These are

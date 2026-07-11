@@ -121,12 +121,16 @@ interface Props {
   view: "split" | "unified";
   /** The hunk currently targeted by prev/next — its rows get a "current" highlight. */
   activeHunk?: { start: number; end: number };
-  /** Overview-ruler tick click → jump to that hunk (parent syncs the i/n counter). */
+  /** Overview-ruler tick click → jump to that hunk (parent syncs the i/n counter, scroll-centers it). */
   onSelectHunk?: (hunkIndex: number) => void;
+  /** Row click → make that row's block current WITHOUT scrolling (the row is already in view). */
+  onPickHunk?: (hunkIndex: number) => void;
+  /** Fullscreen mode: the pane flex-fills its container instead of the 72vh cap. */
+  maximized?: boolean;
   ref?: React.Ref<DiffPaneHandle>;
 }
 
-const DiffPane = ({ result, diffOnly, context, view, activeHunk, onSelectHunk, ref }: Props) => {
+const DiffPane = ({ result, diffOnly, context, view, activeHunk, onSelectHunk, onPickHunk, maximized, ref }: Props) => {
   const t = useTranslations("TextDiff");
   // Folds the user has clicked to expand. Reset during render (React's
   // "adjust state when a prop changes" pattern) whenever the diff changes, since
@@ -147,6 +151,14 @@ const DiffPane = ({ result, diffOnly, context, view, activeHunk, onSelectHunk, r
     items.forEach((it, i) => { if (it.kind === "row" && it.index !== undefined) m.set(it.index, i); });
     return m;
   }, [items]);
+
+  // rows[] index → the hunk it belongs to, so clicking any row in a change block
+  // selects that block (mirrors prev/next and the overview ruler).
+  const rowToHunk = useMemo(() => {
+    const m = new Map<number, number>();
+    result.hunks.forEach((h, i) => { for (let r = h.start; r <= h.end; r++) m.set(r, i); });
+    return m;
+  }, [result.hunks]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   // React Compiler can't analyze TanStack's hook; opting this component out of
@@ -189,19 +201,22 @@ const DiffPane = ({ result, diffOnly, context, view, activeHunk, onSelectHunk, r
   }, [items.length, result.hunks, result.rows, rowToItem]);
 
   return (
-    <div className={styles.diff}>
+    <div className={maximized ? `${styles.diff} ${styles.diffFill}` : styles.diff}>
       <div className={styles.withRuler}>
         <div ref={scrollRef} className={styles.scroll}>
           <div className={styles.sizer} style={{ height: virtualizer.getTotalSize() }}>
             {virtualizer.getVirtualItems().map((vi) => {
               const it = items[vi.index];
               const isActive = !!activeHunk && it.index !== undefined && it.index >= activeHunk.start && it.index <= activeHunk.end;
+              const hunkI = it.kind === "row" && it.index !== undefined ? rowToHunk.get(it.index) : undefined;
+              const selectable = hunkI !== undefined;
               return (
                 <div
                   key={vi.key}
                   data-index={vi.index}
                   ref={virtualizer.measureElement}
-                  className={styles.vrow}
+                  className={selectable ? `${styles.vrow} ${styles.selectable}` : styles.vrow}
+                  onClick={selectable ? () => onPickHunk?.(hunkI) : undefined}
                   style={{ transform: `translateY(${vi.start}px)` }}>
                   {it.kind === "fold" ? (
                     <div className={styles.fold} onClick={() => setExpanded((prev) => new Set(prev).add(it.foldKey!))}>

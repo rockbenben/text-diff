@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "이스케이프 문자 지원: \\r\n (줄바꿈), \\r (복귀), \\t (탭), \\s (공백), \\\\ (백슬래시)",
     "skipToContent": "본문으로 건너뛰기",
     "fileProcessFailed": "파일 처리에 실패했습니다. 인코딩을 확인하거나 다른 파일을 사용해 보세요",
     "fileReadFailed": "파일을 읽지 못했습니다",
@@ -200,6 +201,10 @@
     "dataBatch": {
       "title": "텍스트 처리 도구",
       "description": "Excel 표 데이터 일괄 중복 제거·열 추출·텍스트 병합, 다중 규칙 순차 실행"
+    },
+    "textJoiner": {
+      "title": "텍스트 결합기",
+      "description": "여러 텍스트 열을 템플릿으로 줄 단위 결합해 CSV, SQL, JSON을 일괄 생성"
     },
     "jsonValueExtractor": {
       "title": "JSON 값 추출",

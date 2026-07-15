@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "Supporte caractères d'échappement : \\r\n (nouvelle ligne), \\r (retour), \\t (tab), \\s (espace), \\\\ (antislash)",
     "skipToContent": "Aller au contenu principal",
     "fileProcessFailed": "Échec du traitement du fichier — vérifiez son encodage ou essayez-en un autre",
     "fileReadFailed": "Échec de la lecture du fichier",
@@ -201,6 +202,10 @@
       "title": "Processeur de texte",
       "description": "Traitement par lots de données Excel — déduplication, extraction de colonnes, fusion, règles enchaînées"
     },
+    "textJoiner": {
+      "title": "Fusionneur de Texte",
+      "description": "Fusionnez plusieurs colonnes de texte ligne par ligne avec des modèles pour générer en lot du CSV, SQL et JSON"
+    },
     "jsonValueExtractor": {
       "title": "Extracteur Valeur JSON",
       "description": "Extraire valeurs JSON par lot, sortie formatée"
@@ -241,7 +246,7 @@
       "title": "Text Diff",
       "description": "Comparez deux textes ou fichiers côte à côte et repérez la première différence.",
       "metaTitle": "Text Diff : Comparer textes et fichiers en ligne",
-      "metaDescription": "Comparez deux textes ou fichiers en ligne avec une mise en évidence côte à côte, indiquant la ligne et la colonne exactes où ils diffèrent en premier.",
+      "metaDescription": "Comparez deux textes ou fichiers en ligne, surlignage côte à côte indiquant la ligne et la colonne de la première différence.",
       "faq": [
         {
           "q": "Quels formats de fichiers sont supportés pour la comparaison ?",

@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "Kaçış karakterlerini destekler: \\r\n (yeni satır), \\r (dönüş), \\t (sekme), \\s (boşluk), \\\\ (ters eğik çizgi)",
     "skipToContent": "Ana içeriğe geç",
     "fileProcessFailed": "Dosya işlenemedi — kodlamasını kontrol edin veya başka bir dosya deneyin",
     "fileReadFailed": "Dosya okunamadı",
@@ -201,6 +202,10 @@
       "title": "Kişisel Metin İşleyici",
       "description": "Excel toplu veri işleme — tekilleştirme, sütun çıkarma, metin birleştirme, zincirli kurallar"
     },
+    "textJoiner": {
+      "title": "Metin Birleştirici",
+      "description": "Birden çok metin sütununu şablonlarla satır satır birleştirerek toplu CSV, SQL ve JSON oluşturun"
+    },
     "jsonValueExtractor": {
       "title": "JSON Değer Çıkarıcı",
       "description": "JSON değerlerini toplu çıkar, formatlı çıktı"
@@ -317,7 +322,7 @@
     "reaction3": "Ne?",
     "reaction4": "Kafam Karıştı",
     "placeholder": "Mesaj bırakın (giriş gerekmez, yanıt için e-posta isteğe bağlı)",
-    "metaDescription": "Tools By AI geri bildirim sayfası: hata bildir, özellik öner veya kullanım örneklerini paylaş. Waline tabanlı, anonim gönderim mümkün, ücretsiz."
+    "metaDescription": "Tools By AI geri bildirim sayfası: hata bildir, özellik öner, kullanım örneği paylaş. Waline tabanlı, anonim, ücretsiz."
   },
   "NotFound": {
     "title": "Sayfa Bulunamadı",

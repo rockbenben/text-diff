@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "エスケープ文字対応：\\r\n (改行)、\\r (復帰)、\\t (タブ)、\\s (スペース)、\\\\ (バックスラッシュ)",
     "skipToContent": "メインコンテンツにスキップ",
     "fileProcessFailed": "ファイルの処理に失敗しました。エンコードを確認するか、別のファイルをお試しください",
     "fileReadFailed": "ファイルの読み込みに失敗しました",
@@ -200,6 +201,10 @@
     "dataBatch": {
       "title": "テキスト処理ツール（自用）",
       "description": "Excel 表データの一括重複削除・列抽出・テキスト結合、複数ルールを順次実行"
+    },
+    "textJoiner": {
+      "title": "テキスト結合ツール",
+      "description": "複数のテキスト列をテンプレートで行ごとに結合し、CSV・SQL・JSONを一括生成"
     },
     "jsonValueExtractor": {
       "title": "JSON値抽出",

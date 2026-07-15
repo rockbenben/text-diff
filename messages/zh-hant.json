@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "支援轉義字元：\\r\n (換行)、\\r (回車)、\\t (製表符)、\\s (空格)、\\\\ (反斜槓)",
     "skipToContent": "跳至主要內容",
     "fileProcessFailed": "檔案處理失敗，請檢查檔案編碼或換一個檔案",
     "fileReadFailed": "讀取檔案失敗",
@@ -200,6 +201,10 @@
     "dataBatch": {
       "title": "資料批處理",
       "description": "Excel 表格批次去重、欄位提取、文字合併，多規則按序執行"
+    },
+    "textJoiner": {
+      "title": "文字拼接",
+      "description": "多欄文字逐行按範本合併，批次生成 CSV、SQL、JSON"
     },
     "jsonValueExtractor": {
       "title": "JSON 欄位值提取",

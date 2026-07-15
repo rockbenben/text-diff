@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "Hỗ trợ ký tự thoát: \\r\n (dòng mới), \\r (xuống dòng), \\t (tab), \\s (dấu cách), \\\\ (dấu gạch chéo ngược)",
     "skipToContent": "Chuyển đến nội dung chính",
     "fileProcessFailed": "Xử lý tệp thất bại — kiểm tra mã hóa hoặc thử tệp khác",
     "fileReadFailed": "Đọc tệp thất bại",
@@ -200,6 +201,10 @@
     "dataBatch": {
       "title": "Xử lý văn bản",
       "description": "Xử lý dữ liệu Excel hàng loạt — loại bỏ trùng, trích xuất cột, hợp nhất văn bản, quy tắc nối tiếp"
+    },
+    "textJoiner": {
+      "title": "Công Cụ Ghép Văn Bản",
+      "description": "Ghép nhiều cột văn bản theo từng dòng bằng mẫu để tạo hàng loạt CSV, SQL và JSON"
     },
     "jsonValueExtractor": {
       "title": "Trình trích xuất Giá trị JSON",

@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, Menu, shell } = require("electron");
 const path = require("path");
 const { SCHEME } = require("./constants");
 const { registerScheme, handleProtocol } = require("./protocol");
@@ -49,6 +49,23 @@ if (!gotLock) {
     windowState.track(win);
     trackLocale(win, store);
 
+    // 外链走系统默认浏览器,不在应用窗口内导航。去掉菜单栏后窗口没有后退入口,
+    // 若让站外链接在窗口内加载会把用户困住。
+    win.webContents.setWindowOpenHandler(({ url }) => {
+      if (/^https?:/.test(url)) {
+        shell.openExternal(url);
+        return { action: "deny" };
+      }
+      return { action: "allow" };
+    });
+    win.webContents.on("will-navigate", (e, navUrl) => {
+      // 允许应用自身(app://)与 dev 服务器(localhost)的整页导航,其余交给系统浏览器。
+      if (!navUrl.startsWith("app://") && !navUrl.startsWith("http://localhost")) {
+        e.preventDefault();
+        shell.openExternal(navUrl);
+      }
+    });
+
     if (isDev) {
       win.loadURL("http://localhost:3000");
     } else {
@@ -59,6 +76,7 @@ if (!gotLock) {
   }
 
   app.whenReady().then(() => {
+    Menu.setApplicationMenu(null); // 移除默认菜单栏(File/Edit/View…),包壳应用不需要
     if (!isDev) handleProtocol(OUT_DIR);
     createWindow();
     tray = setupTray(app, () => win, ICON_PATH);

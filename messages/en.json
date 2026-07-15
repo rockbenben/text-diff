@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "Supports escape chars: \\n (newline), \\r (return), \\t (tab), \\s (space), \\\\ (backslash)",
     "skipToContent": "Skip to main content",
     "fileProcessFailed": "Failed to process the file — check its encoding or try another",
     "fileReadFailed": "Failed to read the file",
@@ -200,6 +201,10 @@
     "dataBatch": {
       "title": "Batch Data Processor",
       "description": "Excel batch data processing — dedup, column extraction, text merge, custom rules chained in sequence"
+    },
+    "textJoiner": {
+      "title": "Text Joiner",
+      "description": "Merge multiple text columns line by line with templates to batch-generate CSV, SQL, and JSON"
     },
     "jsonValueExtractor": {
       "title": "JSON Field Value Extractor",

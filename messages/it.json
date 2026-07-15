@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "Supporta caratteri escape: \\r\n (nuova riga), \\r (ritorno), \\t (tab), \\s (spazio), \\\\ (barra rovesciata)",
     "skipToContent": "Vai al contenuto principale",
     "fileProcessFailed": "Elaborazione del file non riuscita — controlla la codifica o prova un altro file",
     "fileReadFailed": "Lettura del file non riuscita",
@@ -200,6 +201,10 @@
     "dataBatch": {
       "title": "Elaboratore di Testo",
       "description": "Elaborazione batch di dati Excel — deduplicazione, estrazione colonne, fusione, regole concatenate"
+    },
+    "textJoiner": {
+      "title": "Unificatore di Testo",
+      "description": "Unisci più colonne di testo riga per riga con modelli per generare in batch CSV, SQL e JSON"
     },
     "jsonValueExtractor": {
       "title": "Estrattore Valore JSON",

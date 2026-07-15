@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "Suporta caracteres escape: \\r\n (nova linha), \\r (retorno), \\t (tab), \\s (espaço), \\\\ (barra invertida)",
     "skipToContent": "Pular para o conteúdo principal",
     "fileProcessFailed": "Falha ao processar o arquivo — verifique a codificação ou tente outro",
     "fileReadFailed": "Falha ao ler o arquivo",
@@ -201,6 +202,10 @@
       "title": "Processador de Texto",
       "description": "Processamento em lote de dados Excel — deduplicação, extração de colunas, fusão, regras encadeadas"
     },
+    "textJoiner": {
+      "title": "Unificador de Texto",
+      "description": "Combine várias colunas de texto linha por linha com modelos para gerar em lote CSV, SQL e JSON"
+    },
     "jsonValueExtractor": {
       "title": "Extrator Valor JSON",
       "description": "Extrair valores JSON em lote, saída formatada"
@@ -317,7 +322,7 @@
     "reaction3": "O quê?",
     "reaction4": "Confuso",
     "placeholder": "Deixe uma mensagem (não requer login, email opcional para resposta)",
-    "metaDescription": "Página de feedback do Tools By AI: relate bugs, sugira recursos, compartilhe casos de uso. Baseado em Waline, publicação anônima, grátis."
+    "metaDescription": "Página de feedback do Tools By AI: relate bugs, sugira recursos ou compartilhe ideias. Baseado em Waline, anônimo, grátis."
   },
   "NotFound": {
     "title": "Página não encontrada",

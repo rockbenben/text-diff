@@ -245,7 +245,7 @@ export const splitBySpaces = (input: string): string[] => {
  * 解析用户输入的转义字符，将字符串中的转义序列转换为实际字符
  * 支持的转义字符: \n(换行), \r(回车), \t(制表符), \s(空格), \\(反斜杠)
  */
-const parseEscapeChars = (str: string): string => {
+export const parseEscapeChars = (str: string): string => {
   // 单趟替换:链式 replace 会让 "\\t"(想要字面 \t)先被 \t 规则吃掉后半段,
   // 产出「反斜杠+TAB」;单趟里 \\ 先于 t 消耗,语义与文档一致。
   const map: Record<string, string> = { n: "\n", r: "\r", t: "\t", s: " ", "\\": "\\" };

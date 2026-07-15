@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "Mendukung karakter escape: \\r\n (baris baru), \\r (kembali), \\t (tab), \\s (spasi), \\\\ (garis miring terbalik)",
     "skipToContent": "Lewati ke konten utama",
     "fileProcessFailed": "Gagal memproses file — periksa encoding-nya atau coba file lain",
     "fileReadFailed": "Gagal membaca file",
@@ -197,6 +198,10 @@
       "title": "Pemrosesan Teks Pribadi",
       "description": "Pemrosesan data Excel batch — deduplikasi, ekstraksi kolom, gabung teks, aturan berurutan"
     },
+    "textJoiner": {
+      "title": "Penggabung Teks",
+      "description": "Gabungkan beberapa kolom teks baris demi baris dengan template untuk menghasilkan CSV, SQL, dan JSON secara massal"
+    },
     "textSplitter": {
       "title": "Pemisah Teks",
       "description": "Pemisahan teks panjang cerdas untuk AI dan media sosial"
@@ -241,7 +246,7 @@
       "title": "Text Diff",
       "description": "Bandingkan dua teks atau file berdampingan dan temukan perbedaan pertama.",
       "metaTitle": "Text Diff: Bandingkan Teks dan File Online",
-      "metaDescription": "Bandingkan dua teks atau file secara online dengan penyorotan berdampingan, menunjukkan baris dan kolom tepat tempat keduanya pertama berbeda.",
+      "metaDescription": "Bandingkan dua teks atau file online dengan penyorotan berdampingan, menunjukkan baris dan kolom tepat perbedaan pertama.",
       "faq": [
         {
           "q": "Format file apa yang didukung untuk perbandingan?",
@@ -295,11 +300,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI - Peralatan Data & Terjemahan AI untuk Developer",
-    "description": "ToolsByAI: 17 alat open source gratis untuk penerjemahan subtitle, Markdown, JSON i18n, dan pemrosesan teks/JSON batch. 25+ AI engine.",
+    "description": "ToolsByAI: 17 alat open source untuk menerjemahkan subtitle, Markdown, dan JSON i18n. Tanpa instalasi, berbasis browser.",
     "homeTitle": "Suite ToolsByAI",
     "homeDescription": "20+ alat untuk terjemahan, teks, JSON, dan konversi data. Tingkatkan efisiensi pengembang dan kreator.",
     "ogTitle": "ToolsByAI - Alat Dev AI Gratis dan Open Source",
-    "ogDescription": "ToolsByAI: 17 alat open source gratis untuk penerjemahan subtitle, Markdown, JSON i18n, dan pemrosesan teks/JSON batch. 25+ AI engine."
+    "ogDescription": "ToolsByAI: 17 alat open source untuk menerjemahkan subtitle, Markdown, dan JSON i18n. Tanpa instalasi, berbasis browser."
   },
   "CopyToClipboard": {
     "empty": "Konten kosong, tidak ada yang disalin",
@@ -317,7 +322,7 @@
     "reaction3": "Apa?",
     "reaction4": "Bingung",
     "placeholder": "Tinggalkan pesan (tidak perlu login, email opsional untuk balasan)",
-    "metaDescription": "Halaman feedback Tools By AI: laporkan bug, sarankan fitur, atau bagikan ide penggunaan. Berbasis Waline, posting anonim diizinkan, gratis."
+    "metaDescription": "Halaman feedback Tools By AI: laporkan bug, sarankan fitur, atau bagikan ide. Berbasis Waline, posting anonim, gratis."
   },
   "NotFound": {
     "title": "Halaman Tidak Ditemukan",

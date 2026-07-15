@@ -1,5 +1,6 @@
 {
   "common": {
+    "supportEscapeChars": "支持转义字符：\\n (换行)、\\r (回车)、\\t (制表符)、\\s (空格)、\\\\ (反斜杠)",
     "skipToContent": "跳到主要内容",
     "fileProcessFailed": "文件处理失败，请检查文件编码或换一个文件",
     "fileReadFailed": "读取文件失败",
@@ -242,6 +243,10 @@
     "dataBatch": {
       "title": "数据批处理",
       "description": "Excel 表格批量去重、列提取、文本合并，多规则按序执行"
+    },
+    "textJoiner": {
+      "title": "文本拼接",
+      "description": "多列文本逐行按模板合并，批量生成 CSV、SQL、JSON"
     },
     "jsonValueExtractor": {
       "title": "JSON 字段值提取",

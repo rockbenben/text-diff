@@ -49,6 +49,7 @@
     "extractText": "提取纯文本",
     "translationResult": "翻译结果",
     "copy": "复制",
+    "expand": "展开",
     "remove": "删除",
     "format": "格式化",
     "formatTooltip": "格式化：移除空行及首尾空格",
@@ -184,7 +185,7 @@
     },
     "textSplitter": {
       "title": "文本分割",
-      "description": "智能分割长文本，适用于 AI 输入和社交媒体"
+      "description": "按符号、字数或整句拆分长文本，适配 AI 投喂与分段发布"
     },
     "chineseConversion": {
       "title": "简繁转换",
@@ -374,6 +375,11 @@
     "reaction4": "看不懂",
     "placeholder": "请留言，无需登录（填写邮箱可获回复提醒）",
     "metaDescription": "意见反馈页：报告使用问题、提交功能建议、参与工具改进。基于 Waline 评论系统，匿名也可发言。"
+  },
+  "AppError": {
+    "title": "页面加载出错",
+    "description": "页面加载失败,可能是网站刚更新到新版本,请重新加载。",
+    "reload": "重新加载"
   },
   "NotFound": {
     "title": "页面未找到",

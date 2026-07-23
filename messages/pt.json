@@ -1,6 +1,6 @@
 {
   "common": {
-    "supportEscapeChars": "Suporta caracteres escape: \\r\n (nova linha), \\r (retorno), \\t (tab), \\s (espaço), \\\\ (barra invertida)",
+    "supportEscapeChars": "Suporta caracteres escape: \\n (nova linha), \\r (retorno), \\t (tab), \\s (espaço), \\\\ (barra invertida)",
     "skipToContent": "Pular para o conteúdo principal",
     "fileProcessFailed": "Falha ao processar o arquivo — verifique a codificação ou tente outro",
     "fileReadFailed": "Falha ao ler o arquivo",
@@ -49,6 +49,7 @@
     "extractText": "Extrair Texto",
     "translationResult": "Resultado",
     "copy": "Copiar",
+    "expand": "mais",
     "remove": "Remover",
     "exportFile": "Exportar",
     "exportAllFile": "Exportar Tudo",
@@ -184,7 +185,7 @@
     },
     "textSplitter": {
       "title": "Divisor de Texto",
-      "description": "Divisão inteligente de texto longo para IA e redes sociais"
+      "description": "Divida textos longos por separador, tamanho ou frase — e junte de volta"
     },
     "chineseConversion": {
       "title": "Conversor Simp/Trad",
@@ -323,6 +324,11 @@
     "reaction4": "Confuso",
     "placeholder": "Deixe uma mensagem (não requer login, email opcional para resposta)",
     "metaDescription": "Página de feedback do Tools By AI: relate bugs, sugira recursos ou compartilhe ideias. Baseado em Waline, anônimo, grátis."
+  },
+  "AppError": {
+    "title": "Falha ao carregar a página",
+    "description": "Não foi possível carregar a página; isso pode acontecer logo após uma atualização do site. Recarregue a página.",
+    "reload": "Recarregar"
   },
   "NotFound": {
     "title": "Página não encontrada",

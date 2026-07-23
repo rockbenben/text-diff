@@ -1,6 +1,6 @@
 {
   "common": {
-    "supportEscapeChars": "Unterstützt Escape-Zeichen: \\r\n (Zeilenumbruch), \\r (Wagenrücklauf), \\t (Tab), \\s (Leerzeichen), \\\\ (Backslash)",
+    "supportEscapeChars": "Unterstützt Escape-Zeichen: \\n (Zeilenumbruch), \\r (Wagenrücklauf), \\t (Tab), \\s (Leerzeichen), \\\\ (Backslash)",
     "skipToContent": "Zum Hauptinhalt springen",
     "fileProcessFailed": "Datei konnte nicht verarbeitet werden – prüfen Sie die Kodierung oder versuchen Sie eine andere",
     "fileReadFailed": "Datei konnte nicht gelesen werden",
@@ -49,6 +49,7 @@
     "extractText": "Text extrahieren",
     "translationResult": "Übersetzungsergebnis",
     "copy": "Kopieren",
+    "expand": "mehr",
     "remove": "Entfernen",
     "exportFile": "Exportieren",
     "exportAllFile": "Alle exportieren",
@@ -184,7 +185,7 @@
     },
     "textSplitter": {
       "title": "Text-Splitter",
-      "description": "Smarte Langtext-Teilung für KI und Social Media"
+      "description": "Lange Texte nach Trenner, Länge oder Satz teilen — und wieder zusammenführen"
     },
     "chineseConversion": {
       "title": "Chinesisch-Konvertierung",
@@ -323,6 +324,11 @@
     "reaction4": "Verwirrt",
     "placeholder": "Nachricht hinterlassen (kein Login nötig, E-Mail optional für Antwort)",
     "metaDescription": "Feedback-Seite für Tools By AI: Fehler melden, Funktionen vorschlagen, Anwendungsfälle teilen. Basiert auf Waline, anonym möglich."
+  },
+  "AppError": {
+    "title": "Seite konnte nicht geladen werden",
+    "description": "Die Seite konnte nicht geladen werden – das kann direkt nach einem Website-Update passieren. Bitte neu laden.",
+    "reload": "Neu laden"
   },
   "NotFound": {
     "title": "Seite nicht gefunden",

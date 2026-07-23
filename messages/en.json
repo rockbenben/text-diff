@@ -49,6 +49,7 @@
     "extractText": "Extract Text",
     "translationResult": "Translation Result",
     "copy": "Copy",
+    "expand": "more",
     "remove": "Remove",
     "exportFile": "Export",
     "exportAllFile": "Export All",
@@ -184,7 +185,7 @@
     },
     "textSplitter": {
       "title": "Text Splitter",
-      "description": "Smart long text splitter for AI and social media"
+      "description": "Split long text by delimiter, length, or sentence — and merge it back"
     },
     "chineseConversion": {
       "title": "Chinese Conversion",
@@ -323,6 +324,11 @@
     "reaction4": "Confused",
     "placeholder": "Leave a message (no login required, email optional for reply)",
     "metaDescription": "Feedback for Tools By AI: report bugs, suggest features, share use-case ideas. Built on Waline, anonymous posting allowed, free."
+  },
+  "AppError": {
+    "title": "Page failed to load",
+    "description": "The page could not be loaded — this can happen right after a site update. Please reload.",
+    "reload": "Reload"
   },
   "NotFound": {
     "title": "Page Not Found",

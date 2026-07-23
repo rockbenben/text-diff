@@ -1,6 +1,6 @@
 {
   "common": {
-    "supportEscapeChars": "Mendukung karakter escape: \\r\n (baris baru), \\r (kembali), \\t (tab), \\s (spasi), \\\\ (garis miring terbalik)",
+    "supportEscapeChars": "Mendukung karakter escape: \\n (baris baru), \\r (kembali), \\t (tab), \\s (spasi), \\\\ (garis miring terbalik)",
     "skipToContent": "Lewati ke konten utama",
     "fileProcessFailed": "Gagal memproses file — periksa encoding-nya atau coba file lain",
     "fileReadFailed": "Gagal membaca file",
@@ -49,6 +49,7 @@
     "extractText": "Ekstrak Teks",
     "translationResult": "Hasil",
     "copy": "Salin",
+    "expand": "selengkapnya",
     "remove": "Hapus",
     "exportFile": "Ekspor",
     "exportAllFile": "Ekspor Semua",
@@ -204,7 +205,7 @@
     },
     "textSplitter": {
       "title": "Pemisah Teks",
-      "description": "Pemisahan teks panjang cerdas untuk AI dan media sosial"
+      "description": "Bagi teks panjang per pemisah, panjang, atau kalimat — lalu gabungkan lagi"
     },
     "jsonValueExtractor": {
       "title": "Pengekstrak Nilai JSON",
@@ -323,6 +324,11 @@
     "reaction4": "Bingung",
     "placeholder": "Tinggalkan pesan (tidak perlu login, email opsional untuk balasan)",
     "metaDescription": "Halaman feedback Tools By AI: laporkan bug, sarankan fitur, atau bagikan ide. Berbasis Waline, posting anonim, gratis."
+  },
+  "AppError": {
+    "title": "Halaman gagal dimuat",
+    "description": "Halaman tidak dapat dimuat — ini bisa terjadi tepat setelah situs diperbarui. Silakan muat ulang.",
+    "reload": "Muat ulang"
   },
   "NotFound": {
     "title": "Halaman Tidak Ditemukan",

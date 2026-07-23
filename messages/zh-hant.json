@@ -1,6 +1,6 @@
 {
   "common": {
-    "supportEscapeChars": "支援轉義字元：\\r\n (換行)、\\r (回車)、\\t (製表符)、\\s (空格)、\\\\ (反斜槓)",
+    "supportEscapeChars": "支援轉義字元：\\n (換行)、\\r (回車)、\\t (製表符)、\\s (空格)、\\\\ (反斜槓)",
     "skipToContent": "跳至主要內容",
     "fileProcessFailed": "檔案處理失敗，請檢查檔案編碼或換一個檔案",
     "fileReadFailed": "讀取檔案失敗",
@@ -49,6 +49,7 @@
     "extractText": "提取純文字",
     "translationResult": "翻譯結果",
     "copy": "複製",
+    "expand": "展開",
     "remove": "刪除",
     "format": "格式化",
     "formatTooltip": "格式化：移除空行及首尾空格",
@@ -184,7 +185,7 @@
     },
     "textSplitter": {
       "title": "文字分割",
-      "description": "智慧分割長文字，適用於 AI 輸入和社交媒體"
+      "description": "按符號、字數或整句拆分長文字，適配 AI 投餵與分段發布"
     },
     "chineseConversion": {
       "title": "簡繁轉換",
@@ -323,6 +324,11 @@
     "reaction4": "看不懂",
     "placeholder": "請留言，無需登錄（填寫郵箱可獲回復提醒）",
     "metaDescription": "意見回饋頁：回報使用問題、提交功能建議、參與工具改進。基於 Waline 評論系統，匿名也可發言。"
+  },
+  "AppError": {
+    "title": "頁面載入出錯",
+    "description": "頁面載入失敗,可能是網站剛更新到新版本,請重新載入。",
+    "reload": "重新載入"
   },
   "NotFound": {
     "title": "頁面未找到",

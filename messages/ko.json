@@ -1,6 +1,6 @@
 {
   "common": {
-    "supportEscapeChars": "이스케이프 문자 지원: \\r\n (줄바꿈), \\r (복귀), \\t (탭), \\s (공백), \\\\ (백슬래시)",
+    "supportEscapeChars": "이스케이프 문자 지원: \\n (줄바꿈), \\r (복귀), \\t (탭), \\s (공백), \\\\ (백슬래시)",
     "skipToContent": "본문으로 건너뛰기",
     "fileProcessFailed": "파일 처리에 실패했습니다. 인코딩을 확인하거나 다른 파일을 사용해 보세요",
     "fileReadFailed": "파일을 읽지 못했습니다",
@@ -49,6 +49,7 @@
     "extractText": "텍스트 추출",
     "translationResult": "번역 결과",
     "copy": "복사",
+    "expand": "더 보기",
     "remove": "제거",
     "exportFile": "내보내기",
     "exportAllFile": "모두 내보내기",
@@ -184,7 +185,7 @@
     },
     "textSplitter": {
       "title": "텍스트 분할",
-      "description": "장문 스마트 분할, AI 입력 및 SNS에 최적"
+      "description": "긴 텍스트를 구분자·글자 수·문장 단위로 분할하고 다시 병합"
     },
     "chineseConversion": {
       "title": "간체·번체 변환",
@@ -323,6 +324,11 @@
     "reaction4": "이해 안 됨",
     "placeholder": "메시지를 남겨주세요. 로그인 불필요 (이메일 입력 시 답변 알림 수신 가능)",
     "metaDescription": "Tools By AI 피드백 페이지: 버그 신고, 기능 요청, 사용 사례 공유. Waline 댓글 기반, 익명 작성 가능, 무료."
+  },
+  "AppError": {
+    "title": "페이지 로드 오류",
+    "description": "페이지를 불러오지 못했습니다. 사이트 업데이트 직후에 발생할 수 있으니 새로고침해 주세요.",
+    "reload": "새로고침"
   },
   "NotFound": {
     "title": "페이지를 찾을 수 없음",

@@ -1,6 +1,6 @@
 {
   "common": {
-    "supportEscapeChars": "エスケープ文字対応：\\r\n (改行)、\\r (復帰)、\\t (タブ)、\\s (スペース)、\\\\ (バックスラッシュ)",
+    "supportEscapeChars": "エスケープ文字対応：\\n (改行)、\\r (復帰)、\\t (タブ)、\\s (スペース)、\\\\ (バックスラッシュ)",
     "skipToContent": "メインコンテンツにスキップ",
     "fileProcessFailed": "ファイルの処理に失敗しました。エンコードを確認するか、別のファイルをお試しください",
     "fileReadFailed": "ファイルの読み込みに失敗しました",
@@ -49,6 +49,7 @@
     "extractText": "テキスト抽出",
     "translationResult": "翻訳結果",
     "copy": "コピー",
+    "expand": "続きを読む",
     "remove": "削除",
     "exportFile": "エクスポート",
     "exportAllFile": "すべてエクスポート",
@@ -184,7 +185,7 @@
     },
     "textSplitter": {
       "title": "テキスト分割",
-      "description": "長文をスマートに分割、AI入力とSNSに最適"
+      "description": "長文を区切り記号・文字数・文単位で分割、結合し直しも可能"
     },
     "chineseConversion": {
       "title": "繁体・簡体字変換",
@@ -323,6 +324,11 @@
     "reaction4": "不明",
     "placeholder": "メッセージを残してください。ログインは不要です（メールアドレスを入力すると返信通知を受け取れます）",
     "metaDescription": "Tools By AI のフィードバックページ：バグ報告、機能リクエスト、使用例を共有。Waline ベース、匿名投稿可。"
+  },
+  "AppError": {
+    "title": "ページの読み込みエラー",
+    "description": "ページを読み込めませんでした。サイトの更新直後に発生することがあります。再読み込みしてください。",
+    "reload": "再読み込み"
   },
   "NotFound": {
     "title": "ページが見つかりません",

@@ -1,6 +1,6 @@
 {
   "common": {
-    "supportEscapeChars": "Supporte caractères d'échappement : \\r\n (nouvelle ligne), \\r (retour), \\t (tab), \\s (espace), \\\\ (antislash)",
+    "supportEscapeChars": "Supporte caractères d'échappement : \\n (nouvelle ligne), \\r (retour), \\t (tab), \\s (espace), \\\\ (antislash)",
     "skipToContent": "Aller au contenu principal",
     "fileProcessFailed": "Échec du traitement du fichier — vérifiez son encodage ou essayez-en un autre",
     "fileReadFailed": "Échec de la lecture du fichier",
@@ -49,6 +49,7 @@
     "extractText": "Extraire le texte",
     "translationResult": "Résultat",
     "copy": "Copier",
+    "expand": "plus",
     "remove": "Supprimer",
     "exportFile": "Exporter",
     "exportAllFile": "Tout exporter",
@@ -184,7 +185,7 @@
     },
     "textSplitter": {
       "title": "Découpeur de Texte",
-      "description": "Découpe intelligente de texte long pour IA et réseaux sociaux"
+      "description": "Découper un long texte par séparateur, longueur ou phrase — et le refusionner"
     },
     "chineseConversion": {
       "title": "Conversion chinois",
@@ -323,6 +324,11 @@
     "reaction4": "Confus",
     "placeholder": "Laissez un message (pas de connexion requise, email optionnel pour réponse)",
     "metaDescription": "Page de retours pour Tools By AI : signalez bugs, suggérez fonctionnalités, partagez cas d'usage. Basée sur Waline, publication anonyme."
+  },
+  "AppError": {
+    "title": "Échec du chargement de la page",
+    "description": "La page n'a pas pu être chargée — cela peut arriver juste après une mise à jour du site. Veuillez recharger.",
+    "reload": "Recharger"
   },
   "NotFound": {
     "title": "Page introuvable",

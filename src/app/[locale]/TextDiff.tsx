@@ -107,14 +107,22 @@ const TextDiff = () => {
     const seq = ++loadSeq.current[side];
     const reader = new FileReader();
     reader.onload = async (e) => {
+      const buffer = e.target?.result as ArrayBuffer;
       try {
-        const buffer = e.target?.result as ArrayBuffer;
         const text = normalizeNewlines(await decodeFileBytes(buffer));
         if (seq !== loadSeq.current[side]) return; // superseded by a newer load or a user edit
         const next: SideState = { text, bytes: buffer, filename: file.name, encoding: "utf-8" };
         (side === "a" ? setA : setB)(next);
         if (/�/.test(text)) message.warning(t("notTextFile"));
       } catch {
+        if (seq !== loadSeq.current[side]) return;
+        // 解码失败【仍然留住 bytes】。右上角那个编码选择器以 s.bytes 为渲染
+        // 条件,而 changeEncoding 只需要 bytes —— 它正是为「自动识别不出来的
+        // 文件」存在的。丢掉 bytes 等于把唯一的补救入口一起关掉:用户既看不到
+        // 内容,也没法手动指定编码,这个文件就彻底 diff 不了了。
+        // (decodeFileBytes 对识别不出的编码抛出而非回退成 U+FFFD 之后,这条
+        //  分支从「几乎走不到」变成了这类文件的常规路径。)
+        (side === "a" ? setA : setB)({ text: "", bytes: buffer, filename: file.name, encoding: "utf-8" });
         message.error(t("notTextFile"));
       }
     };

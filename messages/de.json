@@ -130,7 +130,7 @@
     "copyAllFailed": "Alle kopieren",
     "closeFailedLinesModal": "Schließen",
     "failedLanguagesTitle": "{count} Zielsprache(n) fehlgeschlagen",
-    "failedLanguagesDesc": "Alle Batches für diese Sprachen sind fehlgeschlagen — meist durch lokale LLM-Störungen, API-Ratenbegrenzungen oder Modellverweigerung einer bestimmten Sprache. Codes kopieren und nur damit erneut ausführen (in Schnelleingabe via Sprachcodes einfügen); die anderen werden aus dem Cache übersprungen.",
+    "failedLanguagesDesc": "Alle Batches für diese Sprachen sind fehlgeschlagen — meist durch lokale LLM-Störungen, API-Ratenbegrenzungen oder Modellverweigerung einer bestimmten Sprache. Codes kopieren und nur damit erneut ausführen (in 'Mehrsprachige Einstellungen' einfügen); die anderen werden aus dem Cache übersprungen.",
     "copyAllFailedLanguages": "Sprachcodes kopieren",
     "apiStatusFreeApi": "Free API",
     "apiStatusNeedsConfig": "Konfig. erforderlich",
@@ -182,7 +182,7 @@
     },
     "jsonTranslate": {
       "title": "i18n JSON-Übersetzer",
-      "description": "Effizientes mehrsprachiges JSON-Übersetzungstool"
+      "description": "i18n-Sprachdateien im Batch übersetzen, mit JSONPath-Abgleich und Schlüssel-Mapping"
     },
     "mdTranslator": {
       "title": "Markdown-Übersetzer",

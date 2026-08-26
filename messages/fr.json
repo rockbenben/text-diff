@@ -130,7 +130,7 @@
     "copyAllFailed": "Tout copier",
     "closeFailedLinesModal": "Fermer",
     "failedLanguagesTitle": "Échec de la traduction de {count} langue(s)",
-    "failedLanguagesDesc": "Tous les lots de ces langues ont échoué — généralement à cause de défauts de LLM local, de limites de débit API ou du refus du modèle pour une langue spécifique. Copiez les codes et relancez uniquement avec elles (collez dans Saisie rapide par codes de langue) ; les autres utiliseront le cache et seront ignorées.",
+    "failedLanguagesDesc": "Tous les lots de ces langues ont échoué — généralement à cause de défauts de LLM local, de limites de débit API ou du refus du modèle pour une langue spécifique. Copiez les codes et relancez uniquement avec elles (collez dans 'Paramètres multilingues') ; les autres utiliseront le cache et seront ignorées.",
     "copyAllFailedLanguages": "Copier les codes de langue",
     "apiStatusFreeApi": "Free API",
     "apiStatusNeedsConfig": "Config. requise",
@@ -182,7 +182,7 @@
     },
     "jsonTranslate": {
       "title": "Traducteur JSON i18n",
-      "description": "Outil de traduction JSON multilingue efficace"
+      "description": "Traduction par lot des fichiers de langue i18n, avec correspondance JSONPath et mappage de clés"
     },
     "mdTranslator": {
       "title": "Traducteur Markdown",

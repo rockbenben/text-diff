@@ -15,10 +15,10 @@
   --td-border: rgba(240, 237, 228, 0.28);
   --td-border-2: rgba(240, 237, 228, 0.10);
   --td-text: rgba(240, 237, 228, 0.85);
-  --td-text-3: rgba(240, 237, 228, 0.45);
+  --td-text-3: rgba(240, 237, 228, 0.6);
   --td-accent: var(--accent);
   --td-accent-bg: rgba(122, 140, 255, 0.10);
-  --td-del: #d15546;
+  --td-del: #dc6b5c;
   --td-add: #44a978;
   /* Row/chip tints are an EQUAL-weight wash of each accent over the container
      bg, so deletions and additions read at the same visual weight in both
@@ -32,10 +32,10 @@
   --td-border: rgba(20, 19, 16, 0.30);
   --td-border-2: rgba(20, 19, 16, 0.12);
   --td-text: rgba(20, 19, 16, 0.88);
-  --td-text-3: rgba(20, 19, 16, 0.45);
+  --td-text-3: rgba(20, 19, 16, 0.62);
   --td-accent-bg: rgba(29, 53, 245, 0.06);
   --td-del: #d02b1f;
-  --td-add: #1e8a5a;
+  --td-add: #197a4f;
 }
 
 .diff { border: 1px solid var(--td-border); font-family: var(--td-mono); font-size: 14px; }

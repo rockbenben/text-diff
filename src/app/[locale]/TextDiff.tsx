@@ -5,7 +5,7 @@ import { Alert, App, Button, Checkbox, Divider, Segmented, Select, Space, Toolti
 import { SwapOutlined, UpOutlined, DownOutlined, ClearOutlined, CopyOutlined, DownloadOutlined, FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import { createPatch } from "diff";
-import { decodeFileBytes, normalizeNewlines, downloadFile, getFileTypePresetConfig } from "@/app/utils";
+import { decodeFileBytes, normalizeNewlines, getFileTypePresetConfig } from "@/app/utils";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 import { useIsMobile } from "@/app/hooks/useIsMobile";
@@ -15,6 +15,7 @@ import DiffPane, { type DiffPaneHandle } from "./DiffPane";
 import FirstDiffBanner from "./FirstDiffBanner";
 import CodeInput from "./CodeInput";
 import styles from "./textDiff.module.css";
+import { useFileExport } from "@/app/hooks/useFileExport";
 
 const ENCODINGS = ["utf-8", "gbk", "big5", "utf-16le"] as const;
 const FORMATS: FormatKind[] = ["plain", "csv", "tsv", "ini", "json"];
@@ -31,6 +32,7 @@ const countLines = (s: string) => (s === "" ? 0 : s.split("\n").length);
 const TextDiff = () => {
   const t = useTranslations("TextDiff");
   const { message } = App.useApp();
+  const exportFile = useFileExport();
   const isMobile = useIsMobile();
 
   const [a, setA] = useState<SideState>(emptySide);
@@ -174,8 +176,7 @@ const TextDiff = () => {
     // Export is an explicit user action — let it run to completion even on a large
     // raw diff (slow is acceptable when the user clicked it), rather than failing.
     const patch = createPatch(b.filename ?? "diff", a.text, b.text, a.filename ?? t("sideA"), b.filename ?? t("sideB"));
-    void downloadFile(patch, (b.filename ?? "text") + ".patch");
-    message.success(t("exportDone"));
+    void exportFile(patch, (b.filename ?? "text") + ".patch", undefined, t("exportDone"));
   };
 
   const gotoHunk = (idx: number) => {

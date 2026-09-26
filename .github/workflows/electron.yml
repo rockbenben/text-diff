@@ -33,7 +33,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 24
           cache: yarn
 
       # tag 触发时,用 tag(去掉前缀 v)作为应用版本写入 package.json,让构建出的

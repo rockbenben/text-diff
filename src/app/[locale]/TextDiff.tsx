@@ -278,6 +278,29 @@ const TextDiff = () => {
   const diffPane = result && (
     <DiffPane ref={paneRef} result={result} diffOnly={diffOnly} context={context} view={view} activeHunk={activeHunk} onSelectHunk={gotoHunk} onPickHunk={selectHunk} maximized={maximized} />
   );
+  // 内联工具栏与全屏覆盖层的头部各画一遍同样的控件 —— 定义一次,两处引用。
+  const viewControls = (
+    <>
+      <Segmented<"split" | "unified">
+        value={view}
+        onChange={setView}
+        options={[
+          { value: "split", label: t("viewSplit") },
+          { value: "unified", label: t("viewUnified") },
+        ]}
+      />
+      <Checkbox checked={diffOnly} onChange={(e) => setDiffOnly(e.target.checked)}>{t("diffOnly")}</Checkbox>
+    </>
+  );
+  const navControls = result && (
+    <Space.Compact>
+      <Button icon={<UpOutlined />} title={t("prev")} aria-label={t("prev")} onClick={() => gotoHunk(hunkIdx - 1)} disabled={!result.hunks.length} />
+      <Button style={{ pointerEvents: "none", fontFamily: "var(--td-mono)" }}>
+        {result.hunks.length ? t("blockNav", { i: hunkIdx + 1, n: result.hunks.length }) : "0 / 0"}
+      </Button>
+      <Button icon={<DownOutlined />} title={t("next")} aria-label={t("next")} onClick={() => gotoHunk(hunkIdx + 1)} disabled={!result.hunks.length} />
+    </Space.Compact>
+  );
 
   return (
     <div className={styles.surface}>
@@ -311,15 +334,7 @@ const TextDiff = () => {
           <div className={styles.toolbar}>
             {/* View — how the diff is shown */}
             <span className={styles.cluster}>
-              <Segmented<"split" | "unified">
-                value={view}
-                onChange={setView}
-                options={[
-                  { value: "split", label: t("viewSplit") },
-                  { value: "unified", label: t("viewUnified") },
-                ]}
-              />
-              <Checkbox checked={diffOnly} onChange={(e) => setDiffOnly(e.target.checked)}>{t("diffOnly")}</Checkbox>
+              {viewControls}
               <Tooltip title={t("contextTooltip")}>
                 <Select<number>
                   size="small" value={context} disabled={!diffOnly} onChange={setContext} style={{ width: 120 }}
@@ -343,13 +358,7 @@ const TextDiff = () => {
             <Divider orientation="vertical" />
 
             {/* Navigate */}
-            <Space.Compact>
-              <Button icon={<UpOutlined />} title={t("prev")} aria-label={t("prev")} onClick={() => gotoHunk(hunkIdx - 1)} disabled={!result.hunks.length} />
-              <Button style={{ pointerEvents: "none", fontFamily: "var(--td-mono)" }}>
-                {result.hunks.length ? t("blockNav", { i: hunkIdx + 1, n: result.hunks.length }) : "0 / 0"}
-              </Button>
-              <Button icon={<DownOutlined />} title={t("next")} aria-label={t("next")} onClick={() => gotoHunk(hunkIdx + 1)} disabled={!result.hunks.length} />
-            </Space.Compact>
+            {navControls}
 
             <Divider orientation="vertical" />
 
@@ -385,22 +394,8 @@ const TextDiff = () => {
             <div className={styles.overlayHead}>
               {readout}
               <span className={styles.overlayControls}>
-                <Segmented<"split" | "unified">
-                  value={view}
-                  onChange={setView}
-                  options={[
-                    { value: "split", label: t("viewSplit") },
-                    { value: "unified", label: t("viewUnified") },
-                  ]}
-                />
-                <Checkbox checked={diffOnly} onChange={(e) => setDiffOnly(e.target.checked)}>{t("diffOnly")}</Checkbox>
-                <Space.Compact>
-                  <Button icon={<UpOutlined />} title={t("prev")} aria-label={t("prev")} onClick={() => gotoHunk(hunkIdx - 1)} disabled={!result.hunks.length} />
-                  <Button style={{ pointerEvents: "none", fontFamily: "var(--td-mono)" }}>
-                    {result.hunks.length ? t("blockNav", { i: hunkIdx + 1, n: result.hunks.length }) : "0 / 0"}
-                  </Button>
-                  <Button icon={<DownOutlined />} title={t("next")} aria-label={t("next")} onClick={() => gotoHunk(hunkIdx + 1)} disabled={!result.hunks.length} />
-                </Space.Compact>
+                {viewControls}
+                {navControls}
                 <Button icon={<FullscreenExitOutlined />} onClick={() => setMaximized(false)}>{t("exitMaximize")}</Button>
               </span>
             </div>

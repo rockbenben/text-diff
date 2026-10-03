@@ -182,19 +182,34 @@
     "errorHintRelay403": "API trả về 403 Forbidden — hãy bật \"Chuyển tiếp API\" trong \"Thêm cài đặt Provider\"",
     "errorHintCors": "Không thể kết nối tới địa chỉ này — hãy kiểm tra địa chỉ và xem dịch vụ có cho phép yêu cầu khác nguồn (CORS) hay không. Cổng tự dựng và mô hình cục bộ phải tự bật, hoặc dùng Chuyển tiếp API của riêng bạn",
     "errorHintGeminiKey": "Không thể kết nối Gemini: hãy kiểm tra mạng trước (một số mạng không thể truy cập trực tiếp dịch vụ Google). Nếu mạng bình thường, từ 19/06/2026 Google từ chối các API key không giới hạn — hãy tạo lại key trong AI Studio (mặc định đã giới hạn) hoặc thêm giới hạn Gemini API cho key cũ trong Google Cloud Console",
-    "rateLimitCooldown": "Đạt giới hạn yêu cầu — tạm dừng một lát rồi tự động thử lại"
+    "rateLimitCooldown": "Đạt giới hạn yêu cầu — tạm dừng một lát rồi tự động thử lại",
+    "faqHeading": "Câu hỏi thường gặp",
+    "homeIndexEyebrow": "Mục lục",
+    "homeCategoryEyebrow": "{n} danh mục",
+    "openNavigation": "Mở điều hướng",
+    "goHome": "Về trang chủ",
+    "primaryNav": "Điều hướng chính",
+    "toggleTheme": "Đổi giao diện",
+    "communityLinks": "Liên kết cộng đồng",
+    "viewOnGitHub": "Xem trên GitHub",
+    "toolCategories": "Danh mục công cụ",
+    "searchLanguage": "Tìm ngôn ngữ",
+    "selectLanguage": "Chọn ngôn ngữ",
+    "noMatchFound": "Không có kết quả",
+    "backToTop": "Lên đầu trang",
+    "exportOptions": "Tùy chọn xuất"
   },
   "tools": {
     "subtitleTranslator": {
-      "title": "Dịch giả Phụ đề",
+      "title": "Trình Dịch Phụ Đề",
       "description": "Dịch hàng loạt SRT, ASS, VTT, SBV, LRC. 120+ ngôn ngữ."
     },
     "jsonTranslate": {
-      "title": "Dịch giả JSON i18n",
+      "title": "Trình Dịch JSON i18n",
       "description": "Dịch tệp ngôn ngữ i18n hàng loạt, với đối sánh JSONPath và ánh xạ khóa"
     },
     "mdTranslator": {
-      "title": "Dịch giả Markdown",
+      "title": "Trình Dịch Markdown",
       "description": "Dịch Markdown hàng loạt, giữ định dạng và mã"
     },
     "textSplitter": {
@@ -214,7 +229,7 @@
       "description": "Tích hợp regex, sắp xếp, lọc và nhiều tính năng xử lý văn bản hàng loạt"
     },
     "dataBatch": {
-      "title": "Xử lý văn bản",
+      "title": "Xử lý dữ liệu hàng loạt",
       "description": "Xử lý dữ liệu Excel hàng loạt — loại bỏ trùng, trích xuất cột, hợp nhất văn bản, quy tắc nối tiếp"
     },
     "textJoiner": {
@@ -246,7 +261,7 @@
       "description": "Sắp xếp và nhóm mảng, quy tắc tùy chỉnh"
     },
     "jsonMatchUpdate": {
-      "title": "Cập nhật JSON Match",
+      "title": "Khớp & Cập Nhật JSON",
       "description": "Cập nhật hàng loạt dựa trên khớp trường"
     },
     "dataParserFlare": {
@@ -258,7 +273,7 @@
       "description": "Tạo dữ liệu JSON IMGPrompt hàng loạt"
     },
     "textDiff": {
-      "title": "Text Diff",
+      "title": "So Sánh Văn Bản",
       "description": "So sánh hai văn bản hoặc tệp song song và xác định điểm khác biệt đầu tiên.",
       "metaTitle": "Text Diff: So sánh văn bản và tệp trực tuyến",
       "metaDescription": "So sánh hai văn bản hoặc tệp trực tuyến với làm nổi bật song song, chỉ rõ dòng và cột chính xác nơi đầu tiên khác nhau.",
@@ -311,17 +326,17 @@
     "externalTools": {
       "legendtalk": "Bàn tròn nhà tư tưởng AI",
       "imgprompt": "Câu lệnh tạo ảnh AI",
-      "lives": "Thousand Lives",
-      "learndata": "LearnData Ghi chú nguồn mở"
+      "learndata": "LearnData Ghi chú nguồn mở",
+      "hub365": "365 Nguồn mở"
     }
   },
   "Metadata": {
     "title": "ToolsByAI - Bộ Công Cụ Dịch Thuật & Dữ Liệu AI Online",
-    "description": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 25+ engine AI.",
+    "description": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 30+ engine AI.",
     "homeTitle": "Bộ ToolsByAI",
     "homeDescription": "19 công cụ cho dịch, văn bản, JSON và chuyển đổi dữ liệu. Tăng cường hiệu quả cho nhà phát triển và người sáng tạo.",
-    "ogTitle": "ToolsByAI - Công Cụ Dev AI Miễn Phí & Mã Nguồn Mở",
-    "ogDescription": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 25+ engine AI."
+    "ogTitle": "ToolsByAI - Bộ Công Cụ Dịch Thuật & Dữ Liệu AI Online",
+    "ogDescription": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 30+ engine AI."
   },
   "CopyToClipboard": {
     "empty": "Nội dung trống, không có gì để sao chép",
@@ -400,6 +415,9 @@
     "exportDiff": "Xuất diff",
     "exportDiffTooltip": "Xuất dưới dạng diff hợp nhất (.patch) — dùng được với git apply / công cụ review",
     "exportDone": "Đã xuất tệp diff",
-    "similarityLabel": "Độ tương đồng"
+    "similarityLabel": "Độ tương đồng",
+    "encodingLabel": "Bảng mã tệp",
+    "contextLinesLabel": "Số dòng ngữ cảnh",
+    "formatLabel": "Định dạng so sánh"
   }
 }

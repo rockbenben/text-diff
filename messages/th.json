@@ -33,7 +33,7 @@
     "translationCancelled": "ยกเลิกการแปลแล้ว",
     "translationStopped": "หยุดแล้ว",
     "resumeFromCache": "บรรทัดที่แปลแล้วถูกเก็บในแคช — แปลอีกครั้งเพื่อทำต่อจากจุดที่หยุด",
-    "cancelKeepsProgress": "ยกเลิกแล้วส่วนที่แปลไว้ยังอยู่",
+    "cancelKeepsProgress": "ยกเลิกแล้ว สามารถแปลต่อจากจุดที่ค้างไว้ได้",
     "dismiss": "ปิด",
     "translationAPI": "API แปลภาษา",
     "enter": "ป้อน",
@@ -113,7 +113,7 @@
     "retryCount": "จำนวนครั้งที่ลองใหม่",
     "retryCountTooltip": "จำนวนครั้งที่ลองใหม่เมื่อการแปลล้มเหลว",
     "requestTimeoutSec": "หมดเวลา",
-    "requestTimeoutSecTooltip": "เวลารอสูงสุดต่อคำขอ (วินาที). LLM ใช้เวลาคิดนานกว่า; แนะนำ 180 วินาทีขึ้นไป.",
+    "requestTimeoutSecTooltip": "เวลารอสูงสุดต่อคำขอ (วินาที) LLM ใช้เวลาคิดนานกว่า แนะนำ 180 วินาทีขึ้นไป",
     "customExportFilename": "รูปแบบชื่อไฟล์ส่งออก",
     "customExportFilenameTooltip": "'{'name'}' = ชื่อไฟล์เดิม, '{'lang'}' = ภาษา, '{'ext'}' = นามสกุล, '{'date'}' = วันที่, '{'time'}' = เวลา; ในโหมดหลายภาษาจะเพิ่ม '{'lang'}' อัตโนมัติเพื่อป้องกันชื่อไฟล์ซ้ำ",
     "partialFailureTitle": "แปลล้มเหลว {count} บรรทัด",
@@ -182,7 +182,22 @@
     "errorHintRelay403": "API ส่งกลับ 403 Forbidden — เปิดใช้ \"API Relay\" ใน \"การตั้งค่า Provider เพิ่มเติม\"",
     "errorHintCors": "เชื่อมต่อกับที่อยู่นี้ไม่ได้ — ตรวจสอบที่อยู่ และตรวจสอบว่าบริการอนุญาตคำขอข้ามต้นทาง (CORS) หรือไม่ เกตเวย์ที่ติดตั้งเองและโมเดลในเครื่องต้องเปิดใช้เอง หรือใช้ API Relay ของคุณเอง",
     "errorHintGeminiKey": "เชื่อมต่อ Gemini ไม่ได้: โปรดตรวจสอบเครือข่ายก่อน (บางเครือข่ายไม่สามารถเข้าถึงบริการ Google โดยตรง) หากเครือข่ายปกติ ตั้งแต่ 19 มิ.ย. 2026 Google ปฏิเสธ API key แบบไม่จำกัดสิทธิ์ — โปรดสร้าง key ใหม่ใน AI Studio (จำกัดสิทธิ์โดยค่าเริ่มต้น) หรือเพิ่มข้อจำกัด Gemini API ให้ key เดิมใน Google Cloud Console",
-    "rateLimitCooldown": "ถึงขีดจำกัดคำขอ — หยุดชั่วครู่แล้วจะลองใหม่อัตโนมัติ"
+    "rateLimitCooldown": "ถึงขีดจำกัดคำขอ — หยุดชั่วครู่แล้วจะลองใหม่อัตโนมัติ",
+    "faqHeading": "คำถามที่พบบ่อย",
+    "homeIndexEyebrow": "สารบัญ",
+    "homeCategoryEyebrow": "{n} หมวดหมู่",
+    "openNavigation": "เปิดการนำทาง",
+    "goHome": "ไปยังหน้าแรก",
+    "primaryNav": "การนำทางหลัก",
+    "toggleTheme": "สลับธีม",
+    "communityLinks": "ลิงก์คอมมูนิตี้",
+    "viewOnGitHub": "ดูบน GitHub",
+    "toolCategories": "หมวดหมู่เครื่องมือ",
+    "searchLanguage": "ค้นหาภาษา",
+    "selectLanguage": "เลือกภาษา",
+    "noMatchFound": "ไม่พบผลลัพธ์",
+    "backToTop": "กลับขึ้นด้านบน",
+    "exportOptions": "ตัวเลือกการส่งออก"
   },
   "tools": {
     "subtitleTranslator": {
@@ -214,7 +229,7 @@
       "description": "รวม Regex การเรียงลำดับ การกรอง และฟีเจอร์ประมวลผลข้อความเป็นชุดอื่นๆ"
     },
     "dataBatch": {
-      "title": "ประมวลผลข้อความ",
+      "title": "ประมวลผลข้อมูลแบบชุด",
       "description": "การประมวลผลข้อมูล Excel เป็นชุด — ขจัดซ้ำ แยกคอลัมน์ รวมข้อความ กฎต่อเนื่อง"
     },
     "textJoiner": {
@@ -246,7 +261,7 @@
       "description": "เรียงลำดับและจัดกลุ่มอาร์เรย์ กฎที่กำหนดเอง"
     },
     "jsonMatchUpdate": {
-      "title": "อัปเดต JSON Match",
+      "title": "จับคู่อัปเดต JSON",
       "description": "อัปเดตเป็นชุดตามการจับคู่ฟิลด์"
     },
     "dataParserFlare": {
@@ -311,17 +326,17 @@
     "externalTools": {
       "legendtalk": "โต๊ะกลมนักคิด AI",
       "imgprompt": "พรอมต์รูปภาพ AI",
-      "lives": "Thousand Lives",
-      "learndata": "LearnData บันทึกโอเพนซอร์ส"
+      "learndata": "LearnData บันทึกโอเพนซอร์ส",
+      "hub365": "365 โอเพนซอร์ส"
     }
   },
   "Metadata": {
     "title": "ToolsByAI - ชุดเครื่องมือแปลภาษา & ข้อมูล AI ออนไลน์",
-    "description": "ToolsByAI: 19 เครื่องมือโอเพ่นซอร์สสำหรับแปลซับไตเติ้ล Markdown และ JSON i18n ไม่ต้องติดตั้ง ทำงานบนเบราว์เซอร์",
+    "description": "ToolsByAI: 19 เครื่องมือโอเพนซอร์สสำหรับแปลซับไตเติล Markdown และ JSON i18n ไม่ต้องติดตั้ง ทำงานบนเบราว์เซอร์",
     "homeTitle": "ชุด ToolsByAI",
     "homeDescription": "19 เครื่องมือสำหรับแปล ข้อความ JSON และแปลงข้อมูล เพิ่มประสิทธิภาพสำหรับนักพัฒนาและผู้สร้างเนื้อหา",
-    "ogTitle": "ToolsByAI - เครื่องมือ Dev AI ฟรี & โอเพนซอร์ส",
-    "ogDescription": "ToolsByAI: 19 เครื่องมือโอเพ่นซอร์สสำหรับแปลซับไตเติ้ล Markdown และ JSON i18n ไม่ต้องติดตั้ง ทำงานบนเบราว์เซอร์"
+    "ogTitle": "ToolsByAI - ชุดเครื่องมือแปลภาษา & ข้อมูล AI ออนไลน์",
+    "ogDescription": "ToolsByAI: 19 เครื่องมือโอเพนซอร์สสำหรับแปลซับไตเติล Markdown และ JSON i18n ไม่ต้องติดตั้ง ทำงานบนเบราว์เซอร์"
   },
   "CopyToClipboard": {
     "empty": "เนื้อหาว่าง ไม่มีอะไรให้คัดลอก",
@@ -366,7 +381,7 @@
     "prev": "ก่อนหน้า",
     "next": "ถัดไป",
     "diffOnly": "เฉพาะความแตกต่าง",
-    "ignoreWhitespace": "ละเว้นช่องว่างรอบข้าง",
+    "ignoreWhitespace": "ละเว้นช่องว่างต้นและท้ายบรรทัด",
     "ignoreCase": "ละเว้นตัวพิมพ์",
     "charLevel": "ระดับอักขระ",
     "blockNav": "{i} / {n} บล็อก",
@@ -400,6 +415,9 @@
     "exportDiff": "ส่งออก diff",
     "exportDiffTooltip": "ส่งออกเป็น diff แบบรวม (.patch) ใช้กับ git apply / เครื่องมือรีวิวได้",
     "exportDone": "ส่งออกไฟล์ diff แล้ว",
-    "similarityLabel": "ความคล้าย"
+    "similarityLabel": "ความคล้าย",
+    "encodingLabel": "การเข้ารหัสไฟล์",
+    "contextLinesLabel": "จำนวนบรรทัดบริบท",
+    "formatLabel": "รูปแบบการเปรียบเทียบ"
   }
 }

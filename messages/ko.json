@@ -20,7 +20,7 @@
     "configuration": "설정",
     "operation": "작업",
     "optional": "선택사항",
-    "pleaseWait": "잠시만 기다려 주세요...",
+    "pleaseWait": "잠시만 기다려 주세요…",
     "pasteUploadContent": "또는 여기에 텍스트 입력/붙여넣기",
     "example": "예시",
     "sourceLanguage": "원본 언어",
@@ -77,7 +77,7 @@
     "sameLanguageTarget": "원본 언어와 목표 언어가 같습니다. 자동으로 목표 언어를 조정했습니다:",
     "sameLanguageSource": "원본 언어와 목표 언어가 같습니다. 자동으로 원본 언어를 조정했습니다:",
     "enterApiKey": "API 키를 입력하거나 무료 API로 전환하세요.",
-    "enterApiUrl": "\"더 많은 Provider 설정\"에서 API URL을 구성하세요.",
+    "enterApiUrl": "\"더 많은 프로바이더 설정\"에서 API URL을 구성하세요.",
     "serviceUnavailable": "{service}에 일시적으로 연결할 수 없습니다. 네트워크와 서비스 주소를 확인한 뒤 잠시 후 다시 시도하거나 다른 번역 서비스를 선택하세요.",
     "serviceUnavailableSwitched": "{service}에 일시적으로 연결할 수 없어 {fallback}(으)로 자동 전환했습니다. 계속 사용하려면 확인 후 설정에서 되돌리세요.",
     "noFileUploaded": "처리할 파일을 먼저 업로드하세요.",
@@ -92,7 +92,7 @@
     "startProcess": "처리 시작",
     "result": "처리 결과",
     "exportSettingTooltip": "파일로 설정 내보내기",
-    "importSettingTooltip": "파일에서 구성 가져오기",
+    "importSettingTooltip": "파일에서 설정 가져오기",
     "exportSettingSuccess": "설정을 내보냈습니다",
     "exportSettingError": "내보내기 실패, 다시 시도하세요",
     "dictLoadFailed": "변환 사전을 불러오지 못했습니다. 네트워크를 확인하거나 페이지를 새로고침하세요",
@@ -135,7 +135,7 @@
     "apiStatusFailed": "연결 실패",
     "apiStatusTimeout": "연결 시간 초과",
     "testConnection": "연결 테스트",
-    "moreProviderSettings": "더 많은 Provider 설정",
+    "moreProviderSettings": "더 많은 프로바이더 설정",
     "format": "포맷",
     "formatTooltip": "포맷: 빈 줄 및 앞뒤 공백 제거",
     "resultToSource": "결과 ➔ 원문",
@@ -151,7 +151,7 @@
     "generateJson": "JSON 생성",
     "networkUnavailable": "번역 서비스에 일시적으로 연결할 수 없습니다. 네트워크 문제이거나 서비스 측의 일시적인 문제일 수 있습니다. 잠시 후 다시 시도하거나 다른 번역 서비스로 전환하세요.",
     "translationTimeout": "번역 요청이 시간 초과되었습니다. 네트워크가 느리거나 서비스 응답이 느릴 수 있습니다. 잠시 후 다시 시도하거나 다른 번역 서비스로 전환하세요.",
-    "translationTimeoutLocal": "로컬 모델 번역이 시간 초과되었습니다. 흔한 원인: 동시 실행 수가 로컬 서버의 병렬 슬롯보다 많아 요청이 서버에서 대기하다 시간 초과되거나, 모델이 반복 출력 루프에 빠진 경우(대개 원본 언어 선택 오류)입니다. 이 서비스의 \"호출 매개변수 → 동시 번역 행수\"을 낮추거나 \"고급 설정 → 시간 초과\"을 늘리고, 선택한 원본 언어가 실제 텍스트와 일치하는지 확인하세요.",
+    "translationTimeoutLocal": "로컬 모델 번역이 시간 초과되었습니다. 흔한 원인: 동시 실행 수가 로컬 서버의 병렬 슬롯보다 많아 요청이 서버에서 대기하다 시간 초과되거나, 모델이 반복 출력 루프에 빠진 경우(대개 원본 언어 선택 오류)입니다. 이 서비스의 \"호출 매개변수 → 동시 번역 행수\"를 낮추거나 \"고급 설정 → 시간 초과\"를 늘리고, 선택한 원본 언어가 실제 텍스트와 일치하는지 확인하세요.",
     "langGroupCommon": "자주 사용",
     "langGroupEurope": "유럽",
     "langGroupMiddleEast": "중동",
@@ -178,11 +178,26 @@
     "errorHint429": "요청 한도를 초과했습니다. 나중에 다시 시도하세요",
     "errorHint456": "이번 기간의 번역 할당량을 모두 사용했습니다",
     "errorHint5xx": "서버 오류입니다. 나중에 다시 시도하세요",
-    "errorHintRelay": "네트워크 오류(CORS 제한일 수 있음). \"더 많은 Provider 설정\"에서 \"API 중계\"를 켜세요",
-    "errorHintRelay403": "API가 403 Forbidden을 반환했습니다. \"더 많은 Provider 설정\"에서 \"API 중계\"를 켜세요",
+    "errorHintRelay": "네트워크 오류(CORS 제한일 수 있음). \"더 많은 프로바이더 설정\"에서 \"API 중계\"를 켜세요",
+    "errorHintRelay403": "API가 403 Forbidden을 반환했습니다. \"더 많은 프로바이더 설정\"에서 \"API 중계\"를 켜세요",
     "errorHintCors": "이 주소에 연결할 수 없습니다. 주소가 올바른지, 서비스가 교차 출처 요청(CORS)을 허용하는지 확인하세요. 자체 구축 게이트웨이와 로컬 모델은 직접 켜야 하며, 본인의 API 중계를 사용할 수도 있습니다",
     "errorHintGeminiKey": "Gemini에 연결할 수 없습니다. 먼저 네트워크를 확인하세요(일부 네트워크에서는 Google 서비스에 직접 연결할 수 없습니다). 네트워크가 정상이라면 2026년 6월 19일부터 Google이 무제한 API 키를 거부하고 있습니다. AI Studio에서 키를 다시 생성하거나(기본적으로 제한됨) Google Cloud 콘솔에서 기존 키에 Gemini API 제한을 추가하세요",
-    "rateLimitCooldown": "요청 한도 도달 — 잠시 멈춘 뒤 자동으로 재시도합니다"
+    "rateLimitCooldown": "요청 한도 도달 — 잠시 멈춘 뒤 자동으로 재시도합니다",
+    "faqHeading": "자주 묻는 질문",
+    "homeIndexEyebrow": "색인",
+    "homeCategoryEyebrow": "분류 {n}개",
+    "openNavigation": "내비게이션 열기",
+    "goHome": "홈으로 이동",
+    "primaryNav": "주요 내비게이션",
+    "toggleTheme": "테마 전환",
+    "communityLinks": "커뮤니티 링크",
+    "viewOnGitHub": "GitHub에서 보기",
+    "toolCategories": "도구 분류",
+    "searchLanguage": "언어 검색",
+    "selectLanguage": "언어 선택",
+    "noMatchFound": "일치하는 항목 없음",
+    "backToTop": "맨 위로 이동",
+    "exportOptions": "내보내기 옵션"
   },
   "tools": {
     "subtitleTranslator": {
@@ -214,7 +229,7 @@
       "description": "정규식 매칭·정렬·필터링 등을 통합한 텍스트 일괄 처리 도구"
     },
     "dataBatch": {
-      "title": "텍스트 처리 도구",
+      "title": "데이터 일괄 처리",
       "description": "Excel 표 데이터 일괄 중복 제거·열 추출·텍스트 병합, 다중 규칙 순차 실행"
     },
     "textJoiner": {
@@ -293,7 +308,7 @@
         "일반 텍스트, CSV, TSV, INI, JSON 형식 지원",
         "UTF-8, GBK, Big5, UTF-16LE 인코딩 자동 감지",
         "공백 무시, 대소문자 무시, 문자 수준 비교 모드",
-        "분할 및 통 보기 전환",
+        "나란히 및 통합 보기 전환",
         "비교 블록 내비게이션으로 빠른 이동",
         "표준 .patch 파일로 내보내기, git apply 호환",
         "큰 텍스트의 시간 초과 가드 및 강제 비교 옵션"
@@ -311,17 +326,17 @@
     "externalTools": {
       "legendtalk": "AI 사상가 라운드테이블",
       "imgprompt": "AI 이미지 프롬프트",
-      "lives": "천세서 인생 시뮬레이션",
-      "learndata": "LearnData 오픈소스 노트"
+      "learndata": "LearnData 오픈소스 노트",
+      "hub365": "365 오픈소스"
     }
   },
   "Metadata": {
     "title": "ToolsByAI | 무료 오픈소스 AI 번역 및 데이터 처리 도구",
-    "description": "ToolsByAI: 자막·Markdown·JSON i18n 번역 및 텍스트/JSON 일괄 처리 19개 무료 도구, 25+ AI 엔진.",
+    "description": "ToolsByAI: 자막·Markdown·JSON i18n 번역 및 텍스트/JSON 일괄 처리 19개 무료 도구, 30+ AI 엔진.",
     "homeTitle": "ToolsByAI 도구 모음",
     "homeDescription": "19 무료 도구. 다국어 번역, 텍스트 처리, JSON 변환 등 개발자와 크리에이터의 업무 효율 향상.",
     "ogTitle": "ToolsByAI | 무료 오픈소스 AI 번역 및 데이터 처리 도구",
-    "ogDescription": "ToolsByAI: 자막·Markdown·JSON i18n 번역 및 텍스트/JSON 일괄 처리 19개 무료 도구, 25+ AI 엔진."
+    "ogDescription": "ToolsByAI: 자막·Markdown·JSON i18n 번역 및 텍스트/JSON 일괄 처리 19개 무료 도구, 30+ AI 엔진."
   },
   "CopyToClipboard": {
     "empty": "내용이 비어 있어 복사할 필요가 없습니다",
@@ -331,7 +346,7 @@
   },
   "feedback": {
     "feedback1": "피드백 및 제안",
-    "feedback2": "사용 중 문제가 발생하거나 제안 및 아이디어가 있으면 언제든지 알려주세요!",
+    "feedback2": "사용 중 문제가 발생하거나 제안 및 아이디어가 있으면 언제든지 알려주세요! 고객님의 피드백은 향후 기능 개발과 개선에 직접 반영되어 모두의 요구에 더 잘 맞는 도구를 함께 만들어 갑니다.",
     "feedback3": "사용 시나리오나 발생한 문제, 또는 창의적인 아이디어를 자세히 설명해 주세요. 모든 피드백을 진지하게 읽고 가능한 한 빨리 조정 및 최적화하겠습니다.",
     "reaction0": "좋아요",
     "reaction1": "응원해요",
@@ -348,7 +363,7 @@
   },
   "NotFound": {
     "title": "페이지를 찾을 수 없음",
-    "description": "방문한 페이지가 존재하지 않거나 이동되었습니다。",
+    "description": "방문한 페이지가 존재하지 않거나 이동되었습니다.",
     "goHome": "홈으로"
   },
   "TextDiff": {
@@ -400,6 +415,9 @@
     "exportDiff": "diff 내보내기",
     "exportDiffTooltip": "통합 diff(.patch)로 내보내기 — git apply / 리뷰 도구에서 사용 가능",
     "exportDone": "diff 파일을 내보냈습니다",
-    "similarityLabel": "유사도"
+    "similarityLabel": "유사도",
+    "encodingLabel": "파일 인코딩",
+    "contextLinesLabel": "문맥 줄 수",
+    "formatLabel": "비교 형식"
   }
 }

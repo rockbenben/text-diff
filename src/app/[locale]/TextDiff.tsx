@@ -232,6 +232,7 @@ const TextDiff = () => {
             {s.bytes && (
               <Select
                 size="small" value={s.encoding} style={{ width: 96 }}
+                aria-label={t("encodingLabel")}
                 onChange={(enc) => changeEncoding(side, enc)}
                 options={ENCODINGS.map((enc) => ({ value: enc, label: enc }))} />
             )}
@@ -261,7 +262,9 @@ const TextDiff = () => {
         </span>
       )}
       <Tooltip title={t("stats", { count: result.stats.mods + result.stats.adds + result.stats.dels, mods: result.stats.mods, adds: result.stats.adds, dels: result.stats.dels })}>
-        <span className={styles.counts}>
+        {/* dir=ltr: `+`/`~` here are prefixes, but a neutral at the start of an RTL
+            run resolves to the paragraph direction — /ar rendered them as `0+`. */}
+        <span dir="ltr" className={styles.counts}>
           <span className={styles.cMod}>~{result.stats.mods}</span>
           <span className={styles.cAdd}>+{result.stats.adds}</span>
           <span className={styles.cDel}>−{result.stats.dels}</span>
@@ -308,8 +311,10 @@ const TextDiff = () => {
           hidden behind the fixed overlay. */}
       <div inert={maximized || undefined}>
       <Space orientation="vertical" size="middle" style={{ width: "100%" }}>
-        {/* Inputs first — you type/drop on top, results flow below. */}
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
+        {/* Inputs first — you type/drop on top, results flow below.
+            LTR-pinned together with the diff below: A/B's left-to-right order is
+            the one pairing the result rows have to agree with. */}
+        <div dir="ltr" style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
           {renderSide("a")}
           {renderSide("b")}
         </div>
@@ -338,6 +343,7 @@ const TextDiff = () => {
               <Tooltip title={t("contextTooltip")}>
                 <Select<number>
                   size="small" value={context} disabled={!diffOnly} onChange={setContext} style={{ width: 120 }}
+                  aria-label={t("contextLinesLabel")}
                   options={[0, 1, 3, 5, 10].map((n) => ({ value: n, label: n === 0 ? t("contextNone") : t("contextLines", { n }) }))} />
               </Tooltip>
             </span>
@@ -348,6 +354,7 @@ const TextDiff = () => {
             <span className={styles.cluster}>
               <Select<FormatKind | "auto">
                 size="small" value={formatOverride} onChange={setFormatOverride} style={{ width: 130 }}
+                aria-label={t("formatLabel")}
                 options={[{ value: "auto", label: `${t("detectedAs")}: ${t(("format" + format[0].toUpperCase() + format.slice(1)) as never)}` },
                   ...FORMATS.map((fmt) => ({ value: fmt, label: t(("format" + fmt[0].toUpperCase() + fmt.slice(1)) as never) }))]} />
               <Checkbox checked={charLevel} onChange={(e) => setCharLevel(e.target.checked)}>{t("charLevel")}</Checkbox>
@@ -363,17 +370,21 @@ const TextDiff = () => {
             <Divider orientation="vertical" />
 
             {/* Actions */}
+            {/* aria-hidden on every icon here: antd's Icon ships role="img" +
+                aria-label=<glyph name>, and these buttons carry their text but no
+                aria-label — so the accessible name was computed from contents and
+                came out "fullscreen تكبير" / "copy نسخ A" in every locale. */}
             <span className={styles.cluster}>
-              <Button icon={<FullscreenOutlined />} onClick={() => setMaximized(true)}>{t("maximize")}</Button>
-              <Button icon={<SwapOutlined />} onClick={swap}>{t("swap")}</Button>
+              <Button icon={<FullscreenOutlined aria-hidden />} onClick={() => setMaximized(true)}>{t("maximize")}</Button>
+              <Button icon={<SwapOutlined aria-hidden />} onClick={swap}>{t("swap")}</Button>
               <Space.Compact>
-                <Button icon={<CopyOutlined />} onClick={() => copyToClipboard(a.text, t("sideA"))}>{t("copyA")}</Button>
-                <Button icon={<CopyOutlined />} onClick={() => copyToClipboard(b.text, t("sideB"))}>{t("copyB")}</Button>
+                <Button icon={<CopyOutlined aria-hidden />} onClick={() => copyToClipboard(a.text, t("sideA"))}>{t("copyA")}</Button>
+                <Button icon={<CopyOutlined aria-hidden />} onClick={() => copyToClipboard(b.text, t("sideB"))}>{t("copyB")}</Button>
                 <Tooltip title={t("exportDiffTooltip")}>
-                  <Button icon={<DownloadOutlined />} onClick={exportPatch}>{t("exportDiff")}</Button>
+                  <Button icon={<DownloadOutlined aria-hidden />} onClick={exportPatch}>{t("exportDiff")}</Button>
                 </Tooltip>
               </Space.Compact>
-              <Button icon={<ClearOutlined />} danger onClick={clearAll}>{t("clear")}</Button>
+              <Button icon={<ClearOutlined aria-hidden />} danger onClick={clearAll}>{t("clear")}</Button>
             </span>
           </div>
         )}
@@ -396,7 +407,7 @@ const TextDiff = () => {
               <span className={styles.overlayControls}>
                 {viewControls}
                 {navControls}
-                <Button icon={<FullscreenExitOutlined />} onClick={() => setMaximized(false)}>{t("exitMaximize")}</Button>
+                <Button icon={<FullscreenExitOutlined aria-hidden />} onClick={() => setMaximized(false)}>{t("exitMaximize")}</Button>
               </span>
             </div>
           ) : (

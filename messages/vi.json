@@ -1,6 +1,12 @@
 {
   "common": {
-    "supportEscapeChars": "Hỗ trợ ký tự thoát: \\r\n (dòng mới), \\r (xuống dòng), \\t (tab), \\s (dấu cách), \\\\ (dấu gạch chéo ngược)",
+    "exportFolder": "Thư mục xuất",
+    "exportFolderDefault": "Tệp xuất ra nằm trong thư mục tải xuống mặc định.",
+    "exportFolderBlocked": "Trình duyệt không cho chọn chính Desktop, Documents, Downloads và thư mục người dùng — hãy chọn thư mục con hoặc thư mục khác.",
+    "exportFolderCurrent": "Tệp xuất ra sẽ nằm trong {dir}",
+    "exportFolderReset": "Quay lại thư mục tải xuống",
+    "exportFolderFailed": "Không thể đặt thư mục xuất.",
+    "supportEscapeChars": "Hỗ trợ ký tự thoát: \\n (dòng mới), \\r (xuống dòng), \\t (tab), \\s (dấu cách), \\\\ (dấu gạch chéo ngược)",
     "skipToContent": "Chuyển đến nội dung chính",
     "fileProcessFailed": "Xử lý tệp thất bại — kiểm tra mã hóa hoặc thử tệp khác",
     "fileReadFailed": "Đọc tệp thất bại",
@@ -56,6 +62,7 @@
     "extractText": "Trích xuất văn bản",
     "translationResult": "Kết quả",
     "copy": "Sao chép",
+    "expand": "xem thêm",
     "remove": "Xóa",
     "exportFile": "Xuất",
     "exportAllFile": "Xuất tất cả",
@@ -118,7 +125,7 @@
     "copyAllFailed": "Sao chép tất cả",
     "closeFailedLinesModal": "Đóng",
     "failedLanguagesTitle": "{count} ngôn ngữ đích thất bại",
-    "failedLanguagesDesc": "Tất cả các lô cho các ngôn ngữ này đã thất bại — thường do trục trặc LLM cục bộ, giới hạn tốc độ API hoặc mô hình từ chối ngôn ngữ cụ thể. Sao chép mã và chạy lại chỉ cho chúng (dán vào Nhập nhanh bằng mã ngôn ngữ); những ngôn ngữ khác sẽ được bỏ qua từ bộ nhớ đệm.",
+    "failedLanguagesDesc": "Tất cả các lô cho các ngôn ngữ này đã thất bại — thường do trục trặc LLM cục bộ, giới hạn tốc độ API hoặc mô hình từ chối ngôn ngữ cụ thể. Sao chép mã và chạy lại chỉ cho chúng (dán vào 'Cài đặt đa ngôn ngữ'); những ngôn ngữ khác sẽ được bỏ qua từ bộ nhớ đệm.",
     "copyAllFailedLanguages": "Sao chép mã ngôn ngữ",
     "apiStatusFreeApi": "Free API",
     "apiStatusNeedsConfig": "Cần cấu hình",
@@ -136,6 +143,8 @@
     "readOnlyMode": "Chế độ chỉ đọc",
     "readOnlyModeTooltip": "Văn bản quá dài: trình soạn thảo tạm thời ở chế độ chỉ đọc và chỉ hiển thị bản xem trước một phần. Toàn bộ nội dung của bạn không bị ảnh hưởng — xử lý và xuất vẫn dùng toàn bộ văn bản.",
     "fileExported": "Đã xuất tệp: {fileName}",
+    "exportFailed": "Không thể xuất tệp: {fileName}",
+    "exportedToFolder": "Đã lưu vào {dir}: {fileName}",
     "batchDownloaded": "Xử lý hoàn tất, tệp đã được tải xuống tự động",
     "smartLineBreak": "Xuống dòng thông minh",
     "replaceText": "Thay thế văn bản",
@@ -171,25 +180,41 @@
     "errorHint5xx": "Lỗi máy chủ, vui lòng thử lại sau",
     "errorHintRelay": "Lỗi mạng (có thể do CORS) — hãy bật \"Chuyển tiếp API\" trong \"Thêm cài đặt Provider\"",
     "errorHintRelay403": "API trả về 403 Forbidden — hãy bật \"Chuyển tiếp API\" trong \"Thêm cài đặt Provider\"",
+    "errorHintCors": "Không thể kết nối tới địa chỉ này — hãy kiểm tra địa chỉ và xem dịch vụ có cho phép yêu cầu khác nguồn (CORS) hay không. Cổng tự dựng và mô hình cục bộ phải tự bật, hoặc dùng Chuyển tiếp API của riêng bạn",
     "errorHintGeminiKey": "Không thể kết nối Gemini: hãy kiểm tra mạng trước (một số mạng không thể truy cập trực tiếp dịch vụ Google). Nếu mạng bình thường, từ 19/06/2026 Google từ chối các API key không giới hạn — hãy tạo lại key trong AI Studio (mặc định đã giới hạn) hoặc thêm giới hạn Gemini API cho key cũ trong Google Cloud Console",
-    "rateLimitCooldown": "Đạt giới hạn yêu cầu — tạm dừng một lát rồi tự động thử lại"
+    "rateLimitCooldown": "Đạt giới hạn yêu cầu — tạm dừng một lát rồi tự động thử lại",
+    "faqHeading": "Câu hỏi thường gặp",
+    "homeIndexEyebrow": "Mục lục",
+    "homeCategoryEyebrow": "{n} danh mục",
+    "openNavigation": "Mở điều hướng",
+    "goHome": "Về trang chủ",
+    "primaryNav": "Điều hướng chính",
+    "toggleTheme": "Đổi giao diện",
+    "communityLinks": "Liên kết cộng đồng",
+    "viewOnGitHub": "Xem trên GitHub",
+    "toolCategories": "Danh mục công cụ",
+    "searchLanguage": "Tìm ngôn ngữ",
+    "selectLanguage": "Chọn ngôn ngữ",
+    "noMatchFound": "Không có kết quả",
+    "backToTop": "Lên đầu trang",
+    "exportOptions": "Tùy chọn xuất"
   },
   "tools": {
     "subtitleTranslator": {
-      "title": "Dịch giả Phụ đề",
+      "title": "Trình Dịch Phụ Đề",
       "description": "Dịch hàng loạt SRT, ASS, VTT, SBV, LRC. 120+ ngôn ngữ."
     },
     "jsonTranslate": {
-      "title": "Dịch giả JSON i18n",
-      "description": "Công cụ dịch JSON đa ngôn ngữ hiệu quả"
+      "title": "Trình Dịch JSON i18n",
+      "description": "Dịch tệp ngôn ngữ i18n hàng loạt, với đối sánh JSONPath và ánh xạ khóa"
     },
     "mdTranslator": {
-      "title": "Dịch giả Markdown",
+      "title": "Trình Dịch Markdown",
       "description": "Dịch Markdown hàng loạt, giữ định dạng và mã"
     },
     "textSplitter": {
       "title": "Bộ chia văn bản",
-      "description": "Chia văn bản dài thông minh cho AI và mạng xã hội"
+      "description": "Chia văn bản dài theo dấu phân tách, độ dài hoặc câu — và gộp lại"
     },
     "chineseConversion": {
       "title": "Chuyển đổi Giản thể ↔ Phồn thể",
@@ -204,7 +229,7 @@
       "description": "Tích hợp regex, sắp xếp, lọc và nhiều tính năng xử lý văn bản hàng loạt"
     },
     "dataBatch": {
-      "title": "Xử lý văn bản",
+      "title": "Xử lý dữ liệu hàng loạt",
       "description": "Xử lý dữ liệu Excel hàng loạt — loại bỏ trùng, trích xuất cột, hợp nhất văn bản, quy tắc nối tiếp"
     },
     "textJoiner": {
@@ -236,7 +261,7 @@
       "description": "Sắp xếp và nhóm mảng, quy tắc tùy chỉnh"
     },
     "jsonMatchUpdate": {
-      "title": "Cập nhật JSON Match",
+      "title": "Khớp & Cập Nhật JSON",
       "description": "Cập nhật hàng loạt dựa trên khớp trường"
     },
     "dataParserFlare": {
@@ -248,7 +273,7 @@
       "description": "Tạo dữ liệu JSON IMGPrompt hàng loạt"
     },
     "textDiff": {
-      "title": "Text Diff",
+      "title": "So Sánh Văn Bản",
       "description": "So sánh hai văn bản hoặc tệp song song và xác định điểm khác biệt đầu tiên.",
       "metaTitle": "Text Diff: So sánh văn bản và tệp trực tuyến",
       "metaDescription": "So sánh hai văn bản hoặc tệp trực tuyến với làm nổi bật song song, chỉ rõ dòng và cột chính xác nơi đầu tiên khác nhau.",
@@ -301,17 +326,17 @@
     "externalTools": {
       "legendtalk": "Bàn tròn nhà tư tưởng AI",
       "imgprompt": "Câu lệnh tạo ảnh AI",
-      "lives": "Thousand Lives",
-      "learndata": "LearnData Ghi chú nguồn mở"
+      "learndata": "LearnData Ghi chú nguồn mở",
+      "hub365": "365 Nguồn mở"
     }
   },
   "Metadata": {
     "title": "ToolsByAI - Bộ Công Cụ Dịch Thuật & Dữ Liệu AI Online",
-    "description": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 25+ engine AI.",
+    "description": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 30+ engine AI.",
     "homeTitle": "Bộ ToolsByAI",
     "homeDescription": "19 công cụ cho dịch, văn bản, JSON và chuyển đổi dữ liệu. Tăng cường hiệu quả cho nhà phát triển và người sáng tạo.",
-    "ogTitle": "ToolsByAI - Công Cụ Dev AI Miễn Phí & Mã Nguồn Mở",
-    "ogDescription": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 25+ engine AI."
+    "ogTitle": "ToolsByAI - Bộ Công Cụ Dịch Thuật & Dữ Liệu AI Online",
+    "ogDescription": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 30+ engine AI."
   },
   "CopyToClipboard": {
     "empty": "Nội dung trống, không có gì để sao chép",
@@ -330,6 +355,11 @@
     "reaction4": "Bối rối",
     "placeholder": "Để lại tin nhắn (không cần đăng nhập, email tùy chọn để trả lời)",
     "metaDescription": "Trang phản hồi Tools By AI: báo lỗi, đề xuất tính năng, chia sẻ tình huống sử dụng. Dựa trên Waline, đăng ẩn danh được phép, miễn phí."
+  },
+  "AppError": {
+    "title": "Không tải được trang",
+    "description": "Không thể tải trang — điều này có thể xảy ra ngay sau khi trang web được cập nhật. Vui lòng tải lại.",
+    "reload": "Tải lại"
   },
   "NotFound": {
     "title": "Không tìm thấy trang",
@@ -385,6 +415,9 @@
     "exportDiff": "Xuất diff",
     "exportDiffTooltip": "Xuất dưới dạng diff hợp nhất (.patch) — dùng được với git apply / công cụ review",
     "exportDone": "Đã xuất tệp diff",
-    "similarityLabel": "Độ tương đồng"
+    "similarityLabel": "Độ tương đồng",
+    "encodingLabel": "Bảng mã tệp",
+    "contextLinesLabel": "Số dòng ngữ cảnh",
+    "formatLabel": "Định dạng so sánh"
   }
 }

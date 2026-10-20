@@ -1,10 +1,11 @@
 name: Build Desktop App
 
 # Manual run, or push a tag like `v3.0.0`.
-# Produces signed installers for Windows / macOS / Linux and a DRAFT GitHub
-# Release with the updater manifest (latest.json) attached. Publish the draft
-# (un-draft it) to actually roll the update out to existing installs — the
-# updater endpoint resolves `releases/latest`, which ignores drafts.
+# Produces signed installers for Windows / macOS / Linux and a GitHub Release
+# with the updater manifest (latest.json) attached. The release is built as a
+# draft and published by the `publish` job at the end, which also points
+# `releases/latest` at it — the updater endpoint resolves `releases/latest`,
+# which ignores drafts, so publishing is what rolls the update out.
 #
 # This workflow lives ONLY on main (the desktop release hub): a tag push runs the
 # definition from the tagged main commit. The feat/tauri-desktop branch keeps no
@@ -112,6 +113,14 @@ jobs:
 
             🔄 **自动更新**：已安装的应用会在后台下载新版本并提示安装，无需再回到本页面。
           releaseDraft: true
+            # **草稿**：这一趟出的是 draft release。草稿是**矩阵的汇合点**——
+            # 四个平台那条矩阵里第一个跑的建出这条草稿，另外三个只往里传产物
+            # （草稿不发布，四个 job 就不是各建一条 release 了）。
+            #
+            # 草稿里的 `latest.json` 外面看不到：更新端点读的是 `releases/latest`，
+            # 而它**只认已发布的** release。真正把更新推到装好的那些应用上的，
+            # 是下面 `publish` 那条 job——它把草稿发布出去并显式标成 latest，
+            # **不需要人点 Publish**。
           prerelease: false
           args: ${{ matrix.args }}
 
@@ -141,3 +150,48 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload "v${APP_VERSION}" "TextDiff_${APP_VERSION}_portable.exe" --clobber
+
+  # 把那条草稿发布出去，并显式把它标成 latest。
+  #
+  # 单独一条 job，不放在矩阵里：矩阵有四条腿（macOS 两条、Linux、Windows），
+  # 四条腿都去发布会打架。`needs: publish-tauri` 保证产物都进去了才轮到它。
+  publish:
+    name: 发布这个 release，并把 latest 指到它
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: publish-tauri
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # ⚠️ **不能只发草稿了事**：草稿转成已发布时，GitHub **不会**重算
+      # `releases/latest` 指向谁——2026-10-20 在 rclone-deck 上撞到过一次：release 已经是
+      # `draft=false`、`prerelease=false`、`published_at` 也填上了，`releases/latest`
+      # 却仍返回旧版本，端点 `releases/latest/download/latest.json` 于是 **404**
+      # （旧 release 里没有 `latest.json`）。所以这里一次 PATCH 同时给
+      # `draft=false` 与 `make_latest=true`，不靠 GitHub 自己挪。
+      #
+      # 判据是**看 API 指到谁**，不是看 release 的字段：字段全对而指针没挪，端点照样 404。
+      # CDN 那层重定向还会再滞后几分钟，属正常——这里判 API，不判 CDN。
+      - name: 发布并把 latest 指到它
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          # ⚠️ **不能用 `releases/tags/<tag>` 找这条 release**：那个端点**不返回草稿**。
+          # 草稿只能从 release 列表里捞——列表按创建时间倒序，新建的草稿总在第一页。
+          id="$(gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100" \
+                 --jq "first(.[] | select(.tag_name == \"${tag}\") | .id)")"
+          if [ -z "$id" ]; then
+            echo "::error::没找到 tag ${tag} 对应的 release"
+            exit 1
+          fi
+          gh api --method PATCH "repos/${GITHUB_REPOSITORY}/releases/${id}" \
+            -F draft=false -f make_latest=true > /dev/null
+          latest="$(gh api "repos/${GITHUB_REPOSITORY}/releases/latest" --jq .tag_name)"
+          if [ "$latest" != "$tag" ]; then
+            echo "::error::releases/latest 指着 ${latest}，不是 ${tag}"
+            exit 1
+          fi
+          echo "release ${tag} 已发布，releases/latest 指向它"

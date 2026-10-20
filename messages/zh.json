@@ -379,5 +379,23 @@
     "title": "页面未找到",
     "description": "你访问的页面不存在或已移动。",
     "goHome": "返回首页"
+  },
+  "Update": {
+    "settings": "更新",
+    "autoCheck": "自动检查更新",
+    "autoCheckHint": "开启后，桌面版会在启动时以及每天检查一次新版本。在你同意之前不会下载任何安装包。",
+    "checkNow": "检查更新",
+    "upToDate": "已经是最新版本。",
+    "availableTitle": "发现新版本",
+    "availableContent": "发现版本 {version}。现在下载并安装吗？",
+    "installNow": "立即安装",
+    "remindLater": "稍后提醒",
+    "skipVersion": "跳过此版本",
+    "skipped": "已跳过版本 {version}，不会再提醒你。",
+    "downloading": "正在下载更新…",
+    "downloadingProgress": "正在下载更新… {percent}%",
+    "installing": "正在安装更新…",
+    "installFailed": "更新安装失败，请稍后重试。",
+    "checkFailed": "检查更新失败：{reason}"
   }
 }

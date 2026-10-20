@@ -1,6 +1,6 @@
 {
   "name": "text-diff",
-  "version": "3.0.0",
+  "version": "3.0.3",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
@@ -9,6 +9,8 @@
     "build:lang": "node scripts/buildWithLang.js",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "check:messages": "node scripts/checkMessages.js",
     "outdated": "ncu",
     "tauri": "tauri",
     "update-version": "node src-tauri/update-version.js"

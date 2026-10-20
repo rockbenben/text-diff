@@ -379,5 +379,23 @@
     "exportDiffTooltip": "Birleşik diff (.patch) olarak dışa aktar — git apply / inceleme araçlarıyla kullanılabilir",
     "exportDone": "Diff dosyası dışa aktarıldı",
     "similarityLabel": "Benzerlik"
+  },
+  "Update": {
+    "settings": "Güncellemeler",
+    "autoCheck": "Güncellemeleri otomatik denetle",
+    "autoCheckHint": "Açıkken masaüstü uygulaması başlangıçta ve günde bir kez yeni bir sürüm arar. Onay vermeden hiçbir şey indirilmez.",
+    "checkNow": "Güncellemeleri denetle",
+    "upToDate": "En son sürümü kullanıyorsunuz.",
+    "availableTitle": "Güncelleme var",
+    "availableContent": "{version} sürümü mevcut. Şimdi indirip kurulsun mu?",
+    "installNow": "Şimdi kur",
+    "remindLater": "Daha sonra hatırlat",
+    "skipVersion": "Bu sürümü atla",
+    "skipped": "{version} sürümü atlandı. Artık hatırlatmayacağız.",
+    "downloading": "Güncelleme indiriliyor…",
+    "downloadingProgress": "Güncelleme indiriliyor… {percent}%",
+    "installing": "Güncelleme kuruluyor…",
+    "installFailed": "Güncelleme kurulamadı. Lütfen daha sonra tekrar deneyin.",
+    "checkFailed": "Güncellemeler denetlenemedi: {reason}"
   }
 }

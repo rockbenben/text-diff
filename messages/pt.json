@@ -379,5 +379,23 @@
     "exportDiffTooltip": "Exportar como diff unificado (.patch) — compatível com git apply / ferramentas de revisão",
     "exportDone": "Arquivo diff exportado",
     "similarityLabel": "Similaridade"
+  },
+  "Update": {
+    "settings": "Atualizações",
+    "autoCheck": "Procurar atualizações automaticamente",
+    "autoCheckHint": "Quando ativado, o aplicativo de desktop procura uma nova versão ao iniciar e uma vez por dia. Nada é baixado até você aceitar.",
+    "checkNow": "Procurar atualizações",
+    "upToDate": "Você já está na versão mais recente.",
+    "availableTitle": "Atualização disponível",
+    "availableContent": "A versão {version} está disponível. Baixar e instalar agora?",
+    "installNow": "Instalar agora",
+    "remindLater": "Lembrar mais tarde",
+    "skipVersion": "Ignorar esta versão",
+    "skipped": "Versão {version} ignorada. Não vamos mais lembrar você dela.",
+    "downloading": "Baixando a atualização…",
+    "downloadingProgress": "Baixando a atualização… {percent}%",
+    "installing": "Instalando a atualização…",
+    "installFailed": "Não foi possível instalar a atualização. Tente novamente mais tarde.",
+    "checkFailed": "Falha ao procurar atualizações: {reason}"
   }
 }

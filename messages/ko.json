@@ -379,5 +379,23 @@
     "exportDiffTooltip": "통합 diff(.patch)로 내보내기 — git apply / 리뷰 도구에서 사용 가능",
     "exportDone": "diff 파일을 내보냈습니다",
     "similarityLabel": "유사도"
+  },
+  "Update": {
+    "settings": "업데이트",
+    "autoCheck": "자동으로 업데이트 확인",
+    "autoCheckHint": "켜면 데스크톱 앱이 실행 시와 매일 한 번 새 버전을 확인합니다. 동의하기 전에는 아무것도 다운로드하지 않습니다.",
+    "checkNow": "업데이트 확인",
+    "upToDate": "최신 버전입니다.",
+    "availableTitle": "업데이트 사용 가능",
+    "availableContent": "버전 {version}을(를) 사용할 수 있습니다. 지금 다운로드하여 설치할까요?",
+    "installNow": "지금 설치",
+    "remindLater": "나중에 알림",
+    "skipVersion": "이 버전 건너뛰기",
+    "skipped": "버전 {version}을(를) 건너뛰었습니다. 다시 알리지 않습니다.",
+    "downloading": "업데이트 다운로드 중…",
+    "downloadingProgress": "업데이트 다운로드 중… {percent}%",
+    "installing": "업데이트 설치 중…",
+    "installFailed": "업데이트를 설치하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+    "checkFailed": "업데이트 확인 실패: {reason}"
   }
 }

@@ -379,5 +379,23 @@
     "exportDiffTooltip": "Als vereinheitlichtes Diff (.patch) exportieren — nutzbar mit git apply / Review-Tools",
     "exportDone": "Diff-Datei exportiert",
     "similarityLabel": "Ähnlichkeit"
+  },
+  "Update": {
+    "settings": "Updates",
+    "autoCheck": "Automatisch nach Updates suchen",
+    "autoCheckHint": "Wenn aktiv, sucht die Desktop-App beim Start und einmal täglich nach einer neuen Version. Es wird nichts heruntergeladen, bis du zustimmst.",
+    "checkNow": "Nach Updates suchen",
+    "upToDate": "Du hast bereits die neueste Version.",
+    "availableTitle": "Update verfügbar",
+    "availableContent": "Version {version} ist verfügbar. Jetzt herunterladen und installieren?",
+    "installNow": "Jetzt installieren",
+    "remindLater": "Später erinnern",
+    "skipVersion": "Diese Version überspringen",
+    "skipped": "Version {version} übersprungen. Du wirst nicht mehr daran erinnert.",
+    "downloading": "Update wird heruntergeladen…",
+    "downloadingProgress": "Update wird heruntergeladen… {percent}%",
+    "installing": "Update wird installiert…",
+    "installFailed": "Das Update konnte nicht installiert werden. Bitte versuche es später erneut.",
+    "checkFailed": "Suche nach Updates fehlgeschlagen: {reason}"
   }
 }

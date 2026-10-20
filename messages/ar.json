@@ -379,5 +379,23 @@
     "exportDiffTooltip": "تصدير كـ diff موحّد (.patch) — يصلح مع git apply / أدوات المراجعة",
     "exportDone": "تم تصدير ملف diff",
     "similarityLabel": "التشابه"
+  },
+  "Update": {
+    "settings": "التحديثات",
+    "autoCheck": "التحقق من التحديثات تلقائيًا",
+    "autoCheckHint": "عند التشغيل، يتحقق تطبيق سطح المكتب من وجود إصدار جديد عند بدء التشغيل ومرة واحدة يوميًا. لا يتم تنزيل أي شيء حتى توافق.",
+    "checkNow": "التحقق من التحديثات",
+    "upToDate": "أنت تستخدم أحدث إصدار.",
+    "availableTitle": "يتوفر تحديث",
+    "availableContent": "الإصدار {version} متاح. هل تريد تنزيله وتثبيته الآن؟",
+    "installNow": "التثبيت الآن",
+    "remindLater": "ذكّرني لاحقًا",
+    "skipVersion": "تخطّي هذا الإصدار",
+    "skipped": "تم تخطّي الإصدار {version}. لن نذكّرك به مرة أخرى.",
+    "downloading": "جارٍ تنزيل التحديث…",
+    "downloadingProgress": "جارٍ تنزيل التحديث… {percent}%",
+    "installing": "جارٍ تثبيت التحديث…",
+    "installFailed": "تعذّر تثبيت التحديث. يرجى المحاولة مرة أخرى لاحقًا.",
+    "checkFailed": "فشل التحقق من التحديثات: {reason}"
   }
 }

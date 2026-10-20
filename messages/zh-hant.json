@@ -379,5 +379,23 @@
     "exportDiffTooltip": "匯出為統一 diff（.patch），可用於 git apply / 程式碼審查",
     "exportDone": "已匯出 diff 檔案",
     "similarityLabel": "相似度"
+  },
+  "Update": {
+    "settings": "更新",
+    "autoCheck": "自動檢查更新",
+    "autoCheckHint": "開啟後，桌面版會在啟動時以及每天檢查一次新版本。在你同意之前不會下載任何安裝檔。",
+    "checkNow": "檢查更新",
+    "upToDate": "已經是最新版本。",
+    "availableTitle": "發現新版本",
+    "availableContent": "發現版本 {version}。現在下載並安裝嗎？",
+    "installNow": "立即安裝",
+    "remindLater": "稍後提醒",
+    "skipVersion": "略過此版本",
+    "skipped": "已略過版本 {version}，不會再提醒你。",
+    "downloading": "正在下載更新…",
+    "downloadingProgress": "正在下載更新… {percent}%",
+    "installing": "正在安裝更新…",
+    "installFailed": "更新安裝失敗，請稍後再試。",
+    "checkFailed": "檢查更新失敗：{reason}"
   }
 }

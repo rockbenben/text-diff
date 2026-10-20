@@ -379,5 +379,23 @@
     "exportDiffTooltip": "Xuất dưới dạng diff hợp nhất (.patch) — dùng được với git apply / công cụ review",
     "exportDone": "Đã xuất tệp diff",
     "similarityLabel": "Độ tương đồng"
+  },
+  "Update": {
+    "settings": "Cập nhật",
+    "autoCheck": "Tự động kiểm tra cập nhật",
+    "autoCheckHint": "Khi bật, ứng dụng máy tính sẽ kiểm tra phiên bản mới khi khởi động và mỗi ngày một lần. Không có gì được tải xuống cho đến khi bạn đồng ý.",
+    "checkNow": "Kiểm tra cập nhật",
+    "upToDate": "Bạn đang dùng phiên bản mới nhất.",
+    "availableTitle": "Đã có bản cập nhật",
+    "availableContent": "Phiên bản {version} đã có. Tải xuống và cài đặt ngay?",
+    "installNow": "Cài đặt ngay",
+    "remindLater": "Nhắc lại sau",
+    "skipVersion": "Bỏ qua phiên bản này",
+    "skipped": "Đã bỏ qua phiên bản {version}. Chúng tôi sẽ không nhắc lại nữa.",
+    "downloading": "Đang tải bản cập nhật…",
+    "downloadingProgress": "Đang tải bản cập nhật… {percent}%",
+    "installing": "Đang cài đặt bản cập nhật…",
+    "installFailed": "Không thể cài đặt bản cập nhật. Vui lòng thử lại sau.",
+    "checkFailed": "Không thể kiểm tra cập nhật: {reason}"
   }
 }

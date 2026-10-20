@@ -379,5 +379,23 @@
     "exportDiffTooltip": "Export as a unified diff (.patch) — usable with git apply / review tools",
     "exportDone": "Diff file exported",
     "similarityLabel": "Similarity"
+  },
+  "Update": {
+    "settings": "Updates",
+    "autoCheck": "Check for updates automatically",
+    "autoCheckHint": "When on, the desktop app checks for a new version at launch and once a day. Nothing is downloaded until you accept it.",
+    "checkNow": "Check for updates",
+    "upToDate": "You are on the latest version.",
+    "availableTitle": "Update available",
+    "availableContent": "Version {version} is available. Download and install it now?",
+    "installNow": "Install now",
+    "remindLater": "Remind me later",
+    "skipVersion": "Skip this version",
+    "skipped": "Version {version} skipped. You will not be reminded about it again.",
+    "downloading": "Downloading the update…",
+    "downloadingProgress": "Downloading the update… {percent}%",
+    "installing": "Installing the update…",
+    "installFailed": "The update could not be installed. Please try again later.",
+    "checkFailed": "Could not check for updates: {reason}"
   }
 }

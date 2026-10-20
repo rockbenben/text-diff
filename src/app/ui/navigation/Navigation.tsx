@@ -7,8 +7,10 @@ import { useTheme } from "next-themes";
 import { useLocale } from "next-intl";
 import { useAppMenu } from "@/app/components/projects";
 import { isChineseLocale } from "@/app/utils";
+import { isTauriRuntime } from "@/app/utils/externalLink";
 import { SOCIAL_LINKS } from "./config";
 import { LanguageSelector } from "./LanguageSelector";
+import { UpdateMenu } from "./UpdateMenu";
 
 const { Header } = Layout;
 
@@ -103,6 +105,11 @@ export function Navigation() {
           <a href={DEFAULT_GITHUB} target="_blank" rel="noopener noreferrer">
             <Button type="text" icon={<GithubOutlined style={iconStyle} />} aria-label="View on GitHub" />
           </a>
+
+          {/* Desktop-only: the updater has no web counterpart. Rendered after
+              mount so the server-rendered markup and the first client render
+              agree — isTauriRuntime() can only be true in the browser. */}
+          {mounted && isTauriRuntime() && <UpdateMenu />}
 
           <Button type="text" icon={themeIcon} onClick={handleThemeToggle} aria-label="Toggle theme" />
         </Space>

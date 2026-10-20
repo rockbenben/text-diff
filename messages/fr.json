@@ -379,23 +379,5 @@
     "exportDiffTooltip": "Exporter en diff unifié (.patch) — utilisable avec git apply / outils de revue",
     "exportDone": "Fichier diff exporté",
     "similarityLabel": "Similarité"
-  },
-  "Update": {
-    "settings": "Mises à jour",
-    "autoCheck": "Rechercher les mises à jour automatiquement",
-    "autoCheckHint": "Lorsque cette option est activée, l'application de bureau recherche une nouvelle version au démarrage et une fois par jour. Rien n'est téléchargé tant que vous n'avez pas accepté.",
-    "checkNow": "Rechercher les mises à jour",
-    "upToDate": "Vous utilisez déjà la dernière version.",
-    "availableTitle": "Mise à jour disponible",
-    "availableContent": "La version {version} est disponible. La télécharger et l'installer maintenant ?",
-    "installNow": "Installer maintenant",
-    "remindLater": "Me le rappeler plus tard",
-    "skipVersion": "Ignorer cette version",
-    "skipped": "Version {version} ignorée. Vous ne serez plus averti à son sujet.",
-    "downloading": "Téléchargement de la mise à jour…",
-    "downloadingProgress": "Téléchargement de la mise à jour… {percent}%",
-    "installing": "Installation de la mise à jour…",
-    "installFailed": "La mise à jour n'a pas pu être installée. Veuillez réessayer plus tard.",
-    "checkFailed": "Échec de la recherche de mises à jour : {reason}"
   }
 }

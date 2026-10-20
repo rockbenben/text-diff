@@ -379,23 +379,5 @@
     "exportDiffTooltip": "統合 diff（.patch）として書き出し（git apply やレビューツールで利用可）",
     "exportDone": "diff ファイルを書き出しました",
     "similarityLabel": "類似度"
-  },
-  "Update": {
-    "settings": "アップデート",
-    "autoCheck": "自動的に更新を確認する",
-    "autoCheckHint": "オンにすると、デスクトップアプリは起動時と1日1回新しいバージョンを確認します。許可するまでダウンロードは行われません。",
-    "checkNow": "更新を確認",
-    "upToDate": "最新バージョンです。",
-    "availableTitle": "更新があります",
-    "availableContent": "バージョン {version} が利用可能です。今すぐダウンロードしてインストールしますか？",
-    "installNow": "今すぐインストール",
-    "remindLater": "後で通知",
-    "skipVersion": "このバージョンをスキップ",
-    "skipped": "バージョン {version} をスキップしました。再度通知されません。",
-    "downloading": "アップデートをダウンロード中…",
-    "downloadingProgress": "アップデートをダウンロード中… {percent}%",
-    "installing": "アップデートをインストール中…",
-    "installFailed": "アップデートをインストールできませんでした。しばらくしてからもう一度お試しください。",
-    "checkFailed": "更新の確認に失敗しました: {reason}"
   }
 }

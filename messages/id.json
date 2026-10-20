@@ -379,23 +379,5 @@
     "exportDiffTooltip": "Ekspor sebagai diff terpadu (.patch) — bisa dipakai dengan git apply / alat review",
     "exportDone": "Berkas diff diekspor",
     "similarityLabel": "Kemiripan"
-  },
-  "Update": {
-    "settings": "Pembaruan",
-    "autoCheck": "Periksa pembaruan secara otomatis",
-    "autoCheckHint": "Jika aktif, aplikasi desktop memeriksa versi baru saat dimulai dan sekali sehari. Tidak ada yang diunduh sebelum Anda menyetujuinya.",
-    "checkNow": "Periksa pembaruan",
-    "upToDate": "Anda sudah memakai versi terbaru.",
-    "availableTitle": "Pembaruan tersedia",
-    "availableContent": "Versi {version} tersedia. Unduh dan pasang sekarang?",
-    "installNow": "Pasang sekarang",
-    "remindLater": "Ingatkan saya nanti",
-    "skipVersion": "Lewati versi ini",
-    "skipped": "Versi {version} dilewati. Kami tidak akan mengingatkannya lagi.",
-    "downloading": "Mengunduh pembaruan…",
-    "downloadingProgress": "Mengunduh pembaruan… {percent}%",
-    "installing": "Memasang pembaruan…",
-    "installFailed": "Pembaruan tidak dapat dipasang. Silakan coba lagi nanti.",
-    "checkFailed": "Gagal memeriksa pembaruan: {reason}"
   }
 }

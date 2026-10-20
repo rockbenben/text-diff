@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Button, Dropdown, Input, Drawer, Row, Col, theme, Grid } from "antd";
 import { TranslationOutlined, CheckOutlined } from "@ant-design/icons";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { routing } from "@/i18n/routing";
+import { LOCALE_STORAGE_KEY } from "@/app/localeRedirect";
 
 // ============ 语言配置 ============
 
@@ -13,29 +15,42 @@ interface Language {
 }
 
 /**
- * 支持的语言列表
- * Supported languages list
+ * 语言名称表。【键序 = 选择器里的展示顺序】，但「展示哪些」由 routing.locales 决定
+ * —— 见下面的 LANGUAGES。新增语言只改 routing.ts + 这里的名称。
  */
-const LANGUAGES: readonly Language[] = [
-  { key: "zh", label: "中文" },
-  { key: "en", label: "English" },
-  { key: "es", label: "Español" },
-  { key: "hi", label: "हिन्दी" },
-  { key: "ar", label: "العربية" },
-  { key: "pt", label: "Português" },
-  { key: "fr", label: "Français" },
-  { key: "de", label: "Deutsch" },
-  { key: "ja", label: "日本語" },
-  { key: "ko", label: "한국어" },
-  { key: "ru", label: "Русский" },
-  { key: "vi", label: "Tiếng Việt" },
-  { key: "th", label: "ไทย" },
-  { key: "tr", label: "Türkçe" },
-  { key: "zh-hant", label: "繁体中文" },
-  { key: "bn", label: "বাংলা" },
-  { key: "id", label: "Indonesia" },
-  { key: "it", label: "Italiano" },
-] as const;
+const LABELS: Record<string, string> = {
+  zh: "中文",
+  en: "English",
+  es: "Español",
+  hi: "हिन्दी",
+  ar: "العربية",
+  pt: "Português",
+  fr: "Français",
+  de: "Deutsch",
+  ja: "日本語",
+  ko: "한국어",
+  ru: "Русский",
+  vi: "Tiếng Việt",
+  th: "ไทย",
+  tr: "Türkçe",
+  "zh-hant": "繁体中文",
+  bn: "বাংলা",
+  id: "Indonesia",
+  it: "Italiano",
+  hu: "Magyar",
+};
+
+/**
+ * 实际展示的语言 = LABELS 里【且】routing.locales 里有的。
+ *
+ * ⚠ 这份列表【必须】跟着 routing.locales 走，不能自己写死一份：单语言/语种子集
+ *   构建（scripts/buildWithLang.js）只产出其中一个 locale 的路由，而写死的列表照样
+ *   把全量语种都列出来 —— 点子集外的任何一个都落到没构建出来的路由上。
+ *   同一份派生写法 img-prompt 的 ui/navigation/config.ts 已经在用。
+ */
+const LANGUAGES: readonly Language[] = Object.keys(LABELS)
+  .filter((key) => (routing.locales as readonly string[]).includes(key))
+  .map((key) => ({ key, label: LABELS[key] }));
 
 // ============ 组件 ============
 
@@ -43,6 +58,7 @@ export function LanguageSelector() {
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
+  const t = useTranslations();
   const { token } = theme.useToken();
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.md;
@@ -59,6 +75,12 @@ export function LanguageSelector() {
   })();
 
   const handleLanguageChange = (key: string) => {
+    // 记住显式选择：裸域名根页/404 的落点脚本优先读它，不再按浏览器偏好猜。
+    // 没有这一层的话，用户切到英文、下次打开裸域名又被甩回浏览器语言 —— 站点
+    // 会跟用户对着干。无痕模式下 setItem 会抛，吞掉即可（退化成按浏览器偏好）。
+    try {
+      localStorage.setItem(LOCALE_STORAGE_KEY, key);
+    } catch {}
     const newPath = pathname.replace(/^\/[a-z]{2}(-[a-z]+)?/, `/${key}`);
     // usePathname 不含 query/hash —— 不补会在切语言时丢掉 ?huginn 这类
     // 功能门控参数(data-batch 的效应还会因参数消失把已选工具回写成
@@ -70,8 +92,8 @@ export function LanguageSelector() {
     <>
       <Input
         allowClear
-        aria-label="Search language"
-        placeholder="Search language / 语言 / Idioma..."
+        aria-label={t("common.searchLanguage")}
+        placeholder={t("common.searchLanguage")}
         prefix={<TranslationOutlined />}
         value={langQuery}
         autoFocus={isMobile ? false : langOpen}
@@ -89,14 +111,14 @@ export function LanguageSelector() {
                   size={isMobile ? "middle" : "small"}
                   type={selected ? "primary" : "text"}
                   aria-current={selected ? "true" : undefined}
-                  style={{ justifyContent: "space-between", display: "flex", width: "100%", textAlign: "left" }}
+                  style={{ justifyContent: "space-between", display: "flex", width: "100%", textAlign: "start" }}
                   onClick={() => {
                     handleLanguageChange(lang.key);
                     setLangOpen(false);
                   }}>
                   <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {lang.label}
-                    <span style={{ opacity: 0.7, marginLeft: 6 }}>({lang.key})</span>
+                    <span style={{ opacity: 0.7, marginInlineStart: 6 }}>({lang.key})</span>
                   </span>
                   {selected && <CheckOutlined aria-hidden />}
                 </Button>
@@ -104,7 +126,7 @@ export function LanguageSelector() {
             );
           })}
         </Row>
-        {filteredLanguages.length === 0 && <div style={{ padding: 8, opacity: 0.45 }}>No match</div>}
+        {filteredLanguages.length === 0 && <div style={{ padding: 8, opacity: 0.45 }}>{t("common.noMatchFound")}</div>}
       </div>
     </>
   );
@@ -123,12 +145,21 @@ export function LanguageSelector() {
     </div>
   );
 
+  // 触发按钮两个分支共用同一份，语言名显隐交给 CSS（globals.css 的 `.lang-btn`）——
+  // 交给 isMobile 的话静态 HTML 永远出移动分支，hydrate 后桌面才补上语言名，头部会抖。
+  // isMobile 只留面板形态（Drawer / Dropdown）的选择，那要点开才可见。
+  const trigger = (
+    <Button className="lang-btn" type="text" icon={<TranslationOutlined />} aria-label={t("common.selectLanguage")} onClick={isMobile ? () => setLangOpen(true) : undefined}>
+      {currentLanguage}
+    </Button>
+  );
+
   return (
     <>
       {isMobile ? (
         <>
-          <Button type="text" icon={<TranslationOutlined />} aria-label="Select language" onClick={() => setLangOpen(true)} />
-          <Drawer title="Select Language / 选择语言" placement="bottom" onClose={() => setLangOpen(false)} open={langOpen} size="default" styles={{ body: { padding: 16 } }}>
+          {trigger}
+          <Drawer title={t("common.selectLanguage")} placement="bottom" onClose={() => setLangOpen(false)} open={langOpen} size="default" styles={{ body: { padding: 16 } }}>
             {renderLanguageList()}
           </Drawer>
         </>
@@ -142,9 +173,7 @@ export function LanguageSelector() {
           menu={{ items: [] }}
           popupRender={() => desktopPanel}
           placement="bottomRight">
-          <Button type="text" icon={<TranslationOutlined />} aria-label="Select language">
-            {currentLanguage}
-          </Button>
+          {trigger}
         </Dropdown>
       )}
     </>

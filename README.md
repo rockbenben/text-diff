@@ -2,24 +2,26 @@
 🔍 Text Diff
 </h1>
 <p align="center">
-    English | <a href="./README-zh.md">中文</a>
-</p>
-<p align="center">
     <em>Offline two-pane text & file comparison — highlight every difference and locate the first one in plain language</em>
+</p>
+
+<p align="center">
+    <b>English</b> · <a href="./README.zh.md">简体中文</a>
 </p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <a href="https://tools.newzone.top/en/text-diff"><img src="https://img.shields.io/badge/Live%20Demo-text--diff-blue" alt="Live Demo"></a>
+  <a href="https://github.com/rockbenben/365opensource"><img src="https://img.shields.io/badge/365%20Open%20Source%20Plan-%23016-1f6feb" alt="365 Open Source Plan #016"></a>
 </p>
 
-> 365 Open Source Plan #016 · Offline two-pane text & file comparison that highlights every difference and locates the first one
+**[▶ Try it online](https://tools.newzone.top/en/text-diff)** — nothing to install, nothing uploaded
 
-**Text Diff** compares two pieces of text or two files side by side, highlights every change down to the word or character, and tells you in one sentence where the first difference is — which line, which field. It supports split and unified (inline) views, structure-aware comparison for CSV/TSV/INI/JSON, whitespace/case-insensitive options, an overview ruler for jumping between changes, and one-click export to a standard unified-diff `.patch`. Everything runs entirely in your browser — no servers, no uploads.
+![Text Diff interface](./public/img/text-diff-en.webp "Text Diff interface")
 
-👉 **Try it online**: <https://tools.newzone.top/en/text-diff>
+Most diff tools hand you a wall of colour and leave you to find the part that matters. **Text Diff tells you in one sentence where the first difference is** — which line, which field — and gives you a click to jump straight there.
 
-![Text Diff interface](./public/img/text-diff-en.png "Text Diff interface")
+Beyond that it compares two pieces of text or two files side by side, highlights every change down to the word or character, and supports split and unified (inline) views, structure-aware comparison for CSV/TSV/INI/JSON, whitespace/case-insensitive options, an overview ruler for jumping between changes, and one-click export to a standard unified-diff `.patch`. Everything runs entirely in your browser — no servers, no uploads.
 
 ## Key Features
 
@@ -76,16 +78,10 @@ For very large inputs (beyond ~5000 lines per side) the O(n×m) line diff is gat
 
 For detailed usage instructions and deployment guides, see the **[Official Documentation](https://docs.newzone.top/en/guide/text/text-diff.html)**.
 
-## About the 365 Open Source Plan
-
-This project is #016 in the [365 Open Source Plan](https://github.com/rockbenben/365opensource).
-
-One person + AI, 300+ open source projects in a year. [Submit your idea →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
-
 ## Contributing
 
 Contributions are welcome! Feel free to open issues and pull requests.
 
-## License
+## About the 365 Open Source Plan
 
-MIT © 2025 [rockbenben](https://github.com/rockbenben). See [LICENSE](./LICENSE).
+Project **#016** of the [365 Open Source Plan](https://github.com/rockbenben/365opensource) — one person + AI, 300+ open-source projects in a year. [Submit your idea →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

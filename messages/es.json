@@ -1,6 +1,12 @@
 {
   "common": {
-    "supportEscapeChars": "Soporta caracteres escape: \\r\n (nueva línea), \\r (retorno), \\t (tab), \\s (espacio), \\\\ (barra invertida)",
+    "exportFolder": "Carpeta de exportación",
+    "exportFolderDefault": "Las exportaciones van a la carpeta de descargas predeterminada.",
+    "exportFolderBlocked": "El navegador no acepta el Escritorio, Documentos, Descargas ni la carpeta de usuario en sí: elige una subcarpeta u otra carpeta.",
+    "exportFolderCurrent": "Las exportaciones van a {dir}",
+    "exportFolderReset": "Volver a la carpeta de descargas",
+    "exportFolderFailed": "No se pudo establecer la carpeta de exportación.",
+    "supportEscapeChars": "Soporta caracteres escape: \\n (nueva línea), \\r (retorno), \\t (tab), \\s (espacio), \\\\ (barra invertida)",
     "skipToContent": "Saltar al contenido principal",
     "fileProcessFailed": "No se pudo procesar el archivo: comprueba su codificación o prueba con otro",
     "fileReadFailed": "No se pudo leer el archivo",
@@ -8,7 +14,7 @@
     "ignoredLangCodes": "Se ignoraron códigos de idioma no reconocidos: {codes}",
     "partialExportFailed": "No se pudieron exportar algunos idiomas: {items}",
     "userGuide": "Guía de Usuario",
-    "privacyNotice": "Tu clave API y datos se almacenan localmente en tu navegador para garantizar la privacidad. Si tienes preguntas o sugerencias, contáctanos a través de la comunidad o la página de comentarios.",
+    "apiKeyPrivacy": "Se guarda solo en este navegador; nunca se sincroniza con un servidor.",
     "dragAndDropText": "Haz clic o arrastra un archivo aquí para subir",
     "supportedFormats": "Formatos soportados:",
     "configuration": "Configuración",
@@ -24,6 +30,11 @@
     "selectMultiTargetLanguages": "Seleccionar múltiples idiomas destino",
     "noTargetLanguage": "Selecciona al menos un idioma destino.",
     "translationError": "Error de traducción",
+    "translationCancelled": "Traducción cancelada",
+    "translationStopped": "Detenido",
+    "resumeFromCache": "Las líneas traducidas están en caché: vuelve a traducir para continuar donde se detuvo",
+    "cancelKeepsProgress": "Cancelar conserva lo ya traducido",
+    "dismiss": "Cerrar",
     "translationAPI": "API de Traducción",
     "enter": "Entrar",
     "getApiKey": "Obtener API Key",
@@ -35,9 +46,11 @@
     "hideResultsTooltip": "Ocultar vista previa de resultados para evitar retrasos por contenido extenso",
     "hideResults": "Ocultar Vista Previa",
     "directExportTooltip": "Descargar automáticamente tras procesar, omitir vista previa",
-    "directExport": "Auto Exportar",
+    "directExport": "Exportación automática",
     "useCache": "Usar Caché",
     "useCacheTooltip": "Reutilizar caché de traducción anterior para acelerar el proceso",
+    "cacheOff": "Caché desactivada",
+    "cacheOffTooltip": "La caché de traducción está desactivada: cada línea se vuelve a solicitar y una ejecución interrumpida no puede reanudarse. Haz clic para reactivarla.",
     "contextAwareTranslation": "Traducción Contextual",
     "contextAwareTranslationTooltip": "Traducir con contexto para mayor coherencia y precisión (solo modelos IA)",
     "multiLanguageMode": "Modo Multilenguaje",
@@ -49,27 +62,30 @@
     "extractText": "Extraer Texto",
     "translationResult": "Resultado",
     "copy": "Copiar",
+    "expand": "más",
     "remove": "Eliminar",
     "exportFile": "Exportar",
     "exportAllFile": "Exportar Todo",
     "exportedFile": "Exportado",
     "fileExported": "Archivo exportado: {fileName}",
+    "exportFailed": "No se pudo exportar el archivo: {fileName}",
+    "exportedToFolder": "Guardado en {dir}: {fileName}",
     "batchDownloaded": "Procesamiento completo, el archivo se descargó automáticamente",
     "extractedText": "Texto Extraído",
     "translating": "Traduciendo...",
     "translateDone": "Traducción completada",
+    "translateDonePartial": "Las líneas fallidas conservan el texto original",
+    "translateDoneIncomplete": "Algunos elementos no se completaron",
     "multiTranslating": "Traduciendo, total idiomas:",
     "model": "Modelo",
     "sameLanguageTarget": "Idiomas origen y destino iguales; destino ajustado automáticamente a",
     "sameLanguageSource": "Idiomas origen y destino iguales; origen ajustado automáticamente a",
     "enterApiKey": "Introduce clave API o cambia a API Gratuita.",
-    "enterApiUrl": "Por favor configure la URL de API en 'Configuración de API'.",
-    "deepLXUnavailable": "El servicio DeepLX está temporalmente inaccesible, se cambió automáticamente a GTX API (Free).",
-    "deeplUnavailable": "El servicio DeepL está temporalmente inaccesible, revisa la configuración relacionada en Configuración de API.",
-    "llmUnavailable": "El servicio LLM está temporalmente inaccesible, revisa la configuración relacionada en Configuración de API.",
+    "enterApiUrl": "Por favor, configura la URL de API en «Más ajustes del Provider».",
+    "serviceUnavailable": "{service} no está disponible temporalmente: comprueba la red y la dirección del servicio, inténtalo más tarde o cambia a otro servicio de traducción.",
+    "serviceUnavailableSwitched": "{service} no está disponible temporalmente: se cambió automáticamente a {fallback}. Compruébalo y vuelve a seleccionarlo en los ajustes si quieres seguir usándolo.",
     "noFileUploaded": "Por favor sube un archivo primero.",
     "translationExported": "Traducción completa, archivos exportados",
-    "sourceTextPlaceholder": "Introduce o pega el texto a procesar...",
     "noSourceText": "Por favor introduce o pega texto.",
     "textExtracted": "Texto extraído, ",
     "sourceArea": "Área Entrada",
@@ -85,14 +101,14 @@
     "resultToSourceTooltip": "Sobrescribir el área de entrada con el texto del resultado",
     "readOnlyMode": "Modo Solo Lectura",
     "readOnlyModeTooltip": "El texto es demasiado largo: el editor está temporalmente en solo lectura y muestra solo una vista previa parcial. Tu contenido completo no se ve afectado: el procesamiento y la exportación siguen usando todo el texto.",
-    "clearInputTooltip": "Limpiar contenido introducido y archivos subidos",
     "smartLineBreak": "Salto de Línea Inteligente",
-    "replaceText": "Reemplazar Texto ",
+    "replaceText": "Reemplazar Texto",
     "generateJson": "Generar JSON",
     "exportSettingTooltip": "Exportar configuración a archivo",
     "importSettingTooltip": "Importar configuración desde archivo",
     "exportSettingSuccess": "Ajustes exportados",
     "exportSettingError": "Fallo al exportar, reintenta",
+    "dictLoadFailed": "No se pudo cargar el diccionario de conversión: revisa la red o recarga la página",
     "importSettingSuccess": "Ajustes importados",
     "importSettingError": "Fallo al importar, reintenta",
     "removeCharsAfterTranslation": "Eliminar caracteres tras traducción",
@@ -114,14 +130,15 @@
     "customExportFilename": "Patrón de nombre de archivo",
     "customExportFilenameTooltip": "'{'name'}' = nombre original, '{'lang'}' = idioma, '{'ext'}' = extensión, '{'date'}' = fecha, '{'time'}' = hora; en modo multiidioma se agrega '{'lang'}' automáticamente para evitar conflictos de nombres",
     "partialFailureTitle": "{count} línea(s) fallaron",
-    "partialFailureDesc": "Las líneas fallidas conservaron el texto original como marcador de posición, manteniendo el archivo utilizable. Estos fallos suelen ser interrupciones de red o problemas temporales del servicio de traducción — los servicios gratuitos y los servidores autoalojados son especialmente propensos a esto, y no es un problema de tu configuración. Haz clic en Reintentar para continuar (las líneas exitosas vienen de la caché, sin retraducción); si sigue fallando, inténtalo más tarde o prueba otro servicio de traducción. O haz clic en Ver líneas fallidas para gestionarlas manualmente.",
-    "retryFailedLines": "Reintentar",
+    "partialFailureDesc": "Esas líneas conservan el texto original, así que la estructura del archivo está intacta. Reintentar solo las reenvía; el resto sale de la caché.",
+    "partialFailureWhy": "Habitual en servicios gratuitos y autoalojados; casi nunca es tu configuración.",
+    "retryFailedLines": "Reintentar líneas fallidas",
     "viewFailedLines": "Ver líneas fallidas",
     "failedLinesModalTitle": "{count} línea(s) fallida(s)",
     "copyAllFailed": "Copiar todo",
     "closeFailedLinesModal": "Cerrar",
     "failedLanguagesTitle": "{count} idioma(s) de destino fallaron",
-    "failedLanguagesDesc": "Todos los lotes de estos idiomas fallaron — generalmente por fallos de LLM local, límites de tasa de API o rechazo del modelo a un idioma específico. Copie los códigos y vuelva a ejecutar solo con ellos (pegue en Entrada rápida por códigos de idioma); los demás usarán caché y se omitirán.",
+    "failedLanguagesDesc": "Todos los lotes de estos idiomas fallaron — generalmente por fallos de LLM local, límites de frecuencia de la API o rechazo del modelo a un idioma específico. Copia los códigos y vuelve a ejecutar solo con ellos (pega en 'Configuración multilingüe'); los demás usarán caché y se omitirán.",
     "copyAllFailedLanguages": "Copiar códigos de idioma",
     "apiStatusFreeApi": "Free API",
     "apiStatusNeedsConfig": "Requiere config.",
@@ -132,12 +149,9 @@
     "apiStatusTimeout": "Tiempo de conexión agotado",
     "testConnection": "Probar conexión",
     "moreProviderSettings": "Más ajustes del Provider",
-    "gtxFreeAPIUnavailable": "El servicio GTX Free está temporalmente inaccesible — podría ser una restricción de red. Inténtalo de nuevo más tarde o cambia a otro servicio de traducción.",
-    "edgeFreeAPIUnavailable": "El servicio Edge Free está temporalmente inaccesible — podría ser una restricción de red. Inténtalo de nuevo más tarde o cambia a otro servicio de traducción.",
-    "translategemmaUnavailable": "El servicio TranslateGemma está temporalmente inaccesible, asegúrate de que tu servidor local (LM Studio / llama.cpp / Ollama) esté en ejecución y la URL sea correcta.",
     "networkUnavailable": "El servicio de traducción está temporalmente inaccesible — podría ser un problema de red o el servicio está teniendo un percance. Inténtalo de nuevo más tarde o cambia a otro servicio de traducción.",
     "translationTimeout": "La solicitud de traducción agotó el tiempo de espera — podría ser una red lenta o el servicio está tardando demasiado en responder. Inténtalo de nuevo más tarde o cambia a otro servicio de traducción.",
-    "translationTimeoutLocal": "Se agotó el tiempo de la traducción con el modelo local. Un LLM local puede quedarse atascado en un bucle de repetición: reduce max_tokens (el límite de salida) en la configuración avanzada y asegúrate de que el idioma de origen seleccionado coincida con el texto real.",
+    "translationTimeoutLocal": "Se agotó el tiempo de espera de la traducción con el modelo local. Causas habituales: la concurrencia supera las ranuras paralelas de tu servidor local y las solicitudes esperan en cola hasta agotar el tiempo; o el modelo se queda en un bucle repetitivo (normalmente por un idioma de origen incorrecto). Reduce «Parámetros de llamada → Líneas simultáneas» en este servicio o aumenta «Ajustes Avanzados → Tiempo de espera», y comprueba que el idioma de origen coincida con el texto real.",
     "langGroupCommon": "Comunes",
     "langGroupEurope": "Europa",
     "langGroupMiddleEast": "Oriente Medio",
@@ -161,13 +175,38 @@
     "errorHint408": "La solicitud expiró, vuelva a intentarlo",
     "errorHint413": "Texto demasiado grande — reduzca el tamaño del bloque o divida el texto",
     "errorHint422": "Un parámetro no es compatible con este modelo — a menudo opciones de razonamiento",
-    "errorHint429": "Límite de solicitudes superado, inténtelo más tarde",
+    "errorHint429": "Límite de solicitudes superado, inténtalo más tarde",
     "errorHint456": "Cuota de traducción agotada para este período",
     "errorHint5xx": "Error del servidor, inténtelo más tarde",
-    "errorHintRelay": "Error de red (posiblemente CORS): active \"Relé API\" en los ajustes de API",
-    "errorHintRelay403": "La API devolvió 403 Forbidden: active \"Relé API\" en los ajustes de API",
+    "errorHintRelay": "Error de red (posiblemente CORS): active \"Relé API\" en «Más ajustes del Provider»",
+    "errorHintRelay403": "La API devolvió 403 Forbidden: active \"Relé API\" en «Más ajustes del Provider»",
+    "errorHintCors": "No se puede conectar con esta dirección: compruebe la dirección y que el servicio permita solicitudes de origen cruzado (CORS). Las pasarelas autoalojadas y los modelos locales deben habilitarlo, o use su propio Relé API",
     "errorHintGeminiKey": "No se puede conectar con Gemini: compruebe primero su red (algunas redes no pueden acceder directamente a los servicios de Google). Si la red funciona, desde el 19 de junio de 2026 Google rechaza las claves API sin restricciones — regenere su clave en AI Studio (restringida por defecto) o añada una restricción de Gemini API a la clave antigua en la consola de Google Cloud",
-    "rateLimitCooldown": "Límite de solicitudes alcanzado — pausa breve, se reintentará automáticamente"
+    "rateLimitCooldown": "Límite de solicitudes alcanzado — pausa breve, se reintentará automáticamente",
+    "faqHeading": "Preguntas frecuentes",
+    "homeIndexEyebrow": "Índice",
+    "homeCategoryEyebrow": "{n} categorías",
+    "openNavigation": "Abrir navegación",
+    "goHome": "Ir a la página de inicio",
+    "primaryNav": "Navegación principal",
+    "toggleTheme": "Cambiar tema",
+    "communityLinks": "Enlaces de la comunidad",
+    "viewOnGitHub": "Ver en GitHub",
+    "toolCategories": "Categorías de herramientas",
+    "searchLanguage": "Buscar idioma",
+    "selectLanguage": "Seleccionar idioma",
+    "noMatchFound": "Sin resultados",
+    "backToTop": "Volver arriba",
+    "exportOptions": "Opciones de exportación",
+    "privacyNotice": "Tu clave API y datos se almacenan localmente en tu navegador para garantizar la privacidad. Si tienes preguntas o sugerencias, contáctanos a través de la comunidad o la página de comentarios.",
+    "deepLXUnavailable": "El servicio DeepLX está temporalmente inaccesible, se cambió automáticamente a GTX API (Free).",
+    "deeplUnavailable": "El servicio DeepL está temporalmente inaccesible, revisa la configuración relacionada en Configuración de API.",
+    "llmUnavailable": "El servicio LLM está temporalmente inaccesible, revisa la configuración relacionada en Configuración de API.",
+    "sourceTextPlaceholder": "Introduce o pega el texto a procesar...",
+    "clearInputTooltip": "Limpiar contenido introducido y archivos subidos",
+    "gtxFreeAPIUnavailable": "El servicio GTX Free está temporalmente inaccesible — podría ser una restricción de red. Inténtalo de nuevo más tarde o cambia a otro servicio de traducción.",
+    "edgeFreeAPIUnavailable": "El servicio Edge Free está temporalmente inaccesible — podría ser una restricción de red. Inténtalo de nuevo más tarde o cambia a otro servicio de traducción.",
+    "translategemmaUnavailable": "El servicio TranslateGemma está temporalmente inaccesible, asegúrate de que tu servidor local (LM Studio / llama.cpp / Ollama) esté en ejecución y la URL sea correcta."
   },
   "tools": {
     "subtitleTranslator": {
@@ -176,7 +215,7 @@
     },
     "jsonTranslate": {
       "title": "Traductor JSON i18n",
-      "description": "Herramienta eficiente de traducción JSON multilingüe"
+      "description": "Traducción por lote de archivos de idioma i18n, con coincidencia JSONPath y mapeo de claves"
     },
     "mdTranslator": {
       "title": "Traductor Markdown",
@@ -184,11 +223,11 @@
     },
     "textSplitter": {
       "title": "Divisor de Texto",
-      "description": "División inteligente de texto largo para IA y redes sociales"
+      "description": "Divide textos largos por separador, longitud o frase — y vuelve a unirlos"
     },
     "chineseConversion": {
       "title": "Conversión chino",
-      "description": "Convertir en lote simplificado, tradicional Taiwán, tradicional Hong Kong y forma nueva de caracteres japoneses"
+      "description": "Conversión por lotes de simplificado, tradicional de Taiwán, tradicional de Hong Kong y shinjitai con soporte para subida de archivos"
     },
     "novelProcessor": {
       "title": "Formateador de novelas web chinas",
@@ -199,7 +238,7 @@
       "description": "Coincidencia regex, ordenación, filtrado y más para el procesamiento masivo de texto"
     },
     "dataBatch": {
-      "title": "Procesador de texto",
+      "title": "Procesador de datos por lotes",
       "description": "Procesamiento por lotes de datos Excel — deduplicación, extracción por columnas, fusión, reglas encadenadas"
     },
     "textJoiner": {
@@ -250,7 +289,7 @@
       "faq": [
         {
           "q": "¿Qué formatos de archivo se admiten para comparación?",
-          "a": "Cinco formatos admitidos: texto plano, CSV, TSV, INI y JSON. La herramienta detecta automáticamente el formatopor la extensión o contenido, o puede cambiar manualmente. El modo CSV/TSV alinea diferencias por columna, el modo INI compara pares clave-valor, facilitando detectar cambios estructurales."
+          "a": "Cinco formatos admitidos: texto plano, CSV, TSV, INI y JSON. La herramienta detecta automáticamente el formato por la extensión o contenido, o puede cambiar manualmente. El modo CSV/TSV alinea diferencias por columna, el modo INI compara pares clave-valor, facilitando detectar cambios estructurales."
         },
         {
           "q": "¿Qué pasa si los dos textos son demasiado diferentes y la comparación expira?",
@@ -283,6 +322,10 @@
         "Exportación como archivo .patch estándar, compatible con git apply",
         "Protección contra tiempo de espera para textos grandes con opción de forzar comparación"
       ]
+    },
+    "braceExpander": {
+      "title": "Expansor de llaves",
+      "description": "Expande una plantilla en una lista completa, sintaxis de bash"
     }
   },
   "navigation": {
@@ -295,16 +338,18 @@
     "otherTools": "Más herramientas",
     "externalTools": {
       "legendtalk": "Mesa redonda de pensadores IA",
-      "imgprompt": "Prompts de imágenes IA"
+      "imgprompt": "Prompts de imágenes IA",
+      "learndata": "LearnData Notas de Código Abierto",
+      "hub365": "365 Código Abierto"
     }
   },
   "Metadata": {
     "title": "ToolsByAI | Herramientas de Traducción y Dev con IA",
-    "description": "ToolsByAI: 17 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador.",
+    "description": "ToolsByAI: 20 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador.",
     "homeTitle": "Suite ToolsByAI",
-    "homeDescription": "20+ herramientas para traducción, texto, JSON y conversión de datos. Impulsa la eficiencia de desarrolladores y creadores.",
+    "homeDescription": "20 herramientas para traducción, texto, JSON y conversión de datos. Impulsa la eficiencia de desarrolladores y creadores.",
     "ogTitle": "ToolsByAI | Herramientas de Traducción y Dev con IA",
-    "ogDescription": "ToolsByAI: 17 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador."
+    "ogDescription": "ToolsByAI: 20 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador."
   },
   "CopyToClipboard": {
     "empty": "Contenido vacío, nada que copiar",
@@ -323,6 +368,11 @@
     "reaction4": "Confuso",
     "placeholder": "Deja un mensaje (no requiere login, email opcional para respuesta)",
     "metaDescription": "Página de feedback para Tools By AI: reporta errores, sugiere funciones, comparte casos de uso. Basada en Waline, publicación anónima."
+  },
+  "AppError": {
+    "title": "Error al cargar la página",
+    "description": "No se pudo cargar la página; puede ocurrir justo después de una actualización del sitio. Vuelve a cargarla.",
+    "reload": "Recargar"
   },
   "NotFound": {
     "title": "Página no encontrada",
@@ -344,7 +394,7 @@
     "prev": "Anterior",
     "next": "Siguiente",
     "diffOnly": "Solo diferencias",
-    "ignoreWhitespace": "Ignorar espacios circundantes",
+    "ignoreWhitespace": "Ignorar espacios en blanco",
     "ignoreCase": "Ignorar mayúsculas",
     "charLevel": "A nivel de caracteres",
     "blockNav": "{i} / {n} bloques",
@@ -378,6 +428,9 @@
     "exportDiff": "Exportar diff",
     "exportDiffTooltip": "Exportar como diff unificado (.patch), compatible con git apply / herramientas de revisión",
     "exportDone": "Archivo diff exportado",
-    "similarityLabel": "Similitud"
+    "similarityLabel": "Similitud",
+    "encodingLabel": "Codificación del archivo",
+    "contextLinesLabel": "Líneas de contexto",
+    "formatLabel": "Formato de comparación"
   }
 }

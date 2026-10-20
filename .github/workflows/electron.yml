@@ -1,0 +1,98 @@
+name: Build Electron (Windows unpacked)
+
+# 手动触发,或 push 一个 `v*` tag 时触发:内网用的 Electron 桌面版。
+# 应用代码在 feat/electron-desktop 分支,所以这里显式 checkout 该分支。
+# 注意:此处固定了分支名;若将来该分支合并/改名,需同步更新下方 checkout 的 ref。
+#
+# 此 workflow 只存在于 main(桌面发布中枢):tag 触发时 GitHub 用“被 tag 的 main
+# commit”里的定义。feat/electron-desktop 不保留 workflow 副本(会与 main 漂移)——
+# 无论打 tag 还是手动 “Run workflow”,都从 main 触发;下方 pin 的 ref 保证仍构建该
+# 分支的代码。在 main 打一个 v* tag 即可同时驱动本 workflow 与 Tauri workflow。
+#
+# 产物为 win-unpacked 目录,会:
+#   1. 作为 workflow artifact 上传(下载时 GitHub 自动打包成 zip,内网下载用);
+#   2. tag 触发时,额外打包成 zip 上传到对应的 GitHub Release。
+#
+# Release 由 “Build Desktop App”(Tauri)workflow 创建(草稿),tag 相同。
+# 本 workflow 只是把 Electron 产物追加到那个 Release,所以会先等它出现。
+# (Tauri 那条 workflow 的矩阵跑完之后,它的 publish job 会把草稿发布出去;
+#  两边并行,所以这个 zip 可能落在「已发布的 release」上,也可能落在草稿上——
+#  两种都对:release 页面上的资产是齐的,只是齐的先后有差。)
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: feat/electron-desktop
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: yarn
+
+      # tag 触发时,用 tag(去掉前缀 v)作为应用版本写入 package.json,让构建出的
+      # win-unpacked 内嵌版本与 Release 一致。手动构建无 tag,跳过,沿用分支当前版本。
+      - name: Sync version from tag
+        if: github.event_name == 'push'
+        shell: bash
+        run: npm pkg set version="${GITHUB_REF_NAME#v}"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run electron unit tests
+        run: yarn test:electron
+
+      - name: Build unpacked app
+        run: yarn electron:build
+
+      - name: Upload unpacked artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: TextDiff-unpacked
+          path: dist-electron/win-unpacked
+          if-no-files-found: error
+
+      # 仅在 tag 触发时把产物追加到 Release。手动触发没有 Release,跳过。
+      - name: Zip unpacked app
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          # 版本号取自 tag(去掉前缀 v),保证压缩包名与 Release 版本一致。
+          # 不要用 feat 分支的 package.json:它可能滞后于 tag,导致命名错版本。
+          VERSION="${GITHUB_REF_NAME#v}"
+          7z a "TextDiff_${VERSION}_win-unpacked.zip" "./dist-electron/win-unpacked"
+          echo "APP_VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Attach unpacked zip to the release
+        if: github.event_name == 'push'
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.ref_name }}"
+          # Tauri workflow 会创建这个(草稿)Release;它要编译 Rust(四平台
+          # 矩阵),通常比 Electron 慢很多,所以这里轮询等待 Release 出现
+          # (最多约 20 分钟);超时仍未出现就报错退出,便于排查。
+          for i in $(seq 1 40); do
+            if gh release view "$TAG" >/dev/null 2>&1; then
+              echo "Release $TAG is ready."
+              break
+            fi
+            if [ "$i" -eq 40 ]; then
+              echo "::error::Release $TAG never appeared; is the Tauri workflow running for this tag?"
+              exit 1
+            fi
+            echo "Release $TAG not ready yet, waiting... ($i/40)"
+            sleep 30
+          done
+          gh release upload "$TAG" "TextDiff_${APP_VERSION}_win-unpacked.zip" --clobber

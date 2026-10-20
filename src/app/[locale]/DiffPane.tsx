@@ -201,7 +201,17 @@ const DiffPane = ({ result, diffOnly, context, view, activeHunk, onSelectHunk, o
   }, [items.length, result.hunks, result.rows, rowToItem]);
 
   return (
-    <div className={maximized ? `${styles.diff} ${styles.diffFill}` : styles.diff}>
+    // GEOMETRY is pinned LTR while the rest of the page mirrors. Not a shortcut —
+    // the row is `[gutter | code]`, and a mirrored gutter cannot render LTR code:
+    // /ar measured the line numbers landing on the gutter's OUTER edge (their
+    // hairline and the −/+ markers follow box-shadow/left-anchored physical rules
+    // the grid columns don't carry), and a 4-space indent resolving to the right of
+    // `return 1` because whitespace at an RTL line's start goes to the inline-start.
+    // This pin covers the grid, the gutters and the markers ONLY. It must not reach
+    // the text itself — a pinned LTR paragraph is exactly what throws an Arabic
+    // line's trailing ? to the reading start and reorders a mixed CSV row's fields,
+    // so each line's content direction comes from the .tx/.utx rules instead.
+    <div className={maximized ? `${styles.diff} ${styles.diffFill}` : styles.diff} dir="ltr">
       <div className={styles.withRuler}>
         <div ref={scrollRef} className={styles.scroll}>
           <div className={styles.sizer} style={{ height: virtualizer.getTotalSize() }}>

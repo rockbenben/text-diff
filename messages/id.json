@@ -1,6 +1,12 @@
 {
   "common": {
-    "supportEscapeChars": "Mendukung karakter escape: \\r\n (baris baru), \\r (kembali), \\t (tab), \\s (spasi), \\\\ (garis miring terbalik)",
+    "exportFolder": "Folder ekspor",
+    "exportFolderDefault": "Hasil ekspor masuk ke folder unduhan bawaan.",
+    "exportFolderBlocked": "Browser tidak menerima Desktop, Documents, Downloads, dan folder pengguna itu sendiri — pilih subfolder atau folder lain.",
+    "exportFolderCurrent": "Hasil ekspor masuk ke {dir}",
+    "exportFolderReset": "Kembali ke folder unduhan",
+    "exportFolderFailed": "Tidak dapat menetapkan folder ekspor.",
+    "supportEscapeChars": "Mendukung karakter escape: \\n (baris baru), \\r (kembali), \\t (tab), \\s (spasi), \\\\ (garis miring terbalik)",
     "skipToContent": "Lewati ke konten utama",
     "fileProcessFailed": "Gagal memproses file — periksa encoding-nya atau coba file lain",
     "fileReadFailed": "Gagal membaca file",
@@ -8,7 +14,7 @@
     "ignoredLangCodes": "Mengabaikan kode bahasa yang tidak dikenali: {codes}",
     "partialExportFailed": "Gagal mengekspor beberapa bahasa: {items}",
     "userGuide": "Panduan Pengguna",
-    "privacyNotice": "Kunci API dan data Anda hanya disimpan secara lokal di browser Anda untuk memastikan privasi. Jika Anda memiliki pertanyaan atau saran, silakan hubungi kami melalui komunitas atau halaman umpan balik.",
+    "apiKeyPrivacy": "Hanya disimpan di browser ini, tidak pernah disinkronkan ke server.",
     "dragAndDropText": "Klik atau seret file ke sini untuk mengunggah",
     "supportedFormats": "Format yang didukung:",
     "configuration": "Konfigurasi",
@@ -24,8 +30,13 @@
     "selectMultiTargetLanguages": "Pilih beberapa bahasa target",
     "noTargetLanguage": "Pilih setidaknya satu bahasa target.",
     "translationError": "Terjemahan gagal",
+    "translationCancelled": "Terjemahan dibatalkan",
+    "translationStopped": "Dihentikan",
+    "resumeFromCache": "Baris yang sudah diterjemahkan tersimpan di cache — terjemahkan lagi untuk melanjutkan dari titik berhenti",
+    "cancelKeepsProgress": "Pembatalan tetap menyimpan hasil yang sudah ada",
+    "dismiss": "Tutup",
     "translationAPI": "API Terjemahan",
-    "enter": "Masuk",
+    "enter": "Masukkan",
     "getApiKey": "Dapatkan Kunci API",
     "charLabel": "Karakter",
     "lineLabel": "Baris",
@@ -38,6 +49,8 @@
     "directExport": "Ekspor Otomatis",
     "useCache": "Gunakan Cache",
     "useCacheTooltip": "Gunakan kembali cache terjemahan sebelumnya untuk mempercepat pemrosesan",
+    "cacheOff": "Cache nonaktif",
+    "cacheOffTooltip": "Cache terjemahan nonaktif: setiap baris diminta ulang dan proses yang terhenti tidak dapat dilanjutkan. Klik untuk mengaktifkan kembali.",
     "contextAwareTranslation": "Terjemahan Kontekstual",
     "contextAwareTranslationTooltip": "Terjemahkan dengan konteks untuk koherensi dan akurasi yang lebih baik (hanya model AI)",
     "multiLanguageMode": "Mode Multi-Bahasa",
@@ -49,6 +62,7 @@
     "extractText": "Ekstrak Teks",
     "translationResult": "Hasil",
     "copy": "Salin",
+    "expand": "selengkapnya",
     "remove": "Hapus",
     "exportFile": "Ekspor",
     "exportAllFile": "Ekspor Semua",
@@ -56,15 +70,16 @@
     "extractedText": "Teks Diekstrak",
     "translating": "Menerjemahkan...",
     "translateDone": "Terjemahan selesai",
+    "translateDonePartial": "Baris yang gagal tetap berisi teks asli",
+    "translateDoneIncomplete": "Sebagian item belum selesai",
     "multiTranslating": "Menerjemahkan, total bahasa:",
     "model": "Model",
     "sameLanguageTarget": "Bahasa sumber dan target sama; target otomatis disesuaikan ke",
     "sameLanguageSource": "Bahasa sumber dan target sama; sumber otomatis disesuaikan ke",
     "enterApiKey": "Masukkan kunci API atau beralih ke API Gratis.",
-    "enterApiUrl": "Silakan konfigurasikan URL API di 'Pengaturan API'.",
-    "deepLXUnavailable": "Layanan DeepLX sementara tidak dapat dijangkau, otomatis beralih ke GTX API (Free).",
-    "deeplUnavailable": "Layanan DeepL sementara tidak dapat dijangkau, periksa pengaturan terkait di Pengaturan API.",
-    "llmUnavailable": "Layanan LLM sementara tidak dapat dijangkau, periksa pengaturan terkait di Pengaturan API.",
+    "enterApiUrl": "Silakan konfigurasikan URL API di \"Pengaturan Provider lain\".",
+    "serviceUnavailable": "{service} sementara tidak dapat dijangkau — periksa jaringan dan alamat layanan, coba lagi nanti, atau beralih ke layanan terjemahan lain.",
+    "serviceUnavailableSwitched": "{service} sementara tidak dapat dijangkau — otomatis beralih ke {fallback}. Periksa lalu pilih kembali di pengaturan jika ingin terus memakainya.",
     "noFileUploaded": "Silakan unggah file terlebih dahulu.",
     "translationExported": "Terjemahan selesai, file diekspor",
     "noSourceText": "Silakan masukkan atau tempel teks.",
@@ -80,6 +95,7 @@
     "importSettingTooltip": "Impor konfigurasi dari file",
     "exportSettingSuccess": "Pengaturan diekspor",
     "exportSettingError": "Ekspor gagal, coba lagi",
+    "dictLoadFailed": "Gagal memuat kamus konversi — periksa jaringan atau muat ulang halaman",
     "importSettingSuccess": "Pengaturan diimpor",
     "importSettingError": "Impor gagal, coba lagi",
     "removeCharsAfterTranslation": "Hapus karakter setelah terjemahan",
@@ -101,14 +117,15 @@
     "customExportFilename": "Pola Nama File Ekspor",
     "customExportFilenameTooltip": "'{'name'}' = nama file asli, '{'lang'}' = bahasa, '{'ext'}' = ekstensi, '{'date'}' = tanggal, '{'time'}' = waktu; dalam mode multibahasa, '{'lang'}' ditambahkan otomatis untuk mencegah bentrokan nama",
     "partialFailureTitle": "{count} baris gagal diterjemahkan",
-    "partialFailureDesc": "Baris yang gagal mempertahankan teks asli sebagai placeholder, file tetap dapat digunakan. Kegagalan semacam ini biasanya disebabkan oleh fluktuasi jaringan atau ketidakstabilan sementara layanan terjemahan — layanan gratis dan server yang di-host sendiri sangat rentan, dan ini bukan masalah konfigurasi Anda. Klik Coba lagi untuk melanjutkan (baris yang berhasil berasal dari cache, tanpa penerjemahan ulang); jika tetap gagal, coba lagi nanti atau beralih ke layanan terjemahan lain. Atau klik Lihat baris yang gagal untuk menanganinya secara manual.",
-    "retryFailedLines": "Coba lagi",
+    "partialFailureDesc": "Baris-baris itu tetap berisi teks asli, jadi struktur berkas utuh. Coba lagi hanya mengirim ulang baris tersebut; sisanya dari cache.",
+    "partialFailureWhy": "Umum pada layanan gratis dan self-hosted — biasanya bukan masalah pengaturan Anda.",
+    "retryFailedLines": "Coba lagi baris yang gagal",
     "viewFailedLines": "Lihat baris yang gagal",
     "failedLinesModalTitle": "{count} baris yang gagal",
     "copyAllFailed": "Salin semua",
     "closeFailedLinesModal": "Tutup",
     "failedLanguagesTitle": "{count} bahasa target gagal",
-    "failedLanguagesDesc": "Semua batch untuk bahasa-bahasa ini gagal — biasanya karena masalah LLM lokal, batas tingkat API, atau penolakan model terhadap bahasa tertentu. Salin kode dan jalankan ulang hanya untuk mereka (tempelkan di Entri Cepat melalui Kode Bahasa); yang lain akan dilewati dari cache.",
+    "failedLanguagesDesc": "Semua batch untuk bahasa-bahasa ini gagal — biasanya karena masalah LLM lokal, batas laju API, atau penolakan model terhadap bahasa tertentu. Salin kode dan jalankan ulang hanya untuk mereka (tempelkan di 'Pengaturan Multi-Bahasa'); yang lain akan dilewati dari cache.",
     "copyAllFailedLanguages": "Salin kode bahasa",
     "apiStatusFreeApi": "Free API",
     "apiStatusNeedsConfig": "Perlu konfig.",
@@ -125,19 +142,16 @@
     "resultToSourceTooltip": "Timpa kotak input dengan teks hasil",
     "readOnlyMode": "Mode Hanya-Baca",
     "readOnlyModeTooltip": "Teks terlalu panjang: editor sementara hanya-baca dan hanya menampilkan pratinjau sebagian. Konten lengkap Anda tidak terpengaruh — pemrosesan dan ekspor tetap menggunakan seluruh teks.",
-    "clearInputTooltip": "Bersihkan konten input dan file yang diunggah",
     "fileExported": "File diekspor: {fileName}",
+    "exportFailed": "Gagal mengekspor file: {fileName}",
+    "exportedToFolder": "Disimpan ke {dir}: {fileName}",
     "batchDownloaded": "Pemrosesan selesai, file diunduh otomatis",
-    "sourceTextPlaceholder": "Masukkan atau tempel teks yang akan diproses...",
     "smartLineBreak": "Jeda Baris Cerdas",
-    "replaceText": "Ganti Teks ",
+    "replaceText": "Ganti Teks",
     "generateJson": "Hasilkan JSON",
-    "gtxFreeAPIUnavailable": "Layanan GTX Free sementara tidak dapat dijangkau — mungkin pembatasan jaringan. Silakan coba lagi nanti atau beralih ke layanan terjemahan lain.",
-    "edgeFreeAPIUnavailable": "Layanan Edge Free sementara tidak dapat dijangkau — mungkin pembatasan jaringan. Silakan coba lagi nanti atau beralih ke layanan terjemahan lain.",
-    "translategemmaUnavailable": "Layanan TranslateGemma sementara tidak dapat dijangkau, pastikan server lokal Anda (LM Studio / llama.cpp / Ollama) sedang berjalan dan URL sudah benar.",
     "networkUnavailable": "Layanan terjemahan sementara tidak dapat dijangkau — bisa jadi masalah jaringan atau gangguan sementara pada layanan. Silakan coba lagi nanti atau beralih ke layanan terjemahan lain.",
     "translationTimeout": "Permintaan terjemahan habis waktu — bisa jadi jaringan lambat atau layanan terlalu lama merespons. Silakan coba lagi nanti atau beralih ke layanan terjemahan lain.",
-    "translationTimeoutLocal": "Penerjemahan model lokal kehabisan waktu. LLM lokal bisa macet dalam perulangan berulang — turunkan max_tokens (batas keluaran) di Pengaturan Lanjutan, dan pastikan bahasa sumber yang dipilih sesuai dengan teks sebenarnya.",
+    "translationTimeoutLocal": "Waktu tunggu terjemahan model lokal habis. Penyebab umum: konkurensi melebihi slot paralel server lokal Anda sehingga permintaan mengantre di sana hingga kehabisan waktu; atau model terjebak dalam loop pengulangan (biasanya bahasa sumber salah). Turunkan \"Parameter Panggilan → Baris simultan\" pada layanan ini atau naikkan \"Pengaturan Lanjutan → Batas Waktu\", dan pastikan bahasa sumber sesuai dengan teksnya.",
     "langGroupCommon": "Umum",
     "langGroupEurope": "Eropa",
     "langGroupMiddleEast": "Timur Tengah",
@@ -164,10 +178,35 @@
     "errorHint429": "Batas permintaan terlampaui, silakan coba lagi nanti",
     "errorHint456": "Kuota terjemahan periode ini telah habis",
     "errorHint5xx": "Kesalahan server, silakan coba lagi nanti",
-    "errorHintRelay": "Kesalahan jaringan (kemungkinan CORS) — aktifkan \"Relay API\" di Pengaturan API",
-    "errorHintRelay403": "API mengembalikan 403 Forbidden — aktifkan \"Relay API\" di Pengaturan API",
+    "errorHintRelay": "Kesalahan jaringan (kemungkinan CORS) — aktifkan \"Relay API\" di \"Pengaturan Provider lain\"",
+    "errorHintRelay403": "API mengembalikan 403 Forbidden — aktifkan \"Relay API\" di \"Pengaturan Provider lain\"",
+    "errorHintCors": "Tidak dapat terhubung ke alamat ini — periksa alamatnya dan pastikan layanan mengizinkan permintaan lintas-asal (CORS). Gateway mandiri dan model lokal harus mengaktifkannya sendiri, atau gunakan Relay API milik Anda",
     "errorHintGeminiKey": "Tidak dapat terhubung ke Gemini: periksa jaringan Anda terlebih dahulu (beberapa jaringan tidak dapat mengakses layanan Google secara langsung). Jika jaringan baik-baik saja, sejak 19 Juni 2026 Google menolak kunci API tanpa pembatasan — buat ulang kunci di AI Studio (dibatasi secara default) atau tambahkan pembatasan Gemini API pada kunci lama di Google Cloud Console",
-    "rateLimitCooldown": "Batas permintaan tercapai — jeda sejenak, akan dicoba ulang otomatis"
+    "rateLimitCooldown": "Batas permintaan tercapai — jeda sejenak, akan dicoba ulang otomatis",
+    "faqHeading": "Pertanyaan umum",
+    "homeIndexEyebrow": "Indeks",
+    "homeCategoryEyebrow": "{n} kategori",
+    "openNavigation": "Buka navigasi",
+    "goHome": "Kembali ke beranda",
+    "primaryNav": "Navigasi utama",
+    "toggleTheme": "Ganti tema",
+    "communityLinks": "Tautan komunitas",
+    "viewOnGitHub": "Lihat di GitHub",
+    "toolCategories": "Kategori alat",
+    "searchLanguage": "Cari bahasa",
+    "selectLanguage": "Pilih bahasa",
+    "noMatchFound": "Tidak ada hasil",
+    "backToTop": "Kembali ke atas",
+    "exportOptions": "Opsi ekspor",
+    "privacyNotice": "Kunci API dan data Anda hanya disimpan secara lokal di browser Anda untuk memastikan privasi. Jika Anda memiliki pertanyaan atau saran, silakan hubungi kami melalui komunitas atau halaman umpan balik.",
+    "deepLXUnavailable": "Layanan DeepLX sementara tidak dapat dijangkau, otomatis beralih ke GTX API (Free).",
+    "deeplUnavailable": "Layanan DeepL sementara tidak dapat dijangkau, periksa pengaturan terkait di Pengaturan API.",
+    "llmUnavailable": "Layanan LLM sementara tidak dapat dijangkau, periksa pengaturan terkait di Pengaturan API.",
+    "clearInputTooltip": "Bersihkan konten input dan file yang diunggah",
+    "sourceTextPlaceholder": "Masukkan atau tempel teks yang akan diproses...",
+    "gtxFreeAPIUnavailable": "Layanan GTX Free sementara tidak dapat dijangkau — mungkin pembatasan jaringan. Silakan coba lagi nanti atau beralih ke layanan terjemahan lain.",
+    "edgeFreeAPIUnavailable": "Layanan Edge Free sementara tidak dapat dijangkau — mungkin pembatasan jaringan. Silakan coba lagi nanti atau beralih ke layanan terjemahan lain.",
+    "translategemmaUnavailable": "Layanan TranslateGemma sementara tidak dapat dijangkau, pastikan server lokal Anda (LM Studio / llama.cpp / Ollama) sedang berjalan dan URL sudah benar."
   },
   "tools": {
     "subtitleTranslator": {
@@ -176,7 +215,7 @@
     },
     "jsonTranslate": {
       "title": "Penerjemah JSON i18n",
-      "description": "Alat terjemahan JSON multi-bahasa yang efisien"
+      "description": "Terjemahan file bahasa i18n batch, dengan pencocokan JSONPath dan pemetaan kunci"
     },
     "mdTranslator": {
       "title": "Penerjemah Markdown",
@@ -184,7 +223,7 @@
     },
     "chineseConversion": {
       "title": "Konversi Karakter Tionghoa",
-      "description": "Konversi batch antara Sederhana, Tradisional Taiwan, Tradisional Hong Kong, dan Aksara Jepang Baru"
+      "description": "Mendukung unggah file dan pemrosesan batch antara Tionghoa Sederhana, Tradisional Taiwan/Hong Kong, dan Shinjitai Jepang"
     },
     "novelProcessor": {
       "title": "Pemformat Novel Web China",
@@ -195,7 +234,7 @@
       "description": "Pencocokan regex, pengurutan, penyaringan, dan pemrosesan teks batch"
     },
     "dataBatch": {
-      "title": "Pemrosesan Teks Pribadi",
+      "title": "Pemrosesan Data Batch",
       "description": "Pemrosesan data Excel batch — deduplikasi, ekstraksi kolom, gabung teks, aturan berurutan"
     },
     "textJoiner": {
@@ -204,7 +243,7 @@
     },
     "textSplitter": {
       "title": "Pemisah Teks",
-      "description": "Pemisahan teks panjang cerdas untuk AI dan media sosial"
+      "description": "Bagi teks panjang per pemisah, panjang, atau kalimat — lalu gabungkan lagi"
     },
     "jsonValueExtractor": {
       "title": "Pengekstrak Nilai JSON",
@@ -265,24 +304,28 @@
           "a": "Ya. Klik 'Ekspor Diff' untuk menghasilkan file unified diff (.patch) standar, kompatibel dengan git apply, alat ulasan kode, dan sistem kontrol versi. Nama file default adalah nama file sisi kanan."
         },
         {
-          "q": "Enkripsi apa yang didukung?",
-          "a": "Mendeteksi secara otomatis UTF-8, GBK, Big5, UTF-16LE, dan enkripsi umum lainnya. Setelah mengunggah file, enkripsi yang terdeteksi ditampilkan — Anda juga dapat beralih enkripsi secara manual untuk mendekode ulang. Ideal untuk membandingkan file konfigurasi atau log yang diekspor dari sistem berbeda."
+          "q": "Pengkodean apa yang didukung?",
+          "a": "Mendeteksi secara otomatis UTF-8, GBK, Big5, UTF-16LE, dan pengkodean umum lainnya. Setelah mengunggah file, enkripsi yang terdeteksi ditampilkan — Anda juga dapat beralih enkripsi secara manual untuk mendekode ulang. Ideal untuk membandingkan file konfigurasi atau log yang diekspor dari sistem berbeda."
         },
         {
           "q": "Apakah teks saya diunggah ke server?",
-          "a": "Pemrosesan sepenuhnya lokal: pembacaan, penguraian, dan perbandingan teks semuanya terjadi di browser Anda — tidak ada yang diunggah ke server mana pun. Aman untuk membandingkan file konfigurasi sensitif, kode pribadi, atau dokumen yang berisi rahasia."
+          "a": "Pemrosesan sepenuhnya lokal: pembacaan, penguraian, dan perbandingan teks semuanya terjadi di browser Anda — tidak ada yang diunggah ke server mana pun. Aman untuk membandingkan file konfigurasi sensitif, kode pribadi, atau dokumen yang berisi kunci rahasia."
         }
       ],
       "features": [
         "Penyorotan berdampingan dengan lokasi perbedaan pertama yang tepat",
         "Mendukung format teks biasa, CSV, TSV, INI, JSON",
-        "Deteksi otomatis enkripsi UTF-8, GBK, Big5, UTF-16LE",
+        "Deteksi otomatis pengkodean UTF-8, GBK, Big5, UTF-16LE",
         "Mode abaikan spasi, abaikan huruf besar/kecil, diff tingkat karakter",
         "Beralih antara tampilan terpisah dan terpadu",
         "Navigasi blok diff untuk lompatan cepat",
         "Ekspor sebagai file .patch standar, kompatibel dengan git apply",
         "Pelindung batas waktu untuk teks besar dengan opsi perbandingan paksa"
       ]
+    },
+    "braceExpander": {
+      "title": "Ekspander Kurung Kurawal",
+      "description": "Kembangkan satu templat menjadi daftar lengkap, sintaks brace bash"
     }
   },
   "navigation": {
@@ -295,16 +338,18 @@
     "otherTools": "Alat Lainnya",
     "externalTools": {
       "legendtalk": "Meja Bundar Pemikir AI",
-      "imgprompt": "Prompt Gambar AI"
+      "imgprompt": "Prompt Gambar AI",
+      "learndata": "LearnData Catatan Sumber Terbuka",
+      "hub365": "365 Sumber Terbuka"
     }
   },
   "Metadata": {
     "title": "ToolsByAI - Peralatan Data & Terjemahan AI untuk Developer",
-    "description": "ToolsByAI: 17 alat open source untuk menerjemahkan subtitle, Markdown, dan JSON i18n. Tanpa instalasi, berbasis browser.",
+    "description": "ToolsByAI: 20 alat open source untuk menerjemahkan subtitle, Markdown, dan JSON i18n. Tanpa instalasi, berbasis browser.",
     "homeTitle": "Suite ToolsByAI",
-    "homeDescription": "20+ alat untuk terjemahan, teks, JSON, dan konversi data. Tingkatkan efisiensi pengembang dan kreator.",
-    "ogTitle": "ToolsByAI - Alat Dev AI Gratis dan Open Source",
-    "ogDescription": "ToolsByAI: 17 alat open source untuk menerjemahkan subtitle, Markdown, dan JSON i18n. Tanpa instalasi, berbasis browser."
+    "homeDescription": "20 alat untuk terjemahan, teks, JSON, dan konversi data. Tingkatkan efisiensi pengembang dan kreator.",
+    "ogTitle": "ToolsByAI - Peralatan Data & Terjemahan AI untuk Developer",
+    "ogDescription": "ToolsByAI: 20 alat open source untuk menerjemahkan subtitle, Markdown, dan JSON i18n. Tanpa instalasi, berbasis browser."
   },
   "CopyToClipboard": {
     "empty": "Konten kosong, tidak ada yang disalin",
@@ -322,7 +367,12 @@
     "reaction3": "Apa?",
     "reaction4": "Bingung",
     "placeholder": "Tinggalkan pesan (tidak perlu login, email opsional untuk balasan)",
-    "metaDescription": "Halaman feedback Tools By AI: laporkan bug, sarankan fitur, atau bagikan ide. Berbasis Waline, posting anonim, gratis."
+    "metaDescription": "Halaman Umpan Balik Tools By AI: laporkan bug, sarankan fitur, atau bagikan ide. Berbasis Waline, posting anonim, gratis."
+  },
+  "AppError": {
+    "title": "Halaman gagal dimuat",
+    "description": "Halaman tidak dapat dimuat — ini bisa terjadi tepat setelah situs diperbarui. Silakan muat ulang.",
+    "reload": "Muat ulang"
   },
   "NotFound": {
     "title": "Halaman Tidak Ditemukan",
@@ -378,6 +428,9 @@
     "exportDiff": "Ekspor diff",
     "exportDiffTooltip": "Ekspor sebagai diff terpadu (.patch) — bisa dipakai dengan git apply / alat review",
     "exportDone": "Berkas diff diekspor",
-    "similarityLabel": "Kemiripan"
+    "similarityLabel": "Kemiripan",
+    "encodingLabel": "Enkode berkas",
+    "contextLinesLabel": "Baris konteks",
+    "formatLabel": "Format perbandingan"
   }
 }

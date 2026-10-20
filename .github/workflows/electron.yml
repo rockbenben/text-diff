@@ -15,6 +15,9 @@ name: Build Electron (Windows unpacked)
 #
 # Release 由 “Build Desktop App”(Tauri)workflow 创建(草稿),tag 相同。
 # 本 workflow 只是把 Electron 产物追加到那个 Release,所以会先等它出现。
+# (Tauri 那条 workflow 的矩阵跑完之后,它的 publish job 会把草稿发布出去;
+#  两边并行,所以这个 zip 可能落在「已发布的 release」上,也可能落在草稿上——
+#  两种都对:release 页面上的资产是齐的,只是齐的先后有差。)
 on:
   workflow_dispatch:
   push:

@@ -20,7 +20,7 @@ const FirstDiffBanner = ({ first, onJump }: Props) => {
   if (first.kind === "same") {
     return (
       <div className={`${styles.banner} ${styles.bannerOk}`}>
-        <CheckOutlined className={styles.okIcon} />
+        <CheckOutlined className={styles.okIcon} aria-hidden />
         <span className={styles.bannerMsg}>{t("identical")}</span>
       </div>
     );
@@ -40,18 +40,25 @@ const FirstDiffBanner = ({ first, onJump }: Props) => {
   const addLine = first.after?.trim();
   const chips =
     first.kind === "mod" && first.before !== undefined ? (
-      <span className={styles.bannerChips}>
-        <span className={`${styles.chip} ${styles.chipDel}`} title={first.before}>{first.before}</span>
+      // The CHAIN is pinned ltr so it keeps reading before→after. The flex row
+      // mirrors on its own (before-chip ends up rightmost) but the arrow does not
+      // follow it — measured on /ar, U+2192 sitting between an Arabic value and a
+      // Latin one still renders →, so the mirrored row read "new → old".
+      // The individual VALUES get dir=auto (isolate on a span) — an Arabic value
+      // then renders and ellipsizes on its own side instead of being force-flushed
+      // left. Pinning the chain but not the values is the whole point.
+      <span dir="ltr" className={styles.bannerChips}>
+        <span dir="auto" className={`${styles.chip} ${styles.chipDel}`} title={first.before}>{first.before}</span>
         <span className={styles.arrow}>→</span>
-        <span className={`${styles.chip} ${styles.chipAdd}`} title={first.after}>{first.after}</span>
+        <span dir="auto" className={`${styles.chip} ${styles.chipAdd}`} title={first.after}>{first.after}</span>
       </span>
     ) : first.kind === "del" && delLine ? (
       <span className={styles.bannerChips}>
-        <span className={`${styles.chip} ${styles.chipDel}`} title={first.before}>{delLine}</span>
+        <span dir="auto" className={`${styles.chip} ${styles.chipDel}`} title={first.before}>{delLine}</span>
       </span>
     ) : first.kind === "add" && addLine ? (
       <span className={styles.bannerChips}>
-        <span className={`${styles.chip} ${styles.chipAdd}`} title={first.after}>{addLine}</span>
+        <span dir="auto" className={`${styles.chip} ${styles.chipAdd}`} title={first.after}>{addLine}</span>
       </span>
     ) : null;
 
@@ -69,7 +76,12 @@ const FirstDiffBanner = ({ first, onJump }: Props) => {
           {chips}
         </div>
       </div>
-      <span className={styles.jump}>{t("jump")} <RightOutlined /></span>
+      {/* aria-hidden on the chevron: antd's Icon ships role="img" +
+          aria-label="right", and this banner is a role="button" with no
+          aria-label of its own — so its accessible name is read from its
+          contents and the English glyph name leaked into it (and named the
+          wrong way round once the chevron mirrors for RTL). */}
+      <span className={styles.jump}>{t("jump")} <RightOutlined aria-hidden /></span>
     </div>
   );
 };

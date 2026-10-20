@@ -131,6 +131,12 @@ const CodeInput = ({ value, onChange, placeholder, minRows = 6, maxRows = 14, on
         <textarea
           ref={taRef}
           className={styles.codeArea}
+          // No direction attribute here on purpose: the box must re-decide each
+          // LINE's direction from that line's own script (an Arabic line's
+          // trailing ? and a mixed CSV row's field order both go wrong under a
+          // fixed LTR paragraph), and only the stylesheet can express that for a
+          // textarea — see the .codeArea rule, which pairs it with an alignment
+          // pin so a right-to-left line can't slide off its own line number.
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onScroll={syncScroll}

@@ -17,8 +17,11 @@ import {
   type ToolContent,
 } from "./toolRegistry";
 
-// Re-export everything from toolRegistry for backward compatibility — consumers
-// can import from "@/app/lib/seo" without caring about the split.
+// 转发 toolRegistry 的全部导出。主仓内【没有】消费方,别当死代码删:各子项目自维护的
+// toolPageShell.tsx(pathOf / namespacesOf / ToolKey)与 layout.tsx(SITE_URL)都从
+// "@/app/lib/seo" 拿这些符号,而那两个文件不在同步范围内 —— 删掉这一行,主仓三道门全绿,
+// 子项目下一次 sync 后一起构建失败(project_sync.py validate 的 _validate_internal_imports
+//「仓内 import 的可达性 / 导出名是否还在」会拦)。
 export * from "./toolRegistry";
 
 /**

@@ -1,5 +1,11 @@
 {
   "common": {
+    "exportFolder": "导出目录",
+    "exportFolderDefault": "导出会保存到默认下载目录。",
+    "exportFolderBlocked": "浏览器不允许选「桌面 / 文档 / 下载 / 用户目录」本身，请选子文件夹或任意其他文件夹。",
+    "exportFolderCurrent": "导出会保存到 {dir}",
+    "exportFolderReset": "恢复为下载目录",
+    "exportFolderFailed": "无法设置导出目录。",
     "supportEscapeChars": "支持转义字符：\\n (换行)、\\r (回车)、\\t (制表符)、\\s (空格)、\\\\ (反斜杠)",
     "skipToContent": "跳到主要内容",
     "fileProcessFailed": "文件处理失败，请检查文件编码或换一个文件",
@@ -8,13 +14,13 @@
     "ignoredLangCodes": "已忽略无法识别的语言代码：{codes}",
     "partialExportFailed": "部分语言导出失败：{items}",
     "userGuide": "使用说明",
-    "privacyNotice": "您的 API 密钥及数据仅存储在本地浏览器，确保隐私安全。如有问题或建议，欢迎通过社群或反馈页面联系我们。",
+    "apiKeyPrivacy": "只保存在此浏览器，不会同步到服务器。",
     "dragAndDropText": "点击或将文件拖拽至此上传",
     "supportedFormats": "支持的格式：",
     "configuration": "配置选项",
     "operation": "操作",
     "optional": "可选",
-    "pleaseWait": "请稍等...",
+    "pleaseWait": "请稍等…",
     "pasteUploadContent": "或在此输入、粘贴文本",
     "example": "示例",
     "sourceLanguage": "源语言",
@@ -24,6 +30,11 @@
     "selectMultiTargetLanguages": "选择多个目标语言",
     "noTargetLanguage": "至少选择一种目标语言。",
     "translationError": "翻译失败",
+    "translationCancelled": "已取消翻译",
+    "translationStopped": "已停止",
+    "resumeFromCache": "已完成的部分已缓存，重新翻译会从断点继续",
+    "cancelKeepsProgress": "取消后可从断点继续",
+    "dismiss": "关闭",
     "translationAPI": "翻译 API",
     "enter": "请输入",
     "getApiKey": "获取 API Key",
@@ -38,6 +49,8 @@
     "directExport": "自动导出",
     "useCache": "使用翻译缓存",
     "useCacheTooltip": "复用之前的翻译缓存，加快处理速度",
+    "cacheOff": "缓存已关",
+    "cacheOffTooltip": "翻译缓存已关闭：每行都会重新请求，中断后也无法从断点继续。点击重新开启。",
     "contextAwareTranslation": "上下文关联翻译",
     "contextAwareTranslationTooltip": "结合上下文语境进行翻译，提升连贯性和准确度（仅 AI 模型支持）",
     "multiLanguageMode": "多语言模式",
@@ -49,6 +62,7 @@
     "extractText": "提取纯文本",
     "translationResult": "翻译结果",
     "copy": "复制",
+    "expand": "展开",
     "remove": "删除",
     "format": "格式化",
     "formatTooltip": "格式化：移除空行及首尾空格",
@@ -62,15 +76,16 @@
     "extractedText": "提取的文本",
     "translating": "翻译中",
     "translateDone": "翻译完成",
+    "translateDonePartial": "失败的行已保留原文",
+    "translateDoneIncomplete": "部分内容未完成",
     "multiTranslating": "正在翻译，目标语言共",
     "model": "模型",
     "sameLanguageTarget": "源语言与目标语言相同，已自动调整目标语言为",
     "sameLanguageSource": "源语言与目标语言相同，已自动调整源语言为",
     "enterApiKey": "请输入 API 密钥或切换至免费 API。",
-    "enterApiUrl": "请在「API 设置」中配置接口地址。",
-    "deepLXUnavailable": "DeepLX 服务暂时连不上，已自动切换至 GTX API (Free)。",
-    "deeplUnavailable": "DeepL 服务暂时连不上，请检查「API 设置」中的相关配置。",
-    "llmUnavailable": "LLM 服务暂时连不上，请检查「API 设置」中的相关配置。",
+    "enterApiUrl": "请在「更多 Provider 设置」中配置接口地址。",
+    "serviceUnavailable": "{service} 暂时连不上：请检查网络与服务地址是否可用，稍后再试，或换一个翻译服务。",
+    "serviceUnavailableSwitched": "{service} 暂时连不上，已自动切换到 {fallback}。如需继续使用原服务，请检查后在设置中切回。",
     "noFileUploaded": "请先上传需要处理的文件。",
     "translationExported": "翻译完成，文件已导出",
     "noSourceText": "请输入或粘贴文本内容。",
@@ -86,6 +101,7 @@
     "importSettingTooltip": "从文件导入配置",
     "exportSettingSuccess": "设置已导出",
     "exportSettingError": "导出失败，请重试",
+    "dictLoadFailed": "转换字典加载失败，请检查网络或刷新页面",
     "importSettingSuccess": "设置已导入",
     "importSettingError": "导入失败，请重试",
     "removeCharsAfterTranslation": "翻译后移除字符",
@@ -107,14 +123,15 @@
     "customExportFilename": "导出文件名格式",
     "customExportFilenameTooltip": "'{'name'}' = 原始文件名, '{'lang'}' = 语言, '{'ext'}' = 扩展名, '{'date'}' = 日期, '{'time'}' = 时间；多语言模式会自动加 '{'lang'}' 防止文件名冲突",
     "partialFailureTitle": "翻译失败 {count} 行",
-    "partialFailureDesc": "失败的行已用原文占位（不影响文件结构）。这种失败大多是网络抖动或翻译服务临时不稳定——免费服务和自建服务器特别容易碰到，不是你的设置问题。点「再试一次」即可继续，已成功的行走缓存不会重翻；如果还是失败，稍后再点或换个翻译服务试试。也可点「查看失败行」自己处理。",
-    "retryFailedLines": "再试一次",
+    "partialFailureDesc": "这些行保留了原文，文件结构完整。重试只重发它们，其余走缓存。",
+    "partialFailureWhy": "免费与自建服务尤其容易碰到，通常不是你的设置问题。",
+    "retryFailedLines": "重试失败行",
     "viewFailedLines": "查看失败行",
     "failedLinesModalTitle": "失败的 {count} 行",
     "copyAllFailed": "复制全部",
     "closeFailedLinesModal": "关闭",
     "failedLanguagesTitle": "翻译失败 {count} 种语言",
-    "failedLanguagesDesc": "这几种语言的所有批次都翻挂了——常见于本地 LLM 抽风、API 限流或模型拒译特定语种。可点「复制语言代码」拿到清单,下次只对它们重跑(在「快速输入语言代码」里粘贴即可),其它语言走缓存不重翻。",
+    "failedLanguagesDesc": "这几种语言的所有批次都翻挂了——常见于本地 LLM 抽风、API 限流或模型拒译特定语种。可点「复制语言代码」拿到清单，下次只对它们重跑（在「多语言设置」里粘贴即可），其它语言走缓存不重翻。",
     "copyAllFailedLanguages": "复制语言代码",
     "apiStatusFreeApi": "Free API",
     "apiStatusNeedsConfig": "需配置",
@@ -125,19 +142,16 @@
     "apiStatusTimeout": "连接超时",
     "testConnection": "测试连接",
     "moreProviderSettings": "更多 Provider 设置",
-    "clearInputTooltip": "清空输入内容和上传的文件",
     "fileExported": "已导出文件：{fileName}",
+    "exportFailed": "导出文件失败：{fileName}",
+    "exportedToFolder": "已保存到 {dir}：{fileName}",
     "batchDownloaded": "处理完成，文件已自动下载",
-    "sourceTextPlaceholder": "请输入或粘贴待处理文本...",
     "smartLineBreak": "智能换行",
     "replaceText": "替换文本",
     "generateJson": "生成 JSON",
-    "gtxFreeAPIUnavailable": "GTX Free 服务暂时连不上，可能是网络限制。稍后再试，或换一个翻译服务。",
-    "edgeFreeAPIUnavailable": "Edge Free 服务暂时连不上，可能是网络限制。稍后再试，或换一个翻译服务。",
-    "translategemmaUnavailable": "TranslateGemma 服务暂时连不上，请确认本地服务器（LM Studio / llama.cpp / Ollama）已启动且 URL 正确。",
     "networkUnavailable": "翻译服务暂时连不上，可能是网络或服务的临时问题。稍后再试，或换一个翻译服务。",
     "translationTimeout": "翻译请求超时，可能是网络较慢或翻译服务响应慢。稍后再试，或换一个翻译服务。",
-    "translationTimeoutLocal": "本地模型翻译超时。本地大模型可能陷入复读循环——请在高级设置中调低 max_tokens（输出上限），并确认所选源语言与文本实际语言一致。",
+    "translationTimeoutLocal": "本地模型翻译超时。常见原因：并发数超过本地服务的并行槽位，请求在服务端排队直到超时；或模型陷入复读循环（多因源语言选错）。请调低本服务「调用参数 → 并发行数」，或放宽「高级设置 → 超时时间」，并确认所选源语言与文本实际语言一致。",
     "langGroupCommon": "常用",
     "langGroupEurope": "欧洲",
     "langGroupMiddleEast": "中东",
@@ -164,10 +178,35 @@
     "errorHint429": "请求过于频繁，请稍后重试",
     "errorHint456": "本期翻译配额已用尽",
     "errorHint5xx": "服务器错误，请稍后重试",
-    "errorHintRelay": "网络错误（可能是 CORS 限制），请在 API 设置中开启「中转 API」",
-    "errorHintRelay403": "接口返回 403 禁止访问，请在 API 设置中开启「中转 API」",
+    "errorHintRelay": "网络错误（可能是 CORS 限制），请在「更多 Provider 设置」中开启「中转 API」",
+    "errorHintRelay403": "接口返回 403 禁止访问，请在「更多 Provider 设置」中开启「中转 API」",
+    "errorHintCors": "无法连接到该地址：请检查地址是否正确，并确认服务已允许跨域（CORS）。自建网关与本地模型需要自行开启，或改用你自己的中转 API",
     "errorHintGeminiKey": "无法连接 Gemini：请先检查网络（部分网络环境无法直连 Google 服务）。若网络正常，则可能是 Google 自 2026-06-19 起拒绝「无限制 API Key」——请在 AI Studio 重新生成密钥（默认已限制），或在 Google Cloud 控制台为旧密钥添加 Gemini API 限制",
-    "rateLimitCooldown": "请求过于频繁，已自动暂停片刻后重试"
+    "rateLimitCooldown": "请求过于频繁，已自动暂停片刻后重试",
+    "faqHeading": "常见问题",
+    "homeIndexEyebrow": "工具索引",
+    "homeCategoryEyebrow": "{n} 个分类",
+    "openNavigation": "打开导航",
+    "goHome": "返回首页",
+    "primaryNav": "主导航",
+    "toggleTheme": "切换主题",
+    "communityLinks": "社区链接",
+    "viewOnGitHub": "在 GitHub 查看",
+    "toolCategories": "工具分类",
+    "searchLanguage": "搜索语言",
+    "selectLanguage": "选择语言",
+    "noMatchFound": "无匹配结果",
+    "backToTop": "回到顶部",
+    "exportOptions": "导出选项",
+    "privacyNotice": "您的 API 密钥及数据仅存储在本地浏览器，确保隐私安全。如有问题或建议，欢迎通过社群或反馈页面联系我们。",
+    "deepLXUnavailable": "DeepLX 服务暂时连不上，已自动切换至 GTX API (Free)。",
+    "deeplUnavailable": "DeepL 服务暂时连不上，请检查「API 设置」中的相关配置。",
+    "llmUnavailable": "LLM 服务暂时连不上，请检查「API 设置」中的相关配置。",
+    "clearInputTooltip": "清空输入内容和上传的文件",
+    "sourceTextPlaceholder": "请输入或粘贴待处理文本...",
+    "gtxFreeAPIUnavailable": "GTX Free 服务暂时连不上，可能是网络限制。稍后再试，或换一个翻译服务。",
+    "edgeFreeAPIUnavailable": "Edge Free 服务暂时连不上，可能是网络限制。稍后再试，或换一个翻译服务。",
+    "translategemmaUnavailable": "TranslateGemma 服务暂时连不上，请确认本地服务器（LM Studio / llama.cpp / Ollama）已启动且 URL 正确。"
   },
   "tools": {
     "subtitleTranslator": {
@@ -176,7 +215,7 @@
     },
     "jsonTranslate": {
       "title": "JSON 多语言翻译",
-      "description": "高效的多语言 JSON 翻译工具"
+      "description": "批量翻译 i18n 语言包，支持 JSONPath 匹配和键名映射"
     },
     "mdTranslator": {
       "title": "Markdown 翻译",
@@ -184,11 +223,11 @@
     },
     "textSplitter": {
       "title": "文本分割",
-      "description": "智能分割长文本，适用于 AI 输入和社交媒体"
+      "description": "按符号、字数或整句拆分长文本，适配 AI 投喂与分段发布"
     },
     "chineseConversion": {
       "title": "简繁转换",
-      "description": "批量转换简体、台湾繁体、香港繁体和日本新字体"
+      "description": "支持文件上传与批量处理，精准转换简体、台湾繁体、香港繁体和日本新字体"
     },
     "novelProcessor": {
       "title": "小说排版整理",
@@ -283,6 +322,10 @@
     "dataParserImgPrompt": {
       "title": "IMGPrompt 数据生成",
       "description": "批量生成 IMGPrompt JSON 数据"
+    },
+    "braceExpander": {
+      "title": "格式批量生成",
+      "description": "一行模板批量展开成完整清单，语法照抄 bash 花括号展开"
     }
   },
   "navigation": {
@@ -295,16 +338,18 @@
     "otherTools": "更多工具",
     "externalTools": {
       "legendtalk": "AI 思想家圆桌",
-      "imgprompt": "AI 绘图提示词"
+      "imgprompt": "AI 绘图提示词",
+      "learndata": "LearnData 开源笔记",
+      "hub365": "365 开源计划"
     }
   },
   "Metadata": {
     "title": "ToolsByAI | 免费开源的 AI 翻译与数据处理工具集",
-    "description": "ToolsByAI 集合 17 款免费工具：字幕、Markdown、JSON i18n 翻译，文本/JSON 批处理。25+ AI 引擎，全前端处理。",
+    "description": "ToolsByAI 集合 20 款免费工具：字幕、Markdown、JSON i18n 翻译，文本/JSON 批处理。30+ AI 引擎，全前端处理。",
     "homeTitle": "ToolsByAI 工具集",
-    "homeDescription": "20+ 实用工具，涵盖多语言翻译、文本处理、JSON 编辑和数据转换，助力开发者和创作者提升效率。",
+    "homeDescription": "20 款实用工具，涵盖多语言翻译、文本处理、JSON 编辑和数据转换，助力开发者和创作者提升效率。",
     "ogTitle": "ToolsByAI | 免费开源的 AI 翻译与数据处理工具集",
-    "ogDescription": "ToolsByAI 集合 17 款免费工具：字幕、Markdown、JSON i18n 翻译，文本/JSON 批处理。25+ AI 引擎，全前端处理。"
+    "ogDescription": "ToolsByAI 集合 20 款免费工具：字幕、Markdown、JSON i18n 翻译，文本/JSON 批处理。30+ AI 引擎，全前端处理。"
   },
   "CopyToClipboard": {
     "empty": "内容为空，无需复制",
@@ -361,7 +406,10 @@
     "exportDiff": "导出 diff",
     "exportDiffTooltip": "导出为统一 diff（.patch），可用于 git apply / 代码评审",
     "exportDone": "已导出 diff 文件",
-    "similarityLabel": "相似度"
+    "similarityLabel": "相似度",
+    "encodingLabel": "文件编码",
+    "contextLinesLabel": "上下文行数",
+    "formatLabel": "比对格式"
   },
   "feedback": {
     "feedback1": "反馈与建议",
@@ -374,6 +422,11 @@
     "reaction4": "看不懂",
     "placeholder": "请留言，无需登录（填写邮箱可获回复提醒）",
     "metaDescription": "意见反馈页：报告使用问题、提交功能建议、参与工具改进。基于 Waline 评论系统，匿名也可发言。"
+  },
+  "AppError": {
+    "title": "页面加载出错",
+    "description": "页面加载失败，可能是网站刚更新到新版本，请重新加载。",
+    "reload": "重新加载"
   },
   "NotFound": {
     "title": "页面未找到",

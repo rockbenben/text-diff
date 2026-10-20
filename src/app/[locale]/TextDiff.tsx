@@ -5,7 +5,7 @@ import { Alert, App, Button, Checkbox, Divider, Segmented, Select, Space, Toolti
 import { SwapOutlined, UpOutlined, DownOutlined, ClearOutlined, CopyOutlined, DownloadOutlined, FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import { createPatch } from "diff";
-import { decodeFileBytes, normalizeNewlines, downloadFile, getFileTypePresetConfig } from "@/app/utils";
+import { decodeFileBytes, normalizeNewlines, getFileTypePresetConfig } from "@/app/utils";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 import { useIsMobile } from "@/app/hooks/useIsMobile";
@@ -15,6 +15,7 @@ import DiffPane, { type DiffPaneHandle } from "./DiffPane";
 import FirstDiffBanner from "./FirstDiffBanner";
 import CodeInput from "./CodeInput";
 import styles from "./textDiff.module.css";
+import { useFileExport } from "@/app/hooks/useFileExport";
 
 const ENCODINGS = ["utf-8", "gbk", "big5", "utf-16le"] as const;
 const FORMATS: FormatKind[] = ["plain", "csv", "tsv", "ini", "json"];
@@ -31,6 +32,7 @@ const countLines = (s: string) => (s === "" ? 0 : s.split("\n").length);
 const TextDiff = () => {
   const t = useTranslations("TextDiff");
   const { message } = App.useApp();
+  const exportFile = useFileExport();
   const isMobile = useIsMobile();
 
   const [a, setA] = useState<SideState>(emptySide);
@@ -107,14 +109,22 @@ const TextDiff = () => {
     const seq = ++loadSeq.current[side];
     const reader = new FileReader();
     reader.onload = async (e) => {
+      const buffer = e.target?.result as ArrayBuffer;
       try {
-        const buffer = e.target?.result as ArrayBuffer;
         const text = normalizeNewlines(await decodeFileBytes(buffer));
         if (seq !== loadSeq.current[side]) return; // superseded by a newer load or a user edit
         const next: SideState = { text, bytes: buffer, filename: file.name, encoding: "utf-8" };
         (side === "a" ? setA : setB)(next);
         if (/�/.test(text)) message.warning(t("notTextFile"));
       } catch {
+        if (seq !== loadSeq.current[side]) return;
+        // 解码失败【仍然留住 bytes】。右上角那个编码选择器以 s.bytes 为渲染
+        // 条件,而 changeEncoding 只需要 bytes —— 它正是为「自动识别不出来的
+        // 文件」存在的。丢掉 bytes 等于把唯一的补救入口一起关掉:用户既看不到
+        // 内容,也没法手动指定编码,这个文件就彻底 diff 不了了。
+        // (decodeFileBytes 对识别不出的编码抛出而非回退成 U+FFFD 之后,这条
+        //  分支从「几乎走不到」变成了这类文件的常规路径。)
+        (side === "a" ? setA : setB)({ text: "", bytes: buffer, filename: file.name, encoding: "utf-8" });
         message.error(t("notTextFile"));
       }
     };
@@ -166,8 +176,7 @@ const TextDiff = () => {
     // Export is an explicit user action — let it run to completion even on a large
     // raw diff (slow is acceptable when the user clicked it), rather than failing.
     const patch = createPatch(b.filename ?? "diff", a.text, b.text, a.filename ?? t("sideA"), b.filename ?? t("sideB"));
-    void downloadFile(patch, (b.filename ?? "text") + ".patch");
-    message.success(t("exportDone"));
+    void exportFile(patch, (b.filename ?? "text") + ".patch", undefined, t("exportDone"));
   };
 
   const gotoHunk = (idx: number) => {
@@ -223,6 +232,7 @@ const TextDiff = () => {
             {s.bytes && (
               <Select
                 size="small" value={s.encoding} style={{ width: 96 }}
+                aria-label={t("encodingLabel")}
                 onChange={(enc) => changeEncoding(side, enc)}
                 options={ENCODINGS.map((enc) => ({ value: enc, label: enc }))} />
             )}
@@ -252,7 +262,9 @@ const TextDiff = () => {
         </span>
       )}
       <Tooltip title={t("stats", { count: result.stats.mods + result.stats.adds + result.stats.dels, mods: result.stats.mods, adds: result.stats.adds, dels: result.stats.dels })}>
-        <span className={styles.counts}>
+        {/* dir=ltr: `+`/`~` here are prefixes, but a neutral at the start of an RTL
+            run resolves to the paragraph direction — /ar rendered them as `0+`. */}
+        <span dir="ltr" className={styles.counts}>
           <span className={styles.cMod}>~{result.stats.mods}</span>
           <span className={styles.cAdd}>+{result.stats.adds}</span>
           <span className={styles.cDel}>−{result.stats.dels}</span>
@@ -269,6 +281,29 @@ const TextDiff = () => {
   const diffPane = result && (
     <DiffPane ref={paneRef} result={result} diffOnly={diffOnly} context={context} view={view} activeHunk={activeHunk} onSelectHunk={gotoHunk} onPickHunk={selectHunk} maximized={maximized} />
   );
+  // 内联工具栏与全屏覆盖层的头部各画一遍同样的控件 —— 定义一次,两处引用。
+  const viewControls = (
+    <>
+      <Segmented<"split" | "unified">
+        value={view}
+        onChange={setView}
+        options={[
+          { value: "split", label: t("viewSplit") },
+          { value: "unified", label: t("viewUnified") },
+        ]}
+      />
+      <Checkbox checked={diffOnly} onChange={(e) => setDiffOnly(e.target.checked)}>{t("diffOnly")}</Checkbox>
+    </>
+  );
+  const navControls = result && (
+    <Space.Compact>
+      <Button icon={<UpOutlined />} title={t("prev")} aria-label={t("prev")} onClick={() => gotoHunk(hunkIdx - 1)} disabled={!result.hunks.length} />
+      <Button style={{ pointerEvents: "none", fontFamily: "var(--td-mono)" }}>
+        {result.hunks.length ? t("blockNav", { i: hunkIdx + 1, n: result.hunks.length }) : "0 / 0"}
+      </Button>
+      <Button icon={<DownOutlined />} title={t("next")} aria-label={t("next")} onClick={() => gotoHunk(hunkIdx + 1)} disabled={!result.hunks.length} />
+    </Space.Compact>
+  );
 
   return (
     <div className={styles.surface}>
@@ -276,8 +311,10 @@ const TextDiff = () => {
           hidden behind the fixed overlay. */}
       <div inert={maximized || undefined}>
       <Space orientation="vertical" size="middle" style={{ width: "100%" }}>
-        {/* Inputs first — you type/drop on top, results flow below. */}
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
+        {/* Inputs first — you type/drop on top, results flow below.
+            LTR-pinned together with the diff below: A/B's left-to-right order is
+            the one pairing the result rows have to agree with. */}
+        <div dir="ltr" style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
           {renderSide("a")}
           {renderSide("b")}
         </div>
@@ -302,18 +339,11 @@ const TextDiff = () => {
           <div className={styles.toolbar}>
             {/* View — how the diff is shown */}
             <span className={styles.cluster}>
-              <Segmented<"split" | "unified">
-                value={view}
-                onChange={setView}
-                options={[
-                  { value: "split", label: t("viewSplit") },
-                  { value: "unified", label: t("viewUnified") },
-                ]}
-              />
-              <Checkbox checked={diffOnly} onChange={(e) => setDiffOnly(e.target.checked)}>{t("diffOnly")}</Checkbox>
+              {viewControls}
               <Tooltip title={t("contextTooltip")}>
                 <Select<number>
                   size="small" value={context} disabled={!diffOnly} onChange={setContext} style={{ width: 120 }}
+                  aria-label={t("contextLinesLabel")}
                   options={[0, 1, 3, 5, 10].map((n) => ({ value: n, label: n === 0 ? t("contextNone") : t("contextLines", { n }) }))} />
               </Tooltip>
             </span>
@@ -324,6 +354,7 @@ const TextDiff = () => {
             <span className={styles.cluster}>
               <Select<FormatKind | "auto">
                 size="small" value={formatOverride} onChange={setFormatOverride} style={{ width: 130 }}
+                aria-label={t("formatLabel")}
                 options={[{ value: "auto", label: `${t("detectedAs")}: ${t(("format" + format[0].toUpperCase() + format.slice(1)) as never)}` },
                   ...FORMATS.map((fmt) => ({ value: fmt, label: t(("format" + fmt[0].toUpperCase() + fmt.slice(1)) as never) }))]} />
               <Checkbox checked={charLevel} onChange={(e) => setCharLevel(e.target.checked)}>{t("charLevel")}</Checkbox>
@@ -334,28 +365,26 @@ const TextDiff = () => {
             <Divider orientation="vertical" />
 
             {/* Navigate */}
-            <Space.Compact>
-              <Button icon={<UpOutlined />} title={t("prev")} aria-label={t("prev")} onClick={() => gotoHunk(hunkIdx - 1)} disabled={!result.hunks.length} />
-              <Button style={{ pointerEvents: "none", fontFamily: "var(--td-mono)" }}>
-                {result.hunks.length ? t("blockNav", { i: hunkIdx + 1, n: result.hunks.length }) : "0 / 0"}
-              </Button>
-              <Button icon={<DownOutlined />} title={t("next")} aria-label={t("next")} onClick={() => gotoHunk(hunkIdx + 1)} disabled={!result.hunks.length} />
-            </Space.Compact>
+            {navControls}
 
             <Divider orientation="vertical" />
 
             {/* Actions */}
+            {/* aria-hidden on every icon here: antd's Icon ships role="img" +
+                aria-label=<glyph name>, and these buttons carry their text but no
+                aria-label — so the accessible name was computed from contents and
+                came out "fullscreen تكبير" / "copy نسخ A" in every locale. */}
             <span className={styles.cluster}>
-              <Button icon={<FullscreenOutlined />} onClick={() => setMaximized(true)}>{t("maximize")}</Button>
-              <Button icon={<SwapOutlined />} onClick={swap}>{t("swap")}</Button>
+              <Button icon={<FullscreenOutlined aria-hidden />} onClick={() => setMaximized(true)}>{t("maximize")}</Button>
+              <Button icon={<SwapOutlined aria-hidden />} onClick={swap}>{t("swap")}</Button>
               <Space.Compact>
-                <Button icon={<CopyOutlined />} onClick={() => copyToClipboard(a.text, t("sideA"))}>{t("copyA")}</Button>
-                <Button icon={<CopyOutlined />} onClick={() => copyToClipboard(b.text, t("sideB"))}>{t("copyB")}</Button>
+                <Button icon={<CopyOutlined aria-hidden />} onClick={() => copyToClipboard(a.text, t("sideA"))}>{t("copyA")}</Button>
+                <Button icon={<CopyOutlined aria-hidden />} onClick={() => copyToClipboard(b.text, t("sideB"))}>{t("copyB")}</Button>
                 <Tooltip title={t("exportDiffTooltip")}>
-                  <Button icon={<DownloadOutlined />} onClick={exportPatch}>{t("exportDiff")}</Button>
+                  <Button icon={<DownloadOutlined aria-hidden />} onClick={exportPatch}>{t("exportDiff")}</Button>
                 </Tooltip>
               </Space.Compact>
-              <Button icon={<ClearOutlined />} danger onClick={clearAll}>{t("clear")}</Button>
+              <Button icon={<ClearOutlined aria-hidden />} danger onClick={clearAll}>{t("clear")}</Button>
             </span>
           </div>
         )}
@@ -376,23 +405,9 @@ const TextDiff = () => {
             <div className={styles.overlayHead}>
               {readout}
               <span className={styles.overlayControls}>
-                <Segmented<"split" | "unified">
-                  value={view}
-                  onChange={setView}
-                  options={[
-                    { value: "split", label: t("viewSplit") },
-                    { value: "unified", label: t("viewUnified") },
-                  ]}
-                />
-                <Checkbox checked={diffOnly} onChange={(e) => setDiffOnly(e.target.checked)}>{t("diffOnly")}</Checkbox>
-                <Space.Compact>
-                  <Button icon={<UpOutlined />} title={t("prev")} aria-label={t("prev")} onClick={() => gotoHunk(hunkIdx - 1)} disabled={!result.hunks.length} />
-                  <Button style={{ pointerEvents: "none", fontFamily: "var(--td-mono)" }}>
-                    {result.hunks.length ? t("blockNav", { i: hunkIdx + 1, n: result.hunks.length }) : "0 / 0"}
-                  </Button>
-                  <Button icon={<DownOutlined />} title={t("next")} aria-label={t("next")} onClick={() => gotoHunk(hunkIdx + 1)} disabled={!result.hunks.length} />
-                </Space.Compact>
-                <Button icon={<FullscreenExitOutlined />} onClick={() => setMaximized(false)}>{t("exitMaximize")}</Button>
+                {viewControls}
+                {navControls}
+                <Button icon={<FullscreenExitOutlined aria-hidden />} onClick={() => setMaximized(false)}>{t("exitMaximize")}</Button>
               </span>
             </div>
           ) : (

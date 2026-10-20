@@ -2,24 +2,26 @@
 🔍 文本对照
 </h1>
 <p align="center">
-    <a href="./README.md">English</a> | 中文
-</p>
-<p align="center">
     <em>离线的双栏文本/文件对比工具——高亮所有差异，并一句话告诉你第一处不同在哪</em>
+</p>
+
+<p align="center">
+    <a href="./README.md">English</a> · <b>简体中文</b>
 </p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <a href="https://tools.newzone.top/zh/text-diff"><img src="https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-text--diff-blue" alt="在线体验"></a>
+  <a href="https://github.com/rockbenben/365opensource"><img src="https://img.shields.io/badge/365%20%E5%BC%80%E6%BA%90%E8%AE%A1%E5%88%92-%23016-1f6feb" alt="365 开源计划 #016"></a>
 </p>
 
-> 365 开源计划 #016 · 离线双栏文本/文件对比，高亮差异并定位第一处不同
+**[▶ 在线体验](https://tools.newzone.top/zh/text-diff)** —— 打开即用，文件不上传
 
-**文本对照** 把两段文本或两个文件并排对比，逐词、逐字符高亮每一处改动，并用一句话告诉你第一处不同在哪——第几行、第几个字段。支持双栏（split）与单栏内联（unified）视图、对 CSV/TSV/INI/JSON 的结构感知对比、忽略空白/大小写选项、用于在差异间跳转的概览标尺，以及一键导出标准 unified-diff `.patch`。工具完全在浏览器本地运行，无服务器、无上传。
+![文本对照界面](./public/img/text-diff-zh.webp "文本对照使用界面")
 
-👉 **在线体验**：<https://tools.newzone.top/zh/text-diff>
+多数对比工具丢给你满屏的颜色，剩下的自己找。**文本对照直接用一句话告诉你第一处不同在哪**——第几行、第几个字段——点一下就跳过去。
 
-![文本对照界面](./public/img/text-diff-zh.png "文本对照使用界面")
+除此之外，它把两段文本或两个文件并排对比，逐词、逐字符高亮每一处改动，支持双栏（split）与单栏内联（unified）视图、对 CSV/TSV/INI/JSON 的结构感知对比、忽略空白/大小写选项、用于在差异间跳转的概览标尺，以及一键导出标准 unified-diff `.patch`。工具完全在浏览器本地运行，无服务器、无上传。
 
 ## 核心特性
 
@@ -58,7 +60,7 @@
 
 ## 性能
 
-对超大输入（单侧约 5000 行以上），O(n×m) 的逐行 diff 会先弹确认，避免页面意外卡死——点击「仍然计算」即可继续。超大输入会跳过字符级高亮，以保持导航流畅。
+对超大输入（单侧约 5000 行以上），O(n×m) 的逐行 diff 会先弹确认，避免页面意外卡死——点击「仍要比对」即可继续。超大输入会跳过字符级高亮，以保持导航流畅。
 
 ## 常见问题
 
@@ -74,18 +76,12 @@
 
 ## 文档与部署
 
-详细使用说明与部署指南见 **[官方文档](https://docs.newzone.top/zh/guide/text/text-diff.html)**。
-
-## 关于 365 开源计划
-
-本项目是 [365 开源计划](https://github.com/rockbenben/365opensource) 的第 016 个项目。
-
-一个人 + AI，一年 300+ 个开源项目。[提交你的需求 →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
+详细使用说明与部署指南见 **[官方文档](https://docs.newzone.top/guide/text/text-diff.html)**。
 
 ## 贡献
 
 欢迎贡献！随时提交 issue 与 pull request。
 
-## 许可证
+## 关于 365 开源计划
 
-MIT © 2025 [rockbenben](https://github.com/rockbenben)。详见 [LICENSE](./LICENSE)。
+[365 开源计划](https://github.com/rockbenben/365opensource) 的第 **#016** 个项目——一个人 + AI，一年 300+ 个开源项目。[提交你的需求 →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

@@ -2,20 +2,31 @@
 import { useState, useRef } from "react";
 import { App } from "antd";
 import { useTranslations } from "next-intl";
-import { normalizeNewlines, decodeFileBytes } from "@/app/utils";
+import { normalizeNewlines, readTextFile, getErrorMessage } from "@/app/utils";
+import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import type { UploadFile, UploadProps } from "antd";
 
 // Shared dedup predicate: match by name + size
 const isDuplicateFile = (a: { name: string; size?: number }, b: { name: string; size?: number }): boolean => a.name === b.name && a.size === b.size;
 
-const useFileUpload = () => {
+// toolKey = 调用方的工具 slug,只用来给 singleFileMode 分键(同 useExportFilename)。
+// 18 个调用方里只有 4 个渲染那个开关,其余传不传都一样。
+const useFileUpload = (toolKey?: string) => {
   const { message } = App.useApp();
   const t = useTranslations("common");
   const [sourceText, setSourceText] = useState<string>("");
   const [multipleFiles, setMultipleFiles] = useState<File[]>([]);
   const [uploadMode, setUploadMode] = useState<"single" | "multiple">("single");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [singleFileMode, setSingleFileMode] = useState(false);
+  // 落盘,且【按工具分键】:这是用户的工作习惯("这个工具我一次只处理一个文件"),
+  // 重启回默认没道理 —— 但它不是全站偏好。渲染这个开关的四个工具(字幕翻译 /
+  // Markdown 翻译 / 小说处理 / 简繁转换)互不相干:共享一个键的话,在简繁转换里开过
+  // 单文件模式,之后到字幕翻译拖 5 个文件只有 1 个进得去,而那一刻界面上没有任何
+  // 东西提示这是别处的设置在起作用(开关本身在折叠面板里)。键名与 useExportFilename
+  // 同一套:工具 slug + camelCase 字段。
+  // 不传 toolKey 的调用方都不渲染这个开关(useTranslationState 只取 readFile),
+  // 落在共用兜底键上无人读写。
+  const [singleFileMode, setSingleFileMode] = useLocalStorage<boolean>(`${toolKey ?? "upload"}-singleFileMode`, false);
   const [isFileProcessing, setIsFileProcessing] = useState<boolean>(false);
   // 读取序号守卫:FileReader.onload / decodeFileBytes 都是异步,一次读取尚未完成时
   // 又发起新读取(连续换文件)或清空(resetUpload),旧读的回调若晚到会用旧内容
@@ -32,33 +43,23 @@ const useFileUpload = () => {
   // single bad file hangs the whole batch loop forever.
   const readFile = (file: File, callback: (text: string) => void, onError?: () => void) => {
     setIsFileProcessing(true);
-    const reader = new FileReader();
-
-    reader.onload = async (e) => {
-      try {
-        const buffer = e.target?.result as ArrayBuffer;
-        // 编码自适应解码(UTF-8 fatal 试解 → jschardet 检测)抽到共享的
-        // decodeFileBytes —— 词汇表/保护规则导入同此管线,策略说明见 fileUtils。
-        const text = await decodeFileBytes(buffer);
-        callback(normalizeNewlines(text));
-      } catch (error) {
-        // jschardet 加载失败 / 解码异常等：别让 onload 静默 reject（否则下方 finally 之外
-        // 的 setIsFileProcessing(false) 永远不执行，处理中遮罩会一直转）。
+    // 编码自适应解码(UTF-8 fatal 试解 → jschardet 检测)在共享的 readTextFile /
+    // decodeFileBytes 里 —— 词汇表/保护规则导入同此管线,策略说明见 encoding.ts。
+    readTextFile(file)
+      .then((text) => callback(normalizeNewlines(text)))
+      .catch((error: unknown) => {
         console.error("处理文件出错：", error);
-        message.warning(t("fileProcessFailed"));
+        // 【带上原始消息】。decodeFileBytes 在判不出编码时抛的是一句可操作的
+        // 指引("unrecognized text encoding — re-save the file as UTF-8"),
+        // 而通用的 fileProcessFailed 把它整个吞掉:中文 Windows 上 Excel/记事本
+        // 存出的短 GBK 字幕会被 jschardet 误判成 IBM855 之类(实测),用户只看到
+        // 「文件处理失败」,而三个翻译工具都没有手动选编码的入口 —— 等于无路可走。
+        // getErrorMessage 而非手写 instanceof:后者对【非 Error 抛出】(字符串、
+        // 对象)返回空串,又退回成裸的「文件处理失败」—— 正是这段改动要消除的。
+        message.warning(`${t("fileProcessFailed")}: ${getErrorMessage(error)}`);
         onError?.();
-      } finally {
-        setIsFileProcessing(false);
-      }
-    };
-
-    reader.onerror = (error) => {
-      console.error("读取文件出错：", error);
-      message.error(t("fileReadFailed"));
-      onError?.();
-      setIsFileProcessing(false);
-    };
-    reader.readAsArrayBuffer(file);
+      })
+      .finally(() => setIsFileProcessing(false));
   };
 
   // 把「写入共享 sourceText」的回调用当前读取序号封一层:换文件 / 清空会自增序号,

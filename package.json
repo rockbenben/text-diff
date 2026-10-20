@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "check:messages": "node scripts/checkMessages.js",
     "outdated": "ncu",
     "tauri": "tauri",
     "update-version": "node src-tauri/update-version.js"

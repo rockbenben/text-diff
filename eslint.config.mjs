@@ -52,6 +52,13 @@ const eslintConfig = defineConfig([
     plugins: { "local-rsc": { rules: { "require-use-client": requireUseClient } } },
     rules: { "local-rsc/require-use-client": "error" },
   },
+  // electron/ 与 scripts/electron-dev.js 是 Node/Electron 侧的 CommonJS 文件，
+  // require() 是它们正确的模块形态 —— TS 那条规则是给 app 源码用的。
+  // （scripts/buildWithLang.js 用的是文件内联的同一条禁用，形态不同、意图一样。）
+  {
+    files: ["electron/**/*.js", "scripts/electron-dev.js"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

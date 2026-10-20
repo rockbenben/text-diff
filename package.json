@@ -9,6 +9,7 @@
     "build:lang": "node scripts/buildWithLang.js",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "outdated": "ncu",
     "tauri": "tauri",
     "update-version": "node src-tauri/update-version.js"

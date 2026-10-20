@@ -40,7 +40,7 @@ jobs:
     steps:
       # 应用代码在 feat/tauri-desktop 分支,所以这里显式 checkout 该分支。
       # 注意:此处固定了分支名;若将来该分支合并/改名,需同步更新下面的 ref。
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: feat/tauri-desktop
 
@@ -51,7 +51,7 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf libgtk-3-dev wget file
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: yarn
@@ -80,7 +80,14 @@ jobs:
           yarn update-version
           yarn install --frozen-lockfile
 
-      - uses: tauri-apps/tauri-action@v0
+      # tauri-action v1（此前是 v0）。三处与本流水线有关的差别：
+      #  * **`.app.tar.gz` 的文件名里带上版本号**，与其它安装包一致（本仓的
+      #    releaseAssetNamePattern 本来就统一了命名，所以只是回到同一套）。
+      #  * **latest.json 里的下载地址用 github.com 那个地址**，不是浏览器地址。
+      #  * v1 不再支持 Tauri v1（这里本来就是 v2），并且 `draft: true` 时若那条
+      #    release 已经不是草稿会直接失败——矩阵的约定仍是「第一条腿建草稿，
+      #    另外三条往里传产物」，所以顺序不能变。
+      - uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
@@ -172,7 +179,7 @@ jobs:
       #
       # 判据是**看 API 指到谁**，不是看 release 的字段：字段全对而指针没挪，端点照样 404。
       # CDN 那层重定向还会再滞后几分钟，属正常——这里判 API，不判 CDN。
-      - name: 发布并把 latest 指到它
+      - name: 发布这个 release，并把 latest 指到它
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash

@@ -187,7 +187,8 @@
     "selectLanguage": "选择语言",
     "noMatchFound": "无匹配结果",
     "backToTop": "回到顶部",
-    "exportOptions": "导出选项"
+    "exportOptions": "导出选项",
+    "expand": "展开"
   },
   "tools": {
     "subtitleTranslator": {

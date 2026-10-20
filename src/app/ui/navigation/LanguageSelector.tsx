@@ -5,7 +5,6 @@ import { Button, Dropdown, Input, Drawer, Row, Col, theme, Grid } from "antd";
 import { TranslationOutlined, CheckOutlined } from "@ant-design/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { routing } from "@/i18n/routing";
-import { LOCALE_STORAGE_KEY } from "@/app/localeRedirect";
 
 // ============ 语言配置 ============
 
@@ -75,12 +74,6 @@ export function LanguageSelector() {
   })();
 
   const handleLanguageChange = (key: string) => {
-    // 记住显式选择：裸域名根页/404 的落点脚本优先读它，不再按浏览器偏好猜。
-    // 没有这一层的话，用户切到英文、下次打开裸域名又被甩回浏览器语言 —— 站点
-    // 会跟用户对着干。无痕模式下 setItem 会抛，吞掉即可（退化成按浏览器偏好）。
-    try {
-      localStorage.setItem(LOCALE_STORAGE_KEY, key);
-    } catch {}
     const newPath = pathname.replace(/^\/[a-z]{2}(-[a-z]+)?/, `/${key}`);
     // usePathname 不含 query/hash —— 不补会在切语言时丢掉 ?huginn 这类
     // 功能门控参数(data-batch 的效应还会因参数消失把已选工具回写成

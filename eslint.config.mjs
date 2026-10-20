@@ -52,6 +52,13 @@ const eslintConfig = defineConfig([
     plugins: { "local-rsc": { rules: { "require-use-client": requireUseClient } } },
     rules: { "local-rsc/require-use-client": "error" },
   },
+  // electron/ 与 scripts/electron-dev.js 是 Node/Electron 侧的 CommonJS 文件，
+  // require() 是它们正确的模块形态 —— TS 那条规则是给 app 源码用的。
+  // （scripts/buildWithLang.js 用的是文件内联的同一条禁用，形态不同、意图一样。）
+  {
+    files: ["electron/**/*.js", "scripts/electron-dev.js"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -59,6 +66,13 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // 桌面分支的构建产物：Electron 打包出的 win-unpacked 里带着一整份 out/，
+    // Tauri 的 target/ 里是 Rust 构建生成的 JS 与二进制资产。不忽略的话
+    // `yarn lint` 会去 lint 它们（实测 text-diff 报 5091 条、subtitle-translator
+    // 50 条 Parsing error），源码里真正的问题被淹掉，这道闸等于失效。
+    // 两个目录都已被 .gitignore 覆盖，这里只是让 eslint 也别看。
+    "dist-electron/**",
+    "src-tauri/**",
   ]),
 ]);
 

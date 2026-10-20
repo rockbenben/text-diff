@@ -187,7 +187,8 @@
     "selectLanguage": "Select language",
     "noMatchFound": "No match",
     "backToTop": "Back to top",
-    "exportOptions": "Export options"
+    "exportOptions": "Export options",
+    "expand": "more"
   },
   "tools": {
     "subtitleTranslator": {

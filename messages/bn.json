@@ -187,7 +187,8 @@
     "selectLanguage": "ভাষা নির্বাচন করুন",
     "noMatchFound": "কোনো ফলাফল নেই",
     "backToTop": "উপরে ফিরে যান",
-    "exportOptions": "রপ্তানি বিকল্প"
+    "exportOptions": "রপ্তানি বিকল্প",
+    "expand": "আরও"
   },
   "tools": {
     "subtitleTranslator": {

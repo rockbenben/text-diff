@@ -187,7 +187,8 @@
     "selectLanguage": "เลือกภาษา",
     "noMatchFound": "ไม่พบผลลัพธ์",
     "backToTop": "กลับขึ้นด้านบน",
-    "exportOptions": "ตัวเลือกการส่งออก"
+    "exportOptions": "ตัวเลือกการส่งออก",
+    "expand": "เพิ่มเติม"
   },
   "tools": {
     "subtitleTranslator": {

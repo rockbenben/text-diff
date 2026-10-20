@@ -187,7 +187,8 @@
     "selectLanguage": "Dil seç",
     "noMatchFound": "eşleşme yok",
     "backToTop": "Yukarı çık",
-    "exportOptions": "Dışa aktarma seçenekleri"
+    "exportOptions": "Dışa aktarma seçenekleri",
+    "expand": "daha fazla"
   },
   "tools": {
     "subtitleTranslator": {

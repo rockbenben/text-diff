@@ -202,7 +202,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Feliratfordító",
-      "description": "SRT, ASS, VTT, SBV, LRC feliratok kötegelt fordítása. 120+ nyelv."
+      "description": "SRT, ASS, SSA, VTT, SBV, LRC feliratok kötegelt fordítása. 120+ nyelv."
     },
     "jsonTranslate": {
       "title": "JSON többnyelvű fordító",
@@ -266,7 +266,7 @@
     },
     "dataParserFlare": {
       "title": "Flare könyvjelző-konverter",
-      "description": "Könyvjelzők konvertálása Flare formátumba és abból vissza"
+      "description": "Könyvjelző HTML-ből Flare YAML (lapos)"
     },
     "dataParserImgPrompt": {
       "title": "IMGPrompt adatgenerátor",

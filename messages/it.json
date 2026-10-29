@@ -202,7 +202,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Traduttore Sottotitoli",
-      "description": "Traduzione in batch SRT, ASS, VTT, SBV, LRC. 120+ lingue."
+      "description": "Traduzione in batch SRT, ASS, SSA, VTT, SBV, LRC. 120+ lingue."
     },
     "jsonTranslate": {
       "title": "Traduttore JSON i18n",
@@ -266,7 +266,7 @@
     },
     "dataParserFlare": {
       "title": "Convertitore Flare",
-      "description": "Conversione preferiti browser e formato Flare"
+      "description": "Segnalibri HTML in Flare YAML (appiattito)"
     },
     "dataParserImgPrompt": {
       "title": "Generatore Dati IMGPrompt",

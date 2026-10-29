@@ -202,7 +202,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Untertitel-Übersetzer",
-      "description": "Batch-Übersetzung für SRT, ASS, VTT, SBV, LRC. 120+ Sprachen."
+      "description": "Batch-Übersetzung für SRT, ASS, SSA, VTT, SBV, LRC. 120+ Sprachen."
     },
     "jsonTranslate": {
       "title": "i18n JSON-Übersetzer",
@@ -266,7 +266,7 @@
     },
     "dataParserFlare": {
       "title": "Flare Lesezeichen-Konverter",
-      "description": "Browser-Lesezeichen und Flare-Format konvertieren"
+      "description": "Lesezeichen-HTML zu Flare-YAML (flachgestellt)"
     },
     "dataParserImgPrompt": {
       "title": "IMGPrompt Datengenerator",
@@ -288,7 +288,7 @@
         },
         {
           "q": "Wie ignoriere ich Leerzeichen- oder Groß-/Kleinschreibung-Unterschiede?",
-          "a": "Aktivieren Sie 'Führende/Nachfolgende Leerzeichen ignorieren', um Leerzeichen-Unterschiede am Anfang/Ende zu überspringen, und 'Groß-/Kleinschreibung ignorieren', um Unterschiede in der Groß-/Kleinschreibung zu ignorieren. Beide können gleichzeitig aktiviert werden — nützlich für den Vergleich formatierter Code- oder Konfigurationsdateien."
+          "a": "Aktivieren Sie 'Umgebende Leerzeichen ignorieren', um Leerzeichen-Unterschiede am Anfang/Ende zu überspringen, und 'Groß-/Kleinschreibung ignorieren', um Unterschiede in der Groß-/Kleinschreibung zu ignorieren. Beide können gleichzeitig aktiviert werden — nützlich für den Vergleich formatierter Code- oder Konfigurationsdateien."
         },
         {
           "q": "Kann ich das Vergleichsergebnis exportieren?",

@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Typography, theme } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import { TOOL_KEYS, groupOf, type ToolKey } from "@/app/lib/toolRegistry";
+import ExportFolderButton from "@/app/components/ExportFolder";
+import { setExportDirTool } from "@/app/utils";
 
 const { Title, Paragraph, Text, Link } = Typography;
 
@@ -20,12 +22,18 @@ interface ToolPageProps {
   /** External user-guide URL. When provided, renders a "User Guide" link
    *  before the description text. */
   guideUrl?: string;
+   /**
+   * 是否提供「导出目录」入口。判据只有一条：这个工具**一次点击会不会落多个文件**
+   * （批量 / 多语言 / 分割）—— 单文件导出用浏览器下载目录就够。目录按 toolKey 分开存，
+   * 所以不提供入口的工具也就没有自己的目录，导出照常走浏览器下载。
+   */
+  showExportFolder?: boolean;
   /** Body — the actual tool surface. */
   children: React.ReactNode;
 }
 
 /**
- * Interlingua tool-page shell — mono index crumb ("02 / 17 — 文本翻译"),
+ * Interlingua tool-page shell — mono index crumb ("NN / 总数 — 分组名"),
  * heavy grotesk title, Klein-blue accent rule, narrow description column.
  * Smaller scale than the home hero so it doesn't compete with the tool
  * surface below.
@@ -33,19 +41,18 @@ interface ToolPageProps {
  * Reads the H1 from `tools.<toolKey>.title` so the nav short name, the
  * Schema.org `name`, and the in-tool H1 stay in lock-step.
  */
-const ToolPage = ({ icon, toolKey, description, guideUrl, children }: ToolPageProps) => {
+const ToolPage = ({ icon, toolKey, description, guideUrl, showExportFolder, children }: ToolPageProps) => {
   const t = useTranslations("common");
   const tTools = useTranslations("tools");
   const tNav = useTranslations("navigation");
   const { token } = theme.useToken();
 
-  // Registry index → "02 / 17" chapter marker. Tools not in the registry
+  // Registry index → 动态「NN / 工具总数」章节标记（总数取 TOOL_KEYS.length）。Tools not in the registry
   // (shouldn't happen — invariant-tested) just skip the crumb.
-  // 描述能拼成纯字符串时才有「展开」；调用方目前传的都是 t(...) 字符串，
-  // ReactNode 描述走下面的降级分支（只截断、无展开）。
+  // 描述能拼成纯字符串时才有「展开」；调用方传 ReactNode 时走下面的降级分支（只截断、无展开）。
   const descriptionText = typeof description === "string" ? description : null;
 
-  // ⚠ 页头【不放隐私说明】。它曾经在这里,19 个工具页一字不差,而其中 12 个
+  // ⚠ 页头【不放隐私说明】。它曾经在这里,每个工具页一字不差,而多数工具
   // (文本分割 / 文本对照 / 全部 JSON 工具)根本不收 API key —— 对它们那句
   // "您的 API 密钥…" 是句空话。它现在只有一份,挂在 TranslationSettings 里
   // apiKey 输入框的 Form.Item extra 上。别再往页头加回来。
@@ -74,6 +81,13 @@ const ToolPage = ({ icon, toolKey, description, guideUrl, children }: ToolPagePr
   // 都被指出别扭),而且行数少一行、页头更矮。
   //
   // 想收窄的话只动这一处:给下面两个 Paragraph 加回 maxWidth 即可。
+
+  // 告诉写入路径「当前是哪个工具」—— downloadFile 的调用点散在各工具页与组件里，逐个传
+  // toolKey 不现实，而这里本来就拿着它。见 utils/exportDir.ts 的 setExportDirTool。
+  useEffect(() => {
+    setExportDirTool(toolKey);
+    return () => setExportDirTool(null);
+  }, [toolKey]);
 
   const registryIndex = TOOL_KEYS.indexOf(toolKey as ToolKey);
   const crumb =
@@ -127,17 +141,23 @@ const ToolPage = ({ icon, toolKey, description, guideUrl, children }: ToolPagePr
             )}
             <span>{tTools(`${toolKey}.title`)}</span>
           </Title>
-          {guideUrl && (
-            // 12px 的链接文字本身只有 19px 高。加纵向内边距把可点区域撑到
-            // ≥24px(WCAG 2.2 SC 2.5.8 的下限),负外边距抵消掉,视觉位置不变。
-            <Link
-              href={guideUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ fontSize: token.fontSizeSM, whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 4, padding: "5px 6px", margin: "-5px -6px" }}>
-              <QuestionCircleOutlined aria-hidden /> {t("userGuide")}
-            </Link>
-          )}
+          {/* 页面级操作区：导出目录（按工具各存一个）＋ 使用说明。ToolPage 每页只
+              渲染一次（toolPageConvention 不变量测试钉着），所以这里天然「一页一个」
+              —— 这正是它从 ResultCard 搬过来的原因。 */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {showExportFolder && <ExportFolderButton toolKey={toolKey} />}
+            {guideUrl && (
+              // 12px 的链接文字本身只有 19px 高。加纵向内边距把可点区域撑到
+              // ≥24px(WCAG 2.2 SC 2.5.8 的下限),负外边距抵消掉,视觉位置不变。
+              <Link
+                href={guideUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: token.fontSizeSM, whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 4, padding: "5px 6px", margin: "-5px -6px" }}>
+                <QuestionCircleOutlined aria-hidden /> {t("userGuide")}
+              </Link>
+            )}
+          </div>
         </div>
         <div aria-hidden style={{ height: 2, width: 40, background: "var(--accent)", marginTop: token.marginXS, marginBottom: token.marginSM }} />
         {/* antd 只有在 children 是纯字符串时才会走 JS 量测、渲染「展开」链接;

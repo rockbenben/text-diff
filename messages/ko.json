@@ -202,7 +202,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "자막 번역기",
-      "description": "SRT, ASS, VTT, SBV, LRC 자막 일괄 번역, 120개 이상 언어 지원"
+      "description": "SRT, ASS, SSA, VTT, SBV, LRC 자막 일괄 번역, 120개 이상 언어 지원"
     },
     "jsonTranslate": {
       "title": "i18n JSON 번역",
@@ -266,7 +266,7 @@
     },
     "dataParserFlare": {
       "title": "Flare 북마크 변환",
-      "description": "브라우저 북마크와 Flare 형식 상호 변환"
+      "description": "북마크 HTML을 Flare YAML로 변환 (평면화)"
     },
     "dataParserImgPrompt": {
       "title": "IMGPrompt 생성기",
@@ -288,7 +288,7 @@
         },
         {
           "q": "공백이나 대소문자 차이를 무시하는 방법은?",
-          "a": "'앞/뒤 공백 무시'를 체크하면 앞뒤 공백 차이를 건너뛰고, '대소문자 무시'를 체크하면 대소문자 차이를 무시합니다. 둘 다 동시에 활성화할 수 있습니다 — 포맷된 코드나 설정 파일 비교에 유용합니다."
+          "a": "'앞뒤 공백 무시'를 체크하면 앞뒤 공백 차이를 건너뛰고, '대소문자 무시'를 체크하면 대소문자 차이를 무시합니다. 둘 다 동시에 활성화할 수 있습니다 — 포맷된 코드나 설정 파일 비교에 유용합니다."
         },
         {
           "q": "비교 결과를 내보낼 수 있나요?",

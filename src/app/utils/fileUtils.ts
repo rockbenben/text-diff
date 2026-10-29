@@ -1,64 +1,56 @@
 import { saveAs } from "file-saver";
+import { writeToExportDir } from "./exportDir";
+/** 一次导出的落点。`dir` 有值 = 写进了用户选的导出目录（那时 `fileName` 是让路后
+ *  的【实际】文件名）；`dir` 为 null = 交给了浏览器下载。 */
+export interface DownloadResult {
+  fileName: string;
+  dir: string | null;
+}
+
 /**
  * 下载文件工具函数
  * @param {string|Blob|ArrayBuffer} content - 要下载的文件内容
  * @param {string} fileName - 下载文件的名称
  * @param {string} mimeType - 文件 MIME 类型，默认为"text/plain;charset=utf-8"
- * @returns {void}
+ * @returns 实际落点（见 DownloadResult）—— 提示文案要照它说话，别复述请求的名字
  */
-export const downloadFile = (content: string | Blob | ArrayBuffer, fileName: string, mimeType = "text/plain;charset=utf-8"): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    try {
-      // 创建 Blob（如果内容不是 Blob）
-      const fileBlob = content instanceof Blob ? content : new Blob([content], { type: mimeType });
-      saveAs(fileBlob, fileName);
-      // 添加一个小延迟以确保浏览器有时间处理下载
-      setTimeout(() => resolve(fileName), 100);
-    } catch (error) {
-      // 抛出干净的 Error,避免把 saveAs 内部错误泄露给调用方
-      console.error("File download failed: ", error);
-      reject(new Error(`Failed to download file "${fileName}"`));
-    }
-  });
+export const downloadFile = async (content: string | Blob | ArrayBuffer, fileName: string, mimeType = "text/plain;charset=utf-8"): Promise<DownloadResult> => {
+  // ⚠ Blob 构造【必须】在 try 里:超大文本(TextSplitter 合并全文)会抛 Invalid
+  // string length,而只要存在不 await / 漏接 reject 的调用路径，构造落在 try 外就是一条
+  // 既无日志、又无干净 Error 的 unhandled rejection。
+  try {
+    // 创建 Blob（如果内容不是 Blob）
+    const fileBlob = content instanceof Blob ? content : new Blob([content], { type: mimeType });
+
+    // 用户设过导出目录（且仍有权限）就直接写进去，仅 Chromium 桌面。其余情况一律
+    // 返回 false，落回浏览器下载目录 —— 见 exportDir.ts 的权限说明。它自己吞掉所有
+    // 异常，所以走到 saveAs 就是真该走；Node 侧没有 window，同样走 false。
+    const written = await writeToExportDir(fileBlob, fileName);
+    if (written) return written;
+    saveAs(fileBlob, fileName);
+  } catch (error) {
+    // 抛出干净的 Error,避免把内部错误泄露给调用方
+    console.error("File download failed: ", error);
+    throw new Error(`Failed to download file "${fileName}"`);
+  }
+  // 保留这个小延迟：批量导出靠它给浏览器留出处理下载的时间
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  // 浏览器下载:落点由浏览器决定,同名它自己会改成 `x (1).srt`,JS 侧看不到 ——
+  // 但下载栏会显示真名,所以这里回传请求的名字不会误导用户。
+  return { fileName, dir: null };
 };
 
 /**
- * 把文件字节解码为字符串(编码自适应)。
- * 策略:先用 UTF-8 fatal 模式对全文试解 —— UTF-8 是自验证编码,成功即几乎
- * 确定是 UTF-8;失败(GBK/Big5/UTF-16 等 legacy 编码)才取样喂 jschardet 检测。
- * 从 useFileUpload.readFile 中提取成共享工具:词汇表 TSV / 保护规则词典的
- * 导入此前用 readAsText(只会按 UTF-8 解),中文 Windows 上 Excel 导出的
- * ANSI/GBK 文件被解成 U+FFFD 乱码后【静默持久化】进 localStorage,翻译/转换
- * 时规则永远匹配不上。
+ * 拆分「文件名 → 主名 + 后缀」的唯一规则。首字符的点不算后缀（`.backup` 是
+ * 无后缀的文件名，不是扩展名），无后缀时回落到 `.txt`。
+ *
+ * 同一份文件名在同一个工具的不同导出按钮下必须得到相同后缀，所以规则只留一处。
+ * 注：useExportFilename / subtitleUtils 里还有各自的历史实现（返回值形状不同、
+ * 回落值不同），归并它们要动翻译系列工具，未一并处理。
  */
-export const decodeFileBytes = async (buffer: ArrayBuffer): Promise<string> => {
-  const uint8Array = new Uint8Array(buffer);
-  try {
-    return new TextDecoder("utf-8", { fatal: true }).decode(uint8Array);
-  } catch {
-    // Sample first 512KB for encoding detection (avoids converting full file to string)
-    const SAMPLE_SIZE = 512 * 1024;
-    const sample = uint8Array.subarray(0, Math.min(SAMPLE_SIZE, uint8Array.length));
-    // Build binary string where charCode === byte value (required by jschardet).
-    // Cannot use TextDecoder("latin1") because browsers map it to Windows-1252,
-    // which remaps bytes 0x80-0x9F to different code points and breaks detection.
-    let sampleString = "";
-    for (let i = 0; i < sample.length; i += 8192) {
-      sampleString += String.fromCharCode.apply(null, sample.subarray(i, i + 8192) as unknown as number[]);
-    }
-
-    // 检测编码(基于样本),后续仍对完整内容进行解码。Lazy load jschardet。
-    const jschardet = (await import("jschardet")).default;
-    const detected = jschardet.detect(sampleString);
-
-    // jschardet 可能返回 TextDecoder 不认的标签(或乱码标签),
-    // new TextDecoder(label) 会抛 RangeError —— 回退到 utf-8 而不是让调用方崩掉。
-    let decoder: TextDecoder;
-    try {
-      decoder = new TextDecoder(detected.encoding || "utf-8");
-    } catch {
-      decoder = new TextDecoder("utf-8");
-    }
-    return decoder.decode(uint8Array);
-  }
+export const splitFileName = (fileName: string, defaultExt = ".txt"): { nameWithoutExt: string; ext: string } => {
+  const dotIndex = fileName.lastIndexOf(".");
+  if (dotIndex > 0) return { nameWithoutExt: fileName.slice(0, dotIndex), ext: fileName.slice(dotIndex) };
+  return { nameWithoutExt: fileName, ext: defaultExt };
 };
+

@@ -1,6 +1,12 @@
 {
   "common": {
-    "supportEscapeChars": "Kaçış karakterlerini destekler: \\r\n (yeni satır), \\r (dönüş), \\t (sekme), \\s (boşluk), \\\\ (ters eğik çizgi)",
+    "exportFolder": "Dışa aktarma klasörü",
+    "exportFolderDefault": "Dışa aktarılanlar varsayılan indirilenler klasörüne gider.",
+    "exportFolderBlocked": "Tarayıcı, Masaüstü, Belgeler, İndirilenler ve kullanıcı klasörünün kendisini kabul etmez — bir alt klasör ya da başka bir klasör seçin.",
+    "exportFolderCurrent": "Dışa aktarılanlar {dir} klasörüne gider",
+    "exportFolderReset": "İndirilenler klasörüne dön",
+    "exportFolderFailed": "Dışa aktarma klasörü ayarlanamadı.",
+    "supportEscapeChars": "Kaçış karakterlerini destekler: \\n (yeni satır), \\r (dönüş), \\t (sekme), \\s (boşluk), \\\\ (ters eğik çizgi)",
     "skipToContent": "Ana içeriğe geç",
     "fileProcessFailed": "Dosya işlenemedi — kodlamasını kontrol edin veya başka bir dosya deneyin",
     "fileReadFailed": "Dosya okunamadı",
@@ -56,6 +62,7 @@
     "extractText": "Metni Çıkar",
     "translationResult": "Sonuç",
     "copy": "Kopyala",
+    "expand": "daha fazla",
     "remove": "Kaldır",
     "exportFile": "Dışa Aktar",
     "exportAllFile": "Tümünü Dışa Aktar",
@@ -118,7 +125,7 @@
     "copyAllFailed": "Tümünü kopyala",
     "closeFailedLinesModal": "Kapat",
     "failedLanguagesTitle": "{count} hedef dil başarısız oldu",
-    "failedLanguagesDesc": "Bu diller için tüm yığınlar başarısız oldu — genellikle yerel LLM aksaklıkları, API hız sınırları veya modelin belirli bir dili reddetmesi nedeniyle. Kodları kopyalayın ve yalnızca onlar için yeniden çalıştırın (Dil Kodları ile Hızlı Giriş alanına yapıştırın); diğerleri önbellekten atlanacak.",
+    "failedLanguagesDesc": "Bu diller için tüm yığınlar başarısız oldu — genellikle yerel LLM aksaklıkları, API hız sınırları veya modelin belirli bir dili reddetmesi nedeniyle. Kodları kopyalayın ve yalnızca onlar için yeniden çalıştırın ('Çok Dilli Ayarlar' bölümüne yapıştırın); diğerleri önbellekten atlanacak.",
     "copyAllFailedLanguages": "Dil kodlarını kopyala",
     "apiStatusFreeApi": "Free API",
     "apiStatusNeedsConfig": "Yapılandırma gerekli",
@@ -136,6 +143,8 @@
     "readOnlyMode": "Salt Okunur Mod",
     "readOnlyModeTooltip": "Metin çok uzun: düzenleyici geçici olarak salt okunur ve yalnızca kısmi bir önizleme gösteriyor. Tüm içeriğiniz etkilenmez; işleme ve dışa aktarma hâlâ metnin tamamını kullanır.",
     "fileExported": "Dışa aktarılan dosya: {fileName}",
+    "exportFailed": "Dosya dışa aktarılamadı: {fileName}",
+    "exportedToFolder": "{dir} klasörüne kaydedildi: {fileName}",
     "batchDownloaded": "İşlem tamamlandı, dosyalar otomatik olarak indirildi",
     "smartLineBreak": "Akıllı satır sonu",
     "replaceText": "Metni değiştir",
@@ -171,6 +180,7 @@
     "errorHint5xx": "Sunucu hatası, lütfen daha sonra tekrar deneyin",
     "errorHintRelay": "Ağ hatası (muhtemelen CORS) — \"Daha fazla Provider ayarı\" bölümünde \"API Aktarıcı\"yı açın",
     "errorHintRelay403": "API 403 Forbidden döndürdü — \"Daha fazla Provider ayarı\" bölümünde \"API Aktarıcı\"yı açın",
+    "errorHintCors": "Bu adrese bağlanılamıyor — adresi ve servisin çapraz kaynak isteklerine (CORS) izin verip vermediğini kontrol edin. Kendi barındırdığınız ağ geçitleri ve yerel modellerde bunu kendiniz açmalısınız ya da kendi API Aktarıcınızı kullanın",
     "errorHintGeminiKey": "Gemini'ye ulaşılamıyor: önce ağınızı kontrol edin (bazı ağlar Google hizmetlerine doğrudan erişemez). Ağ sorunsuzsa, 19 Haziran 2026'dan itibaren Google kısıtlamasız API anahtarlarını reddediyor — anahtarınızı AI Studio'da yeniden oluşturun (varsayılan olarak kısıtlı) veya Google Cloud Console'da eski anahtara Gemini API kısıtlaması ekleyin",
     "rateLimitCooldown": "İstek sınırına ulaşıldı — kısa bir duraklamadan sonra otomatik olarak yeniden denenecek",
     "faqHeading": "Sık sorulan sorular",
@@ -187,17 +197,16 @@
     "selectLanguage": "Dil seç",
     "noMatchFound": "eşleşme yok",
     "backToTop": "Yukarı çık",
-    "exportOptions": "Dışa aktarma seçenekleri",
-    "expand": "daha fazla"
+    "exportOptions": "Dışa aktarma seçenekleri"
   },
   "tools": {
     "subtitleTranslator": {
       "title": "Altyazı Çevirici",
-      "description": "Toplu SRT, ASS, VTT, SBV, LRC çevirisi. 120+ dil."
+      "description": "Toplu SRT, ASS, SSA, VTT, SBV, LRC çevirisi. 120+ dil."
     },
     "jsonTranslate": {
       "title": "i18n JSON Çevirici",
-      "description": "Verimli çok dilli JSON çeviri aracı"
+      "description": "Toplu i18n dil dosyası çevirisi, JSONPath eşleştirme ve anahtar eşleme ile"
     },
     "mdTranslator": {
       "title": "Markdown Çevirici",
@@ -205,7 +214,7 @@
     },
     "textSplitter": {
       "title": "Metin Bölücü",
-      "description": "AI ve sosyal medya için akıllı uzun metin bölme"
+      "description": "Uzun metni ayırıcıya, uzunluğa veya cümleye göre böl — sonra yeniden birleştir"
     },
     "chineseConversion": {
       "title": "Bas/Gel Çince Dönüştürücü",
@@ -257,7 +266,7 @@
     },
     "dataParserFlare": {
       "title": "Flare Dönüştürücü",
-      "description": "Tarayıcı yer imleri ve Flare formatı dönüşümü"
+      "description": "Yer imi HTML'ini Flare YAML'ye dönüştür (düz)"
     },
     "dataParserImgPrompt": {
       "title": "IMGPrompt Veri Oluşturucu",
@@ -350,6 +359,11 @@
     "reaction4": "Kafam Karıştı",
     "placeholder": "Mesaj bırakın (giriş gerekmez, yanıt için e-posta isteğe bağlı)",
     "metaDescription": "Tools By AI geri bildirim sayfası: hata bildir, özellik öner, kullanım örneği paylaş. Waline tabanlı, anonim, ücretsiz."
+  },
+  "AppError": {
+    "title": "Sayfa yüklenemedi",
+    "description": "Sayfa yüklenemedi — bu, site güncellemesinden hemen sonra olabilir. Lütfen yeniden yükleyin.",
+    "reload": "Yeniden yükle"
   },
   "NotFound": {
     "title": "Sayfa Bulunamadı",

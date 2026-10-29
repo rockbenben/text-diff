@@ -156,8 +156,8 @@ export function computeDiff(aRaw: string, bRaw: string, opts: DiffOptions, force
   const header = opts.format === "csv" || opts.format === "tsv" ? parseDelimited(aFirstLine, delimiter ?? ",") : undefined;
 
   const rows: DiffRow[] = [];
-  let aIdx = 0; // cursor into aOrigLines
-  let bIdx = 0; // cursor into bOrigLines
+  let aIdx = 0;
+  let bIdx = 0;
   let aLine = 1; // 1-based line number for A
   let bLine = 1; // 1-based line number for B
   let mods = 0;

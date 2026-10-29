@@ -202,7 +202,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Trình Dịch Phụ Đề",
-      "description": "Dịch hàng loạt SRT, ASS, VTT, SBV, LRC. 120+ ngôn ngữ."
+      "description": "Dịch hàng loạt SRT, ASS, SSA, VTT, SBV, LRC. 120+ ngôn ngữ."
     },
     "jsonTranslate": {
       "title": "Trình Dịch JSON i18n",
@@ -266,7 +266,7 @@
     },
     "dataParserFlare": {
       "title": "Trình chuyển đổi Flare",
-      "description": "Chuyển đổi bookmark trình duyệt và định dạng Flare"
+      "description": "Bookmark HTML sang Flare YAML (làm phẳng)"
     },
     "dataParserImgPrompt": {
       "title": "Trình tạo dữ liệu IMGPrompt",
@@ -288,7 +288,7 @@
         },
         {
           "q": "Làm thế nào để bỏ qua khoảng trắng hoặc sự khác biệt về chữ hoa/chữ thường?",
-          "a": "Chọn 'Bỏ qua khoảng trắng đầu/cuối' để bỏ qua sự khác biệt về khoảng trắng ở đầu và cuối, và 'Bỏ qua chữ hoa/thường' để bỏ qua sự khác biệt về viết hoa. Cả hai có thể được bật đồng thời — hữu ích khi so sánh mã được định dạng hoặc tệp cấu hình."
+          "a": "Chọn 'Bỏ qua khoảng trắng xung quanh' để bỏ qua sự khác biệt về khoảng trắng ở đầu và cuối, và 'Bỏ qua chữ hoa/thường' để bỏ qua sự khác biệt về viết hoa. Cả hai có thể được bật đồng thời — hữu ích khi so sánh mã được định dạng hoặc tệp cấu hình."
         },
         {
           "q": "Tôi có thể xuất kết quả so sánh không?",

@@ -202,7 +202,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Traducteur Sous-titres",
-      "description": "Traduction par lot SRT, ASS, VTT, SBV, LRC. 120+ langues."
+      "description": "Traduction par lot SRT, ASS, SSA, VTT, SBV, LRC. 120+ langues."
     },
     "jsonTranslate": {
       "title": "Traducteur JSON i18n",
@@ -266,7 +266,7 @@
     },
     "dataParserFlare": {
       "title": "Convertisseur Flare",
-      "description": "Conversion favoris navigateur et format Flare"
+      "description": "Favoris HTML vers Flare YAML (aplati)"
     },
     "dataParserImgPrompt": {
       "title": "Générateur Données IMGPrompt",
@@ -288,7 +288,7 @@
         },
         {
           "q": "Comment ignorer les différences d'espaces ou de casse ?",
-          "a": "Cochez 'Ignorer les espaces en début/fin' pour sauter les différences d'espaces en début/fin, et 'Ignorer la casse' pour ignorer les différences de casse. Les deux peuvent être activés simultanément — utile pour comparer du code formaté ou des fichiers de configuration."
+          "a": "Cochez 'Ignorer les espaces environnants' pour sauter les différences d'espaces en début/fin, et 'Ignorer la casse' pour ignorer les différences de casse. Les deux peuvent être activés simultanément — utile pour comparer du code formaté ou des fichiers de configuration."
         },
         {
           "q": "Puis-je exporter le résultat de la comparaison ?",

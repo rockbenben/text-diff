@@ -202,7 +202,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Penerjemah Subtitle",
-      "description": "Terjemahan batch SRT, ASS, VTT, SBV, LRC. 120+ bahasa."
+      "description": "Terjemahan batch SRT, ASS, SSA, VTT, SBV, LRC. 120+ bahasa."
     },
     "jsonTranslate": {
       "title": "Penerjemah JSON i18n",
@@ -266,7 +266,7 @@
     },
     "dataParserFlare": {
       "title": "Konverter Flare",
-      "description": "Konversi bookmark browser dan format Flare"
+      "description": "Bookmark HTML ke Flare YAML (rata)"
     },
     "dataParserImgPrompt": {
       "title": "Generator Data IMGPrompt",
@@ -288,7 +288,7 @@
         },
         {
           "q": "Bagaimana cara mengabaikan perbedaan spasi atau huruf besar/kecil?",
-          "a": "Centang 'Abaikan Spasi Awal/Akhir' untuk melewati perbedaan spasi di awal/akhir, dan 'Abaikan Huruf Besar/Kecil' untuk mengabaikan perbedaan huruf besar/kecil. Keduanya dapat diaktifkan secara bersamaan — berguna untuk membandingkan kode yang diformat atau file konfigurasi."
+          "a": "Centang 'Abaikan spasi di sekitar' untuk melewati perbedaan spasi di awal/akhir, dan 'Abaikan Huruf Besar/Kecil' untuk mengabaikan perbedaan huruf besar/kecil. Keduanya dapat diaktifkan secara bersamaan — berguna untuk membandingkan kode yang diformat atau file konfigurasi."
         },
         {
           "q": "Bisakah saya mengekspor hasil perbandingan?",

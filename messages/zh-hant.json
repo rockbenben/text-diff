@@ -202,7 +202,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "字幕翻譯器",
-      "description": "批次翻譯 SRT、ASS、VTT、SBV、LRC 字幕，支援 120+ 語言"
+      "description": "批次翻譯 SRT、ASS、SSA、VTT、SBV、LRC 字幕，支援 120+ 語言"
     },
     "jsonTranslate": {
       "title": "JSON 多語言翻譯",
@@ -266,7 +266,7 @@
     },
     "dataParserFlare": {
       "title": "Flare 書籤轉換",
-      "description": "瀏覽器書籤與 Flare 格式互轉"
+      "description": "瀏覽器書籤轉 Flare YAML（扁平化匯入）"
     },
     "dataParserImgPrompt": {
       "title": "IMGPrompt 資料產生",

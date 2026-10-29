@@ -202,7 +202,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Tradutor Legendas",
-      "description": "Tradução em lote SRT, ASS, VTT, SBV, LRC. 120+ idiomas."
+      "description": "Tradução em lote SRT, ASS, SSA, VTT, SBV, LRC. 120+ idiomas."
     },
     "jsonTranslate": {
       "title": "Tradutor JSON i18n",
@@ -266,7 +266,7 @@
     },
     "dataParserFlare": {
       "title": "Conversor Flare",
-      "description": "Conversão favoritos navegador e formato Flare"
+      "description": "Favoritos HTML para Flare YAML (achatado)"
     },
     "dataParserImgPrompt": {
       "title": "Gerador Dados IMGPrompt",
@@ -288,7 +288,7 @@
         },
         {
           "q": "Como ignorar diferenças de espaços em branco ou maiúsculas/minúsculas?",
-          "a": "Marque 'Ignorar Espaços em Branco Iniciais/Finais' para pular diferenças de espaços no início/fim, e 'Ignorar Maiúsculas/Minúsculas' para ignorar diferenças de maiúsculas e minúsculas. Ambos podem ser habilitados simultaneamente — útil para comparar código formatado ou arquivos de configuração."
+          "a": "Marque 'Ignorar espaços ao redor' para pular diferenças de espaços no início/fim, e 'Ignorar maiúsculas' para ignorar diferenças de maiúsculas e minúsculas. Ambos podem ser habilitados simultaneamente — útil para comparar código formatado ou arquivos de configuração."
         },
         {
           "q": "Posso exportar o resultado da comparação?",

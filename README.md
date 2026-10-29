@@ -17,7 +17,7 @@
 
 **[▶ Try it online](https://tools.newzone.top/en/text-diff)** — nothing to install, nothing uploaded
 
-![Text Diff interface](./public/img/text-diff-en.webp "Text Diff interface")
+![Text Diff interface](./public/img/text-diff-en.png "Text Diff interface")
 
 Most diff tools hand you a wall of colour and leave you to find the part that matters. **Text Diff tells you in one sentence where the first difference is** — which line, which field — and gives you a click to jump straight there.
 
@@ -60,7 +60,7 @@ The format is auto-detected from the file name and content, and can be overridde
 
 ## Performance
 
-For very large inputs (beyond ~5000 lines per side) the O(n×m) line diff is gated behind a confirmation so the page never freezes unexpectedly — click "compute anyway" to proceed. Char-level highlighting is skipped on oversized inputs to keep navigation responsive.
+The O(n×m) line diff runs under a 3-second budget: inputs that take longer are aborted and you are asked whether to compute anyway, so the page never freezes unexpectedly. A single changed line whose two sides together exceed 5000 characters aborts the whole comparison (you are asked whether to compute anyway) — a forced run then shows that line at line level only.
 
 ## FAQ
 
